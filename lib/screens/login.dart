@@ -39,7 +39,7 @@ class _SignInState extends State<SignIn> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthStateSuccess) {
-          print(context);
+          print('vao ');
         }
       },
       child: Scaffold(
