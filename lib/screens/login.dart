@@ -10,8 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(),
+    return Container(
       child: SignIn(),
     );
   }
@@ -31,7 +30,7 @@ class _SignInState extends State<SignIn> {
   void initState() {
     super.initState();
     _authBloc = BlocProvider.of(context);
-    _authBloc!.add(LoginEvent(username: 'hoang'));
+  //  _authBloc!.add(LoginEvent(username: 'hoang'));
   }
 
   @override
@@ -39,7 +38,7 @@ class _SignInState extends State<SignIn> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthStateSuccess) {
-          print('vao ');
+          print('vao AuthStateSuccess');
         }
       },
       child: Scaffold(

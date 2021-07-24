@@ -20,7 +20,6 @@ class WelcomeInit extends StatefulWidget {
 }
 
 class _WelcomeInitState extends State<WelcomeInit> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -42,42 +41,54 @@ class _WelcomeInitState extends State<WelcomeInit> {
       backgroundColor: HexColor('#07245B'),
       body: SafeArea(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Image(
+                image: AssetImage('assets/images/gmc_icon.png'),
+                width: 80,
+                height: 80),
+            Stack(
               children: [
-                const Image(
-                    image: AssetImage('assets/images/gmc_icon.png'),
-                    width: 80,
-                    height: 80),
-                Stack(
-                  children: [
-                    Container(
-                      height: 100,
-                      width: 200,
-                      margin: const EdgeInsets.only(left: 52.0),
-                      child: const Text('GMC',
-                          style: TextStyle(
-                              fontSize: 60,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white)),
-                    ),
-                    const Positioned(
-                        top: 65,
-                        left: 46,
-                        child: Text(
-                          'EXPERT ERP-SMART SOLUTION',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ))
-                  ],
+                Container(
+                  height: 100,
+                  width: 200,
+                  margin: const EdgeInsets.only(left: 52.0),
+                  child: const Text('GMC',
+                      style: TextStyle(
+                          fontSize: 60,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white)),
                 ),
+                const Positioned(
+                    top: 65,
+                    left: 46,
+                    child: Text(
+                      'EXPERT ERP-SMART SOLUTION',
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white),
+                    ))
               ],
             ),
-          )),
+            FlatButton(
+                onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) {
+                          return LoginScreen();
+                        }),
+                      )
+                    },
+                child: const Text(
+                  " Click to screen ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                ))
+          ],
+        ),
+      )),
     );
   }
 }
-
