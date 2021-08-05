@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gmc_erp/blocs/auth_bloc.dart';
-import 'package:gmc_erp/screens/login.dart';
+import 'package:gmc_erp/screens/Login/login_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class WelcomeScreen extends StatelessWidget {

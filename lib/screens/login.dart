@@ -1,5 +1,6 @@
 import 'package:gmc_erp/blocs/auth_bloc.dart';
 import 'package:gmc_erp/events/auth_event.dart';
+import 'package:gmc_erp/models/login.dart';
 import 'package:gmc_erp/states/auth_states.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +39,8 @@ class _SignInState extends State<SignIn> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthStateSuccess) {
-          print('vao AuthStateSuccess');
+          final auth =  state.props;
+          print('day la ${auth}');
         }
       },
       child: Scaffold(
@@ -54,7 +56,7 @@ class _SignInState extends State<SignIn> {
               Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Welcome to expert ERP',
+                    'Welcome to expert ERP 123',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,

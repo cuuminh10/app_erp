@@ -18,10 +18,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     print("vao initial");
   }
 
+  // @override
+  // AuthState get initialState {
+  //   print("vao override initial");
+  //   return AuthStateInitial();
+  // }
+
+
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async*{
     if (event is LoginEvent) {
-      print(event.username);
       _commentService.getCommentFromApi();
       yield AuthStateSuccess(auth: new Auth('Hoang', '123'));
       return;
