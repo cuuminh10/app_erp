@@ -1,3 +1,15 @@
+/**
+ * Copyright (C) 2021
+ *
+ * Description: The file class
+ *
+ * Change history:
+ * Date             Defect#             Person             Comments
+ * -------------------------------------------------------------------------------
+ * August 4, 2021     ********           HoangNCM            Initialize
+ *
+ */
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gmc_erp/events/comment_event.dart';
 import 'package:gmc_erp/states/Comment_states.dart';

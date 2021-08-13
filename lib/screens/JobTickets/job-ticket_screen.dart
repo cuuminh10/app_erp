@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
-import 'package:gmc_erp/screens/Login/component/body.dart';
+import 'package:gmc_erp/screens/JobTickets/component/body.dart';
 
-class LoginScreen extends StatefulWidget {
+class JobTicketScreen extends StatefulWidget {
   @override
-  _LoginScreen createState() => _LoginScreen();
+  _JobTicketScreen createState() => _JobTicketScreen();
 }
 
-class _LoginScreen extends State<LoginScreen> {
+class _JobTicketScreen extends State<JobTicketScreen> {
   int counter = 0;
 
   changePageIndex(int newIndex) {

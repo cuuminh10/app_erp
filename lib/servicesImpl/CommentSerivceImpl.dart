@@ -1,8 +1,10 @@
+import 'package:gmc_erp/common/service/BaseService.dart';
+import 'package:gmc_erp/common/service/BaseServiceImpl.dart';
 import 'package:gmc_erp/models/Comment.dart';
 import 'package:gmc_erp/repository/CommentRepository.dart';
 import 'package:gmc_erp/services/CommentService.dart';
 
-class CommentServiceImpl implements CommentService {
+class CommentServiceImpl extends BaseServiceImpl<Comment, int> implements CommentService {
 
   final commentRepository = CommentRepository();
 
@@ -10,5 +12,4 @@ class CommentServiceImpl implements CommentService {
   Future<List<Comment>> getCommentFromApi() async {
     return commentRepository.getCommentFromApi();
   }
-
 }

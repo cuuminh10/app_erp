@@ -1,5 +1,16 @@
+/**
+ * Copyright (C) 2021
+ *
+ * Description: The file class
+ *
+ * Change history:
+ * Date             Defect#             Person             Comments
+ * -------------------------------------------------------------------------------
+ * August 4, 2021     ********           HoangNCM            Initialize
+ *
+ */
+
 import 'package:equatable/equatable.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
 
 abstract class AuthEvent extends Equatable {
   @override

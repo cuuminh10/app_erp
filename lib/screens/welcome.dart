@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gmc_erp/blocs/auth_bloc.dart';
 import 'package:gmc_erp/screens/Login/login_screen.dart';
+import 'package:gmc_erp/screens/JobTickets/job-ticket_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -73,19 +72,6 @@ class _WelcomeInitState extends State<WelcomeInit> {
                     ))
               ],
             ),
-            FlatButton(
-                onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) {
-                          return LoginScreen();
-                        }),
-                      )
-                    },
-                child: const Text(
-                  " Click to screen ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                ))
           ],
         ),
       )),

@@ -1,4 +1,15 @@
-import 'dart:ffi';
+/**
+ * Copyright (C) 2021
+ *
+ * Description: The file class
+ *
+ * Change history:
+ * Date             Defect#             Person             Comments
+ * -------------------------------------------------------------------------------
+ * August 4, 2021     ********           HoangNCM            Initialize
+ *
+ */
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';

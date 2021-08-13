@@ -28,6 +28,7 @@ class NormalTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,
+          labelText: hintText,
         ),
       ),
     );

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/screens/Login/component/backgroud.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gmc_erp/common/component/textfields/normal_field_container.dart';
 import 'package:gmc_erp/common/component/textfields/password_field_container.dart';
 import 'package:gmc_erp/common/component/textfields/server_field_container.dart';
-import 'package:gmc_erp/common/component/buttons/normal_button_container.dart';
+import 'package:gmc_erp/common/component/buttons/gmc_button_container.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
@@ -24,6 +25,7 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var counter = BaseInheritedWidget.of(context)!.myData;
     return SafeArea(
       child: Background(
         child: SingleChildScrollView(
@@ -55,7 +57,20 @@ class _Body extends State<Body> {
                   onChanged: (value) => {},
                   onPress: () => {this._showModal(this.listServer)}),
               SizedBox(height: size.height * 0.04),
-              NormalButton(text: "Login", onPress: () => {}, vertical: 20, horizontal: 40, width: 0.8),
+              NormalButton(
+                  text: "Login",
+                  onPress: () => {
+                    BaseInheritedWidget.of(context)!.state.changePageIndex(2),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                        Text('${counter}'),
+                      ),
+                    ),
+                  },
+                  vertical: 20,
+                  horizontal: 40,
+                  width: 0.8),
               SizedBox(height: size.height * 0.4),
             ],
           ),
@@ -66,8 +81,11 @@ class _Body extends State<Body> {
 
   void _showModal(List<String> listServer) {
     Size size = MediaQuery.of(context).size;
+    var counter = BaseInheritedWidget.of(context)!.myData;
+    final snackBar = ScaffoldMessenger.of(context);
+    final _formKey = GlobalKey<FormState>();
     Future<void> future = showModalBottomSheet<void>(
-      isScrollControlled:true,
+      isScrollControlled: true,
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
@@ -89,7 +107,9 @@ class _Body extends State<Body> {
                         left: 0,
                         child: IconButton(
                           icon: Icon(Icons.cancel_outlined),
-                          onPressed: () {  Navigator.pop(context); },
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       ),
                       Center(
@@ -99,7 +119,62 @@ class _Body extends State<Body> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.01),
-                NormalButton(text: "+   Add new server", onPress: () => {}, vertical: 20, horizontal: 30, width: 0.9,),
+                NormalButton(
+                  text: "+   Add new server",
+                  onPress: () => {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: new Text(
+                                      'Add new server',
+                                      style: TextStyle(
+                                          color: HexColor(kNormalString),
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: NormalTextField(
+                                      hintText: "Server name",
+                                      onChanged: (value) => {}),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: NormalButton(
+                                      text: "Add",
+                                      onPress: () => {
+                                            //BaseInheritedWidget.of(context)
+                                            snackBar.showSnackBar(
+                                              SnackBar(
+                                                content:
+                                                    Text('${counter}'),
+                                              ),
+                                            ),
+                                            setState(() {
+                                              counter++;
+                                            })
+                                          },
+                                      vertical: 20,
+                                      horizontal: 40,
+                                      width: 0.8),
+                                )
+                              ],
+                            ),
+                          );
+                        }),
+                  },
+                  vertical: 20,
+                  horizontal: 30,
+                  width: 0.9,
+                ),
                 SizedBox(height: size.height * 0.01),
                 Container(
                   height: size.height * 0.6,
@@ -112,11 +187,15 @@ class _Body extends State<Body> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           color: HexColor(kNormalBackground),
-                          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          margin: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
                           child: Center(
                             child: Text(
                               'Item ${listServer[index]}',
-                              style: TextStyle(color: HexColor(kNormalString), fontSize: 13, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: HexColor(kNormalString),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         );

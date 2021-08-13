@@ -34,6 +34,7 @@ class PasswordTextField extends StatelessWidget {
         cursorColor: kCurso01,
         decoration: InputDecoration(
           hintText: hintText,
+          labelText: hintText,
           suffixIcon:  IconButton(icon: Icon(hidePassword ? Icons.visibility_outlined  : Icons.visibility_off_outlined , color: HexColor(kInvisible),),
             onPressed: onPress,
           ),
