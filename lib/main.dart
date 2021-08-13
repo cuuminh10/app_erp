@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gmc_erp/events/auth_event.dart';
 import 'package:gmc_erp/screens/login.dart';
 import 'package:gmc_erp/screens/project_dashboard.dart';
 import 'package:gmc_erp/screens/welcome.dart';
 import 'package:gmc_erp/servicesImpl/CommentSerivceImpl.dart';
+
 
 import 'blocs/auth_bloc.dart';
 
@@ -18,6 +22,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<CommentServiceImpl>(
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.deepOrange,
           ),
           routes: <String, WidgetBuilder>{
             '/signin': (context) => WelcomeScreen()
