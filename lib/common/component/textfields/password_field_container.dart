@@ -6,13 +6,13 @@ import 'package:gmc_erp/public/constant/color.dart';
 
 class PasswordTextField extends StatelessWidget {
   final String hintText;
-  final ValueChanged<String> onChanged;
+  final TextEditingController controller;
   final Set<void> Function() onPress;
   final bool hidePassword;
   const PasswordTextField({
     Key? key,
     required this.hintText,
-    required this.onChanged,
+    required this.controller,
     required this.onPress,
     required this.hidePassword,
   }) : super(key: key);
@@ -29,7 +29,7 @@ class PasswordTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(
-        onChanged: onChanged,
+        controller: controller,
         obscureText: hidePassword,
         cursorColor: kCurso01,
         decoration: InputDecoration(

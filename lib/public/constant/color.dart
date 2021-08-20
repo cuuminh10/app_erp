@@ -18,3 +18,6 @@ const kLogin = '#07245B';
 const kWhite = '#FFFFFF';
 const kNormalBackground = '#E1EDF9';
 const kNormalString = '#07245B';
+const kBlue800 = '#07245B';
+const kBlue500 = '#4A77BE';
+const kBlue100 = '#ECF2FE';

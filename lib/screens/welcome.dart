@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gmc_erp/screens/Login/login_screen.dart';
-import 'package:gmc_erp/screens/JobTickets/job-ticket_screen.dart';
+import 'package:gmc_erp/screens/DashBoard/danhboard_screen.dart';
+import 'package:gmc_erp/screens/ResultList/result_list_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class WelcomeScreen extends StatelessWidget {

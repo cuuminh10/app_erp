@@ -34,6 +34,16 @@ class _SignInState extends State<SignIn> {
   //  _authBloc!.add(LoginEvent(username: 'hoang'));
   }
 
+  void handleLogin() {
+    final username = usernameController.text;
+    final password = passwordController.text;
+    _authBloc!.add(LoginEvent(username: username, password: password));
+  }
+
+  void getData(int? n) {
+    print(n! * 2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(

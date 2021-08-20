@@ -4,11 +4,11 @@ import 'package:gmc_erp/public/constant/color.dart';
 
 class NormalTextField extends StatelessWidget {
   final String hintText;
-  final ValueChanged<String> onChanged;
+  final TextEditingController controller;
   const NormalTextField({
     Key? key,
     required this.hintText,
-    required this.onChanged,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class NormalTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(
-        onChanged: onChanged,
+        controller: controller,
         cursorColor: kCurso01,
         decoration: InputDecoration(
           hintText: hintText,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
@@ -9,10 +10,12 @@ class Background extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     Size size = MediaQuery.of(context).size;
     return Container(
       width: double.infinity,
       height: size.height,
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[

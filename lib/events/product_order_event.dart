@@ -12,13 +12,18 @@
 
 import 'package:equatable/equatable.dart';
 
-abstract class AuthEvent extends Equatable {
+abstract class ProductOrderEvent extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
-class LoginEvent extends AuthEvent {
-  final String? username;
-  final String? password;
-  LoginEvent({this.username, this.password});
+class getCountEvent extends ProductOrderEvent {
+  final String? type;
+  getCountEvent({this.type});
+}
+
+class getPoOrderEvent extends ProductOrderEvent {
+  final String? type;
+  final String? statusType;
+  getPoOrderEvent({this.type, this.statusType});
 }
