@@ -1,5 +1,6 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:gmc_erp/screens/JobDetail/job_detail_screen.dart';
 import 'package:gmc_erp/screens/ListJobs/list_job_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
@@ -19,13 +20,12 @@ class ListCardJobs extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () => {
-        //Navigator pages
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (_) {
-        //     return ListJobsScreen(tittle: tittle,);
-        //   }),
-        // ),
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) {
+            return JobDetailScreen(tittle: no,);
+          }),
+        ),
       },
       child: Card(
         shape: RoundedRectangleBorder(

@@ -74,6 +74,9 @@ flutter:
     - assets/images/Filter.svg
     - assets/images/Scan.svg
     - assets/images/Paper.svg
+    - assets/images/dot.svg
+    - assets/images/prefix_date.svg
+    - assets/images/prefix_user.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

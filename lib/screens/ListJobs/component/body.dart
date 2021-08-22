@@ -6,8 +6,10 @@ import 'package:gmc_erp/blocs/product_order_bloc.dart';
 import 'package:gmc_erp/common/component/list_card/List_card_jobs.dart';
 import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:gmc_erp/models/ProductOrderOpen.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:gmc_erp/screens/ListJobs/component/background.dart';
 import 'package:gmc_erp/states/product_order_state.dart';
+import 'package:gmc_erp/public/constant/color.dart';
 
 class Body extends StatefulWidget {
   final String tittle;
@@ -49,59 +51,70 @@ class _Body extends State<Body> {
           })
         };
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(this.widget.tittle),
-        leading: new IconButton(
-            icon: new Icon(Icons.arrow_back),
-            onPressed: () => {Navigator.pop(context, true) }
-        ),
-        actions: <Widget>[
-          IconButton(
-              icon: SvgPicture.asset(
-                "assets/images/Scan.svg",
-              ),
-              onPressed: () => _scan()),
-          IconButton(
-              icon: SvgPicture.asset(
-                "assets/images/Filter.svg",
-              ),
-              onPressed: () => {
-                    this.setState(() {
-                      data = 'vao123';
-                    })
-                  } //do something,
-              ),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        child: BlocConsumer<ProductOrderBloc, ProductOrderState>(
-            listener: (context, state) {
-          // do stuff here based on BlocA's state
-        }, builder: (context, state) {
-          if (state is ProductOrderSuccess) {
-            return GridView.count(
-                crossAxisCount: 1,
-                childAspectRatio: 8 / 2,
-                children: List.generate(
-                  state.productOrderOpen.length,
-                  (index) {
-                    return ListCardJobs(
-                      no: state.productOrderOpen[index].no,
-                      phaseName: state.productOrderOpen[index].phaseName,
-                      productDate: state.productOrderOpen[index].productDate,
-                    );
-                  },
-                ));
-          } else {
-            return Container(
-              child: Text(''),
-            );
-          }
-        }),
-      ),
+    return Background(
+      child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text(this.widget.tittle),
+            leading: new IconButton(
+                icon: new Icon(Icons.arrow_back),
+                onPressed: () => {Navigator.pop(context, true)}),
+            actions: <Widget>[
+              IconButton(
+                  icon: SvgPicture.asset(
+                    "assets/images/Scan.svg",
+                  ),
+                  onPressed: () => _scan()),
+              IconButton(
+                  icon: SvgPicture.asset(
+                    "assets/images/Filter.svg",
+                  ),
+                  onPressed: () => {
+                        this.setState(() {
+                          data = 'vao123';
+                        })
+                      } //do something,
+                  ),
+            ],
+          ),
+          body: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: BlocConsumer<ProductOrderBloc, ProductOrderState>(
+                listener: (context, state) {
+              // do stuff here based on BlocA's state
+            }, builder: (context, state) {
+              if (state is ProductOrderSuccess) {
+                return GridView.count(
+                    crossAxisCount: 1,
+                    childAspectRatio: 8 / 2,
+                    children: List.generate(
+                      state.productOrderOpen.length,
+                      (index) {
+                        return ListCardJobs(
+                          no: state.productOrderOpen[index].no,
+                          phaseName: state.productOrderOpen[index].phaseName,
+                          productDate:
+                              state.productOrderOpen[index].productDate,
+                        );
+                      },
+                    ));
+              } else {
+                return Container(
+                  child: Text(''),
+                );
+              }
+            }),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            child:  SvgPicture.asset(
+              "assets/images/Paper.svg",
+              width: 20.0,
+              height: 20.0,
+              color: HexColor(kWhite),
+            ),
+            backgroundColor: HexColor(kOrange600),
+          )),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/events/auth_event.dart';
 import 'package:gmc_erp/models/User.dart';
 import 'package:gmc_erp/screens/DashBoard/danhboard_screen.dart';
+import 'package:gmc_erp/screens/JobDetail/job_detail_screen.dart';
 import 'package:gmc_erp/screens/Login/component/backgroud.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gmc_erp/common/component/textfields/normal_field_container.dart';
@@ -39,7 +40,7 @@ class _Body extends State<Body> {
   void initState() {
     super.initState();
     _authBloc = BlocProvider.of(context);
-     // getData();
+     getData();
     //  _authBloc!.add(LoginEvent(username: 'hoang'));
   }
 
@@ -47,11 +48,6 @@ class _Body extends State<Body> {
     final username = usernameController.text;
     final password = passwordController.text;
     _authBloc!.add(LoginEvent(username: username, password: password));
-    showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text('da login'),
-        ));
   }
 
   void getData() async {
@@ -61,7 +57,8 @@ class _Body extends State<Body> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) {
-            return DashBoardScreen();
+         //   return DashBoardScreen();
+            return JobDetailScreen(tittle: '123');
           }),
         );
       });
@@ -78,24 +75,7 @@ class _Body extends State<Body> {
           final auth = await state.props[0] as User;
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString('token', auth.token);
-          showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: Text('vao 2'),
-              ));
           getData();
-        }else if (state is AuthStateFailure) {
-          showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: Text('Fail'),
-              ));
-        }else {
-          showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: Text('Fail 2'),
-              ));
         }
       },
       child: SafeArea(

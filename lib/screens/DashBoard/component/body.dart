@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gmc_erp/common/component/dashboard/gmc_dashboard.dart';
 import 'package:gmc_erp/common/component/list_card/list_card.dart';
+import 'package:gmc_erp/screens/DashBoard/component/background.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
@@ -46,59 +47,61 @@ class _Body extends State<Body> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 20.0,
+    return Background(
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(
+                vertical: 20.0,
+              ),
+              child: Container(
+                width: size.width * 0.7,
+                decoration: new BoxDecoration(
+                    color: HexColor(kBlue800),
+                    borderRadius: BorderRadius.circular(9.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TabButton(
+                      text: "Short cut",
+                      pageNumber: 0,
+                      selectedPage: _selectedPage,
+                      onPressed: () => {_changePage(0)},
+                    ),
+                    TabButton(
+                      text: "All",
+                      pageNumber: 1,
+                      selectedPage: _selectedPage,
+                      onPressed: () => {_changePage(1)},
+                    ),
+                  ],
+                ),
+              ),
             ),
-            child: Container(
-              width: size.width * 0.7,
-              decoration: new BoxDecoration(
-                  color: HexColor(kBlue800),
-                  borderRadius: BorderRadius.circular(9.0)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            Expanded(
+              child: PageView(
+                onPageChanged: (int page) {
+                  setState(() {
+                    _selectedPage = page;
+                  });
+                },
+                controller: _pageController,
                 children: [
-                  TabButton(
-                    text: "Short cut",
-                    pageNumber: 0,
-                    selectedPage: _selectedPage,
-                    onPressed: () => {_changePage(0)},
-                  ),
-                  TabButton(
-                    text: "All",
-                    pageNumber: 1,
-                    selectedPage: _selectedPage,
-                    onPressed: () => {_changePage(1)},
+                  GmcDashBoard(list: listServer),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        new Expanded(child:  ListCard(tittle: 'Production', list:this.listServer)),
+                        new Expanded(child:  ListCard(tittle: 'Production', list:this.listServer))
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-          ),
-          Expanded(
-            child: PageView(
-              onPageChanged: (int page) {
-                setState(() {
-                  _selectedPage = page;
-                });
-              },
-              controller: _pageController,
-              children: [
-                GmcDashBoard(list: listServer),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      new Expanded(child:  ListCard(tittle: 'Production', list:this.listServer)),
-                      new Expanded(child:  ListCard(tittle: 'Production', list:this.listServer))
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

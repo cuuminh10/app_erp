@@ -7,6 +7,7 @@ import 'package:gmc_erp/common/component/list_card/List_card_badge.dart';
 import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gmc_erp/models/ProductOrderCount.dart';
+import 'package:gmc_erp/screens/ResultList/component/background.dart';
 import 'package:gmc_erp/states/product_order_state.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
@@ -54,66 +55,73 @@ class _Body extends State<Body> {
           })
         };
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('Job Ticket'),
-        actions: <Widget>[
-          IconButton(
-              icon: SvgPicture.asset(
-                "assets/images/Scan.svg",
-              ),
-              onPressed: () => _scan()),
-          IconButton(
-              icon: SvgPicture.asset(
-                "assets/images/Filter.svg",
-              ),
-              onPressed: () => {
-                    this.setState(() {
-                      data = 'vao123';
-                    })
-                  } //do something,
-              ),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        child: BlocConsumer<ProductOrderBloc, ProductOrderState>(
-            listener: (context, state) {
+    return Background(
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('Job Ticket'),
+          actions: <Widget>[
+            IconButton(
+                icon: SvgPicture.asset(
+                  "assets/images/Scan.svg",
+                ),
+                onPressed: () => _scan()),
+            IconButton(
+                icon: SvgPicture.asset(
+                  "assets/images/Filter.svg",
+                ),
+                onPressed: () => {
+                      this.setState(() {
+                        data = 'vao123';
+                      })
+                    } //do something,
+                ),
+          ],
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          child: BlocConsumer<ProductOrderBloc, ProductOrderState>(
+              listener: (context, state) {
+              if (state is ProductOrderCountSuccess) {
+                setState(() {
+                  productOrderCount = state.productOrderCount;
+                });
+              }
+          }, builder: (context, state) {
             if (state is ProductOrderCountSuccess) {
-              setState(() {
-                productOrderCount = state.productOrderCount;
-              });
-            }
-        }, builder: (context, state) {
-          if (state is ProductOrderCountSuccess) {
-            return GridView.count(
-              crossAxisCount: 1,
-              childAspectRatio: 5 / 1,
-              children: [
-                ListCardBadge(tittle: 'Open', count: state.productOrderCount.opens),
-                ListCardBadge(tittle: 'Overdue', count: state.productOrderCount.overdue),
-                ListCardBadge(tittle: 'Incomplete', count: state.productOrderCount.incompleted),
-                ListCardBadge(tittle: 'Complete', count: state.productOrderCount.completed),
-              ],
-            );
-          } else {
-            if (productOrderCount != null){
               return GridView.count(
                 crossAxisCount: 1,
                 childAspectRatio: 5 / 1,
                 children: [
-                  ListCardBadge(tittle: 'Open', count: productOrderCount!.opens),
-                  ListCardBadge(tittle: 'Overdue', count: productOrderCount!.overdue),
-                  ListCardBadge(tittle: 'Incomplete', count: productOrderCount!.incompleted),
-                  ListCardBadge(tittle: 'Complete', count: productOrderCount!.completed),
+                  ListCardBadge(tittle: 'Open', count: state.productOrderCount.opens),
+                  ListCardBadge(tittle: 'Overdue', count: state.productOrderCount.overdue),
+                  ListCardBadge(tittle: 'Incomplete', count: state.productOrderCount.incompleted),
+                  ListCardBadge(tittle: 'Complete', count: state.productOrderCount.completed),
                 ],
               );
-            }else {
-              return Container(child: Text('123123'));
+            } else {
+              if (productOrderCount != null){
+                return GridView.count(
+                  crossAxisCount: 1,
+                  childAspectRatio: 5 / 1,
+                  children: [
+                    ListCardBadge(tittle: 'Open', count: productOrderCount!.opens),
+                    ListCardBadge(tittle: 'Overdue', count: productOrderCount!.overdue),
+                    ListCardBadge(tittle: 'Incomplete', count: productOrderCount!.incompleted),
+                    ListCardBadge(tittle: 'Complete', count: productOrderCount!.completed),
+                  ],
+                );
+              }else {
+                return Container(child: Text('123123'));
+              }
             }
-          }
-        }),
+          }),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {  },
+          child: Icon(Icons.add),
+          backgroundColor: HexColor(kOrange600),
+        )
       ),
     );
   }

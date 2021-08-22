@@ -21,3 +21,4 @@ const kNormalString = '#07245B';
 const kBlue800 = '#07245B';
 const kBlue500 = '#4A77BE';
 const kBlue100 = '#ECF2FE';
+const kOrange600 = '##F7941D';
