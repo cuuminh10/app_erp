@@ -24,7 +24,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       : assert(authService != null),
         _authService = authService,
         super(AuthStateInitial()){
-    print("vao initial");
   }
 
 

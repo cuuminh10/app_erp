@@ -12,17 +12,16 @@
 
 import 'dart:convert';
 
-import 'package:gmc_erp/models/ProductOrderCount.dart';
+import 'package:gmc_erp/models/Favor.dart';
 import 'package:gmc_erp/common/constants/Constants.dart';
-import 'package:gmc_erp/models/ProductOrderOpen.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProductOrderRepsitory {
+class FavorRepsitory {
   http.Client httpClient = http.Client();
 
-  Future<ProductOrderCount> getCount(String type) async {
-    final url = "${Constants.apiBaseURL}/productOrder/groups/${type}";
+  Future<List<Favor>> getFavor() async {
+    final url = "${Constants.apiBaseURL}/favor";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await httpClient.get(
       Uri.parse(url),
@@ -33,35 +32,57 @@ class ProductOrderRepsitory {
     );
 
     if (response.statusCode == 200) {
-      return ProductOrderCount.fromJsonMap(json.decode(response.body));
-    } else {
-      // If that call was not successful, throw an error.
-      throw Exception('Failed to load get');
-    }
-  }
-
-  Future<List<ProductOrderOpen>> getListPoOrder(String type, String statusType) async {
-    final url = "${Constants.apiBaseURL}/productOrder/${type}/${statusType}";
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final response = await httpClient.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}'
-      },
-    );
-
-    if (response.statusCode == 200) {
-     // return ProductOrderOpen.fromJsonMap(json.decode(response.body));
       final respondData = json.decode(response.body) as List;
-      final List<ProductOrderOpen> listResult = respondData.map((comment) {
-        return ProductOrderOpen.fromJsonMap(comment);
+      final List<Favor> listResult = respondData.map((comment) {
+        return Favor.fromJsonMap(comment);
       }).toList();
 
       return listResult;
     } else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load get');
+    }
+  }
+
+  Future<Favor> postFavor(String moduleName) async {
+    final url = "${Constants.apiBaseURL}/favor";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await httpClient.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${prefs.getString('token')!}',
+      },
+      body: jsonEncode(<String, String>{
+        'moduleName': moduleName,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return Favor.fromJsonMap(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load get');
+    }
+  }
+
+  Future<int> deleteFavor(int id) async {
+    final url = "${Constants.apiBaseURL}/favor/${id}";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await httpClient.delete(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${prefs.getString('token')!}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      return result;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load delete');
     }
   }
 }

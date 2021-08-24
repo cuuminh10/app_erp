@@ -1,12 +1,13 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:gmc_erp/models/Favor.dart';
 import 'package:gmc_erp/screens/ResultList/result_list_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
 class GmcDashBoard extends StatelessWidget {
-  final List<String> list;
-  const GmcDashBoard({Key? key, required List<String> this.list})
+  final List<Favor> list;
+  const GmcDashBoard({Key? key, required List<Favor> this.list})
       : super(key: key);
 
   @override
@@ -16,6 +17,7 @@ class GmcDashBoard extends StatelessWidget {
       child: GridView.count(
           crossAxisCount: 2,
           childAspectRatio: 5 / 4,
+          padding: EdgeInsets.only(top: 0),
           children: List.generate(list.length, (index) {
             return InkWell(
               onTap: () => {
@@ -41,7 +43,7 @@ class GmcDashBoard extends StatelessWidget {
                           "assets/images/Jobticket.svg",
                         ),
                         Text(
-                          'Item ${list[index]}',
+                          '${list[index].moduleName}',
                           style: TextStyle(
                               color: HexColor(kNormalString),
                               fontSize: 13,

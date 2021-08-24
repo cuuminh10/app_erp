@@ -77,6 +77,15 @@ flutter:
     - assets/images/dot.svg
     - assets/images/prefix_date.svg
     - assets/images/prefix_user.svg
+    - assets/images/comment.svg
+    - assets/images/document.svg
+    - assets/images/attachment-place-holder.png
+    - assets/images/comment-place-holder.png
+    - assets/images/GoodReceiptRequest.svg
+    - assets/images/product-ressult.svg
+    - assets/images/cart.svg
+    - assets/images/purchase-order.svg
+    - assets/images/Purchase_Request.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

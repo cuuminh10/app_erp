@@ -3,9 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gmc_erp/blocs/favor_bloc.dart';
 import 'package:gmc_erp/blocs/product_order_bloc.dart';
+import 'package:gmc_erp/events/favor_event.dart';
 import 'package:gmc_erp/screens/welcome.dart';
 import 'package:gmc_erp/servicesImpl/AuthServiceImpl.dart';
+import 'package:gmc_erp/servicesImpl/FavorServiceImpl.dart';
 import 'package:gmc_erp/servicesImpl/ProductOrderServiceImpl.dart';
 
 
@@ -28,6 +31,8 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthServiceImpl()),
         RepositoryProvider<ProductOrderServiceImpl>(
             create: (context) => ProductOrderServiceImpl()),
+        RepositoryProvider<FavorServiceImpl>(
+            create: (context) => FavorServiceImpl()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -39,6 +44,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) {
             final service = RepositoryProvider.of<ProductOrderServiceImpl>(context);
             return ProductOrderBloc(service);
+          }),
+          BlocProvider(create: (context) {
+            final service = RepositoryProvider.of<FavorServiceImpl>(context);
+            return FavorBloc(service)..add(getFavorEvent());
           })
         ],
         child: MaterialApp(

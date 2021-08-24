@@ -1,9 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gmc_erp/blocs/favor_bloc.dart';
 import 'package:gmc_erp/common/component/dashboard/gmc_dashboard.dart';
 import 'package:gmc_erp/common/component/list_card/list_card.dart';
+import 'package:gmc_erp/events/favor_event.dart';
+import 'package:gmc_erp/models/Favor.dart';
 import 'package:gmc_erp/screens/DashBoard/component/background.dart';
+import 'package:gmc_erp/states/favor_states.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
@@ -16,9 +20,15 @@ class Body extends StatefulWidget {
 }
 
 class _Body extends State<Body> with TickerProviderStateMixin {
-  final listServer = ['one', 'two', 'three', 'Four'];
+  List<Favor> listProduction = [];
+  List<Favor> listPurchase = [];
+  // _listProduction.add
+  // new Favor(1, 'ProductionOrdr', 'Jobticket.svg','Job Ticket')
   int _selectedPage = 0;
   late PageController _pageController;
+  FavorBloc? _favorBloc;
+  Favor? deleteFavor;
+  List<Favor>? _listFavor = [];
 
   void _changePage(int pageNum) {
     setState(() {
@@ -31,9 +41,43 @@ class _Body extends State<Body> with TickerProviderStateMixin {
     });
   }
 
+  List<Favor>  checkContains (String moduleName) {
+    List<Favor>  contain = _listFavor!.where((element) => element.moduleName == moduleName).toList();
+
+    return contain;
+  }
+
+  void onHandleChangeFavor (String moduleName) {
+    final favor = checkContains(moduleName);
+    if (favor.length > 0) {
+      _favorBloc!.add(deleteFavorEvent(id: favor[0].id));
+      setState(() {
+        deleteFavor = favor[0];
+      });
+    }else {
+      _favorBloc!.add(postFavorEvent(moduleName: moduleName));
+    }
+  }
+
   @override
   void initState() {
     _pageController = PageController();
+    _favorBloc = BlocProvider.of(context);
+    listProduction
+      ..add(new Favor(1, 'ProductionOrdr', 'Jobticket.svg', 'Job Ticket'))
+      ..add(new Favor(
+          2, 'ProductionFG', 'product-ressult.svg', 'ProductionResult'))
+      ..add(new Favor(3, 'POPurchaseReceipt', 'GoodReceiptRequest.svg',
+          'Good Receipt Request'));
+
+    listPurchase
+      ..add(new Favor(4, 'FGReceipt', 'Paper.svg', 'Good Receipt'))
+      ..add(new Favor(
+          5, 'PR', 'Purchase_Request.svg', 'Purchase Request'))
+      ..add(new Favor(6, 'PO', 'purchase-order.svg',
+          'Purchase Order'))
+      ..add(new Favor(7, 'ApprovalProcessConfig', 'Paper.svg',
+          'Approval Form'));
     super.initState();
   }
 
@@ -42,7 +86,6 @@ class _Body extends State<Body> with TickerProviderStateMixin {
     _pageController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,25 +123,54 @@ class _Body extends State<Body> with TickerProviderStateMixin {
               ),
             ),
             Expanded(
-              child: PageView(
-                onPageChanged: (int page) {
+              child: BlocConsumer<FavorBloc, FavorState>(
+                  listener: (context, state) {
+                if (state is FavorSuccess) {
                   setState(() {
-                    _selectedPage = page;
+                    _listFavor = state.favor;
                   });
-                },
-                controller: _pageController,
-                children: [
-                  GmcDashBoard(list: listServer),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        new Expanded(child:  ListCard(tittle: 'Production', list:this.listServer)),
-                        new Expanded(child:  ListCard(tittle: 'Production', list:this.listServer))
-                      ],
+                }
+                if (state is FavorPostSuccess) {
+                  _listFavor!.add(state.favor);
+                  setState(() {
+                    _listFavor = _listFavor;
+                  });
+                }
+                if (state is FavorDeleteSuccess) {
+                  _listFavor!.removeWhere((element) => element.id == state.id);
+                  setState(() {
+                    _listFavor = _listFavor;
+                  });
+                }
+              }, builder: (context, state) {
+                return PageView(
+                  onPageChanged: (int page) {
+                    setState(() {
+                      _selectedPage = page;
+                    });
+                  },
+                  controller: _pageController,
+                  children: [
+                    _listFavor!.length > 0
+                        ? GmcDashBoard(
+                            list: _listFavor!,
+                          )
+                        : SizedBox(),
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          new Expanded(
+                              child: ListCard(
+                                  tittle: 'Production', list: this.listProduction, listEnable: _listFavor!,onTap: (e) => { onHandleChangeFavor(e)} )),
+                          new Expanded(
+                              child: ListCard(
+                                  tittle: 'Purchase', list: this.listPurchase, listEnable: _listFavor!, onTap: (e) => { onHandleChangeFavor(e)}))
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              }),
             )
           ],
         ),

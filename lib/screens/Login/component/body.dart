@@ -57,8 +57,8 @@ class _Body extends State<Body> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) {
-         //   return DashBoardScreen();
-            return JobDetailScreen(tittle: '123');
+              return DashBoardScreen();
+            // return JobDetailScreen(tittle: '123');
           }),
         );
       });
