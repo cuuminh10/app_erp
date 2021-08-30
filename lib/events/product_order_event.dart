@@ -16,6 +16,7 @@ abstract class ProductOrderEvent extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [];
+
 }
 class getCountEvent extends ProductOrderEvent {
   final String? type;
@@ -26,4 +27,10 @@ class getPoOrderEvent extends ProductOrderEvent {
   final String? type;
   final String? statusType;
   getPoOrderEvent({this.type, this.statusType});
+}
+
+class getPoOrderDetailEvent extends ProductOrderEvent {
+  final String? type;
+  final String? no;
+  getPoOrderDetailEvent({this.type, this.no});
 }

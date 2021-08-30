@@ -7,9 +7,10 @@ import 'package:gmc_erp/public/constant/color.dart';
 class ListCardBadge extends StatelessWidget {
   final String tittle;
   final int count;
+  final Set<void> Function(String) onTap;
 
   const ListCardBadge(
-      {Key? key, required String this.tittle, required int this.count})
+      {Key? key, required String this.tittle, required int this.count, required Set<void> Function(String) this.onTap})
       : super(key: key);
 
   @override
@@ -17,7 +18,7 @@ class ListCardBadge extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () => {
-        //Navigator pages
+        // Navigator pages
         Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -25,6 +26,7 @@ class ListCardBadge extends StatelessWidget {
             .then((context) {
               print('vao 123123123');
         }),
+        // this.onTap(tittle)
       },
       child: Card(
         shape: RoundedRectangleBorder(

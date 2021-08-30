@@ -66,7 +66,7 @@ class _Body extends State<Body> with TickerProviderStateMixin {
     listProduction
       ..add(new Favor(1, 'ProductionOrdr', 'Jobticket.svg', 'Job Ticket'))
       ..add(new Favor(
-          2, 'ProductionFG', 'product-ressult.svg', 'ProductionResult'))
+          2, 'ProductionFG', 'product-ressult.svg', 'Production Result'))
       ..add(new Favor(3, 'POPurchaseReceipt', 'GoodReceiptRequest.svg',
           'Good Receipt Request'));
 
@@ -126,6 +126,7 @@ class _Body extends State<Body> with TickerProviderStateMixin {
               child: BlocConsumer<FavorBloc, FavorState>(
                   listener: (context, state) {
                 if (state is FavorSuccess) {
+                  print('vao dashboard');
                   setState(() {
                     _listFavor = state.favor;
                   });
@@ -155,7 +156,7 @@ class _Body extends State<Body> with TickerProviderStateMixin {
                         ? GmcDashBoard(
                             list: _listFavor!,
                           )
-                        : SizedBox(),
+                        : SizedBox(child: Text(  _listFavor!.length.toString()),),
                     Container(
                       child: Column(
                         children: <Widget>[

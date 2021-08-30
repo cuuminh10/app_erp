@@ -1,5 +1,6 @@
 import 'package:gmc_erp/common/service/BaseServiceImpl.dart';
 import 'package:gmc_erp/models/ProductOrderCount.dart';
+import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/models/ProductOrderOpen.dart';
 import 'package:gmc_erp/repository/ProductOrderRepsitory.dart';
 import 'package:gmc_erp/services/ProductOrderService.dart';
@@ -19,5 +20,10 @@ class ProductOrderServiceImpl extends BaseServiceImpl<ProductOrderServiceImpl, i
     String status = Constants.getQueryProductOrder(statusType);
 
     return repository.getListPoOrder(type, status);
+  }
+
+  @override
+  Future<ProductOrderDetail> getDetail(String type, String no) {
+    return repository.getDetail(type, no);
   }
 }

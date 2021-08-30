@@ -74,6 +74,7 @@ class _Body extends State<Body> {
         if (state is AuthStateSuccess) {
           final auth = await state.props[0] as User;
           SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('user', auth.username);
           prefs.setString('token', auth.token);
           getData();
         }

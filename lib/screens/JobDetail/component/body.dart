@@ -2,18 +2,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gmc_erp/blocs/file_comment_bloc.dart';
 import 'package:gmc_erp/blocs/product_order_bloc.dart';
 import 'package:gmc_erp/common/component/buttons/gmc_button_container.dart';
 import 'package:gmc_erp/common/component/comment/CommenBox.dart';
+import 'package:gmc_erp/events/file_comment_event.dart';
 import 'package:gmc_erp/events/product_order_event.dart';
+import 'package:gmc_erp/models/Comments.dart';
+import 'package:gmc_erp/models/ProductOrderDetail.dart';
+import 'package:gmc_erp/states/file_comment_state.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/screens/ListJobs/component/background.dart';
 import 'package:gmc_erp/public/constant/color.dart';
+import 'package:gmc_erp/public/ultis/convert_date.dart';
+import 'package:gmc_erp/common/component/buttons/gmc_button_dotted.dart';
 
 class Body extends StatefulWidget {
-  final String tittle;
+  final ProductOrderDetail productOrderDetail;
 
-  const Body({Key? key, required this.tittle}) : super(key: key);
+  const Body({Key? key, required this.productOrderDetail}) : super(key: key);
 
   @override
   _Body createState() => _Body();
@@ -27,6 +34,16 @@ class _Body extends State<Body> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
   final listServer = ['one', 'two', 'three', 'Four'];
+  final TextEditingController _dateTextFieldController =
+      TextEditingController();
+  final TextEditingController _userTextFieldController =
+      TextEditingController();
+  final TextEditingController _woTextFieldController = TextEditingController();
+  final TextEditingController _noTextFieldController = TextEditingController();
+
+  List<Comment> _comments = [];
+  FileCommentBloc? _fileCommentBloc;
+
   List filedata = [
     {
       'name': 'Adeleye Ayodeji',
@@ -40,7 +57,7 @@ class _Body extends State<Body> {
     },
   ];
 
-  Widget commentChild(data) {
+  Widget commentChild(List<Comment> data) {
     return ListView(
       children: [
         for (var i = 0; i < data.length; i++)
@@ -48,36 +65,44 @@ class _Body extends State<Body> {
             padding: const EdgeInsets.fromLTRB(0, 8.0, 2.0, 0.0),
             child: Column(
               children: [
-                 ListTile(
-                    leading: GestureDetector(
-                      onTap: () async {
-                        // Display the image in large form.
-                        print("Comment Clicked");
-                      },
-                      child: Container(
-                        height: 50.0,
-                        width: 50.0,
-                        decoration: new BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: new BorderRadius.all(Radius.circular(50))),
-                        child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(data[i]['pic'] + "$i")),
+                ListTile(
+                  leading: GestureDetector(
+                    onTap: () async {
+                      // Display the image in large form.
+                      print("Comment Clicked");
+                    },
+                    child: Container(
+                      height: 50.0,
+                      width: 50.0,
+                      decoration: new BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius:
+                              new BorderRadius.all(Radius.circular(50))),
+                      // child: CircleAvatar(
+                      //     radius: 50,
+                      //     backgroundImage: NetworkImage(data[i]['pic'] + "$i")),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.brown.shade800,
+                        child: Text('${data[i].createUser}'),
                       ),
                     ),
-                    title: Text(
-                      data[i]['name'],
-                      style: TextStyle(fontWeight: FontWeight.bold, color: HexColor(kBlue800)),
-                    ),
-                    subtitle: Text(data[i]['message']),
-
                   ),
+                  title: Text(
+                    data[i].createUser,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: HexColor(kBlue800)),
+                  ),
+                  subtitle: Text(
+                      '${ConvertDate.ConvertDateTime(data[i].createDate)}'),
+                ),
                 Container(
                   margin: EdgeInsets.only(left: 16.0),
                   child: Align(
                       alignment: Alignment.topLeft,
-                      child: Text(data[i]['message'],   style: TextStyle(color: HexColor(kBlue500)),)
-                  ),
+                      child: Text(
+                        data[i].comment,
+                        style: TextStyle(color: HexColor(kBlue500)),
+                      )),
                 )
               ],
             ),
@@ -89,10 +114,20 @@ class _Body extends State<Body> {
   @override
   void initState() {
     super.initState();
+    _fileCommentBloc = BlocProvider.of(context);
     _pageController = PageController();
     _productOrderBloc = BlocProvider.of(context);
-    _productOrderBloc!.add(
-        getPoOrderEvent(type: 'jobticket', statusType: this.widget.tittle));
+    _dateTextFieldController.value = TextEditingValue(
+        text: ConvertDate.ConvertDateTime(
+            this.widget.productOrderDetail.ordDate));
+    _userTextFieldController.value =
+        TextEditingValue(text: this.widget.productOrderDetail.employeeName);
+    _woTextFieldController.value =
+        TextEditingValue(text: this.widget.productOrderDetail.woNo);
+    _comments = this.widget.productOrderDetail.listComment!;
+
+    _noTextFieldController.value  =
+        TextEditingValue(text: this.widget.productOrderDetail.no);
   }
 
   void _changePage(int pageNum) {
@@ -120,7 +155,7 @@ class _Body extends State<Body> {
         child: Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(this.widget.tittle),
+        title: Text(this.widget.productOrderDetail.no),
         leading: new IconButton(
             icon: new Icon(Icons.arrow_back),
             onPressed: () => {Navigator.pop(context, true)}),
@@ -149,7 +184,9 @@ class _Body extends State<Body> {
                         flex: 3,
                         child: TextField(
                             style: TextStyle(color: HexColor(kBlue500)),
-                            autocorrect: true,
+                            controller: _noTextFieldController,
+                            showCursor: false,
+                            readOnly: true,
                             decoration: InputDecoration(
                                 enabledBorder: new UnderlineInputBorder(
                                     borderSide: new BorderSide(
@@ -166,7 +203,9 @@ class _Body extends State<Body> {
                         flex: 3,
                         child: TextField(
                             style: TextStyle(color: HexColor(kBlue500)),
-                            autocorrect: true,
+                            controller: _woTextFieldController,
+                            showCursor: false,
+                            readOnly: true,
                             decoration: InputDecoration(
                                 enabledBorder: new UnderlineInputBorder(
                                     borderSide: new BorderSide(
@@ -187,7 +226,9 @@ class _Body extends State<Body> {
                         flex: 3,
                         child: TextField(
                             style: TextStyle(color: HexColor(kBlue500)),
-                            autocorrect: true,
+                            controller: _dateTextFieldController,
+                            showCursor: false,
+                            readOnly: true,
                             decoration: InputDecoration(
                                 enabledBorder: new UnderlineInputBorder(
                                     borderSide: new BorderSide(
@@ -214,7 +255,9 @@ class _Body extends State<Body> {
                         flex: 3,
                         child: TextField(
                             style: TextStyle(color: HexColor(kBlue500)),
-                            autocorrect: true,
+                            controller: _userTextFieldController,
+                            showCursor: false,
+                            readOnly: true,
                             decoration: InputDecoration(
                                 enabledBorder: new UnderlineInputBorder(
                                     borderSide: new BorderSide(
@@ -307,83 +350,95 @@ class _Body extends State<Body> {
                             child: Column(
                               children: <Widget>[
                                 Table(
+                                  columnWidths: {
+                                    0: FlexColumnWidth(3),
+                                    1: FlexColumnWidth(2),
+                                    2: FlexColumnWidth(2),
+                                    3: FlexColumnWidth(2),
+                                    4: FlexColumnWidth(3),
+                                  },
+                                  defaultColumnWidth: IntrinsicColumnWidth(),
                                   border: TableBorder.all(
                                       width: 1.0, color: HexColor(kBlue500)),
-                                  textDirection: TextDirection.ltr,
                                   children: [
                                     TableRow(
                                         decoration: BoxDecoration(
                                             color: HexColor(kBlue800)),
                                         children: [
                                           TableCell(
-                                              child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Item',
-                                                  style: TextStyle(
-                                                      color: HexColor(kWhite),
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: 'Gotham'),
-                                                ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Item',
+                                                style: TextStyle(
+                                                    color: HexColor(kWhite),
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Gotham'),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Phase',
-                                                  style: TextStyle(
-                                                      color: HexColor(kWhite),
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: 'Gotham'),
-                                                ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Phase',
+                                                style: TextStyle(
+                                                    color: HexColor(kWhite),
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Gotham'),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Qty',
-                                                  style: TextStyle(
-                                                      color: HexColor(kWhite),
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: 'Gotham'),
-                                                ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Qty',
+                                                style: TextStyle(
+                                                    color: HexColor(kWhite),
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Gotham'),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Unit',
-                                                  style: TextStyle(
-                                                      color: HexColor(kWhite),
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: 'Gotham'),
-                                                ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Unit',
+                                                style: TextStyle(
+                                                    color: HexColor(kWhite),
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Gotham'),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'Remark',
-                                                  style: TextStyle(
-                                                      color: HexColor(kWhite),
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: 'Gotham'),
-                                                ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Remark',
+                                                style: TextStyle(
+                                                    color: HexColor(kWhite),
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Gotham'),
                                               ),
-                                            ],
-                                          )),
+                                            ),
+                                          )
                                         ]),
-                                    for (var i = 0; i < listServer.length; i++)
+                                    for (var i = 0;
+                                        i <
+                                            this
+                                                .widget
+                                                .productOrderDetail
+                                                .listDetail!
+                                                .length;
+                                        i++)
                                       TableRow(
                                           decoration: BoxDecoration(
                                               color: i % 2 == 0
@@ -391,67 +446,63 @@ class _Body extends State<Body> {
                                                   : HexColor(kBlue200)),
                                           children: [
                                             TableCell(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      '123',
-                                                      style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      '123',
-                                                      style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      '123',
-                                                      style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      '123',
-                                                      style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      '123',
-                                                      style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
-                                                    ),
-                                                  ),
-                                                ],
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '${this.widget.productOrderDetail.listDetail![i].productNo}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          HexColor(kBlue800)),
+                                                ),
+                                              ),
+                                            ),
+                                            TableCell(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '${this.widget.productOrderDetail.listDetail![i].phaseName}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          HexColor(kBlue800)),
+                                                ),
+                                              ),
+                                            ),
+                                            TableCell(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '${this.widget.productOrderDetail.listDetail![i].qty}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          HexColor(kBlue800)),
+                                                ),
+                                              ),
+                                            ),
+                                            TableCell(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '${this.widget.productOrderDetail.listDetail![i].unit}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          HexColor(kBlue800)),
+                                                ),
+                                              ),
+                                            ),
+                                            TableCell(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  ' >',
+                                                  style: TextStyle(
+                                                      color:
+                                                          HexColor(kBlue800)),
+                                                ),
                                               ),
                                             )
                                           ])
@@ -461,59 +512,101 @@ class _Body extends State<Body> {
                             ),
                           ),
                           Container(
-                             child: filedata.isEmpty ? Image.asset(
-                            "assets/images/comment-place-holder.png",
-                            alignment: Alignment.topCenter,
-                          ) : Container(
-                               child: CommentBox(
-                                 userImage:
-                                 "https://scontent.fsgn2-2.fna.fbcdn.net/v/t1.6435-9/124207683_3440092012749731_1279502413228474901_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=bv4Wsm-W7RQAX84Xg_Z&_nc_ht=scontent.fsgn2-2.fna&oh=bf3fe2fc238af306e3eb844b59a3fac2&oe=61490AF2",
-                                 child: commentChild(filedata),
-                                 labelText: 'Write a comment...',
-                                 errorText: 'Comment cannot be blank',
-                                 sendButtonMethod: () {
-                                   if (formKey.currentState!.validate()) {
-                                     print(commentController.text);
-                                     setState(() {
-                                       var value = {
-                                         'name': 'New User',
-                                         'pic':
-                                         'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-                                         'message': commentController.text
-                                       };
-                                       filedata.insert(0, value);
-                                     });
-                                     commentController.clear();
-                                     FocusScope.of(context).unfocus();
-                                   } else {
-                                     print("Not validated");
-                                   }
-                                 },
-                                 formKey: formKey,
-                                 commentController: commentController,
-                                 backgroundColor: Colors.black,
-                                 textColor: Colors.white,
-                                 sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.white),
-                               ),
-                             ),
+                            child:
+                                BlocListener<FileCommentBloc, FileCommentState>(
+                              listener: (context, state) {
+                                if (state is FileCommentStateSuccess) {
+                                  _comments.insert(0, state.comments);
+                                  setState(() {
+                                    _comments = _comments;
+                                  });
+                                }
+                              },
+                              child: CommentBox(
+                                userImage:
+                                    "https://scontent.fsgn2-2.fna.fbcdn.net/v/t1.6435-9/124207683_3440092012749731_1279502413228474901_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=bv4Wsm-W7RQAX84Xg_Z&_nc_ht=scontent.fsgn2-2.fna&oh=bf3fe2fc238af306e3eb844b59a3fac2&oe=61490AF2",
+                                child: this._comments.length > 0
+                                    ? commentChild(this._comments)
+                                    : Container(
+                                        margin: EdgeInsets.only(top: 70.0),
+                                        child: Image.asset(
+                                          "assets/images/comment-place-holder.png",
+                                          alignment: Alignment.topCenter,
+                                        )),
+                                labelText: 'Write a comment...',
+                                errorText: 'Comment cannot be blank',
+                                sendButtonMethod: () {
+                                  if (formKey.currentState!.validate()) {
+                                    print(commentController.text);
+                                    ProductOrderDetail productOrderDetail =
+                                        this.widget.productOrderDetail;
+
+                                    _fileCommentBloc!.add(postComment(
+                                        type: 'jobticket',
+                                        no: productOrderDetail.id.toString(),
+                                        content: commentController.text));
+                                    commentController.clear();
+                                    FocusScope.of(context).unfocus();
+                                  } else {
+                                    print("Not validated");
+                                  }
+                                },
+                                formKey: formKey,
+                                commentController: commentController,
+                                backgroundColor: Colors.black,
+                                textColor: Colors.white,
+                                sendWidget: Icon(Icons.send_sharp,
+                                    size: 30, color: Colors.white),
+                              ),
+                            ),
                           ),
                           Container(
-                            child: Text('123')
-                          )
+                              margin: EdgeInsets.only(top: 70.0),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/attachment-place-holder.png",
+                                      alignment: Alignment.topCenter,
+                                    ),
+                                    SizedBox(height: size.height * 0.02),
+                                    Text(
+                                      'There are no any documents yet',
+                                      style: TextStyle(
+                                          color: HexColor(kBlue800),
+                                          fontFamily: 'Gotham',
+                                          fontWeight: FontWeight.normal,
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: 14.0),
+                                    ),
+                                    SizedBox(height: size.height * 0.02),
+                                    DottedButton(
+                                        text: "Attachment",
+                                        onPress: () => {},
+                                        vertical: 15,
+                                        horizontal: 40,
+                                        width: 0.48,
+                                        color: HexColor(kWhite),
+                                        colorText: HexColor(kBlue900),)
+                                  ],
+                                ),
+                              ))
                         ],
                       ),
                     )
                   ],
                 ),
               ),
-              Center(
-                child: NormalButton(
-                    text: "Result",
-                    onPress: () => {},
-                    vertical: 20,
-                    horizontal: 40,
-                    width: 0.5),
-              )
+              // Center(
+              //   child: NormalButton(
+              //       text: "Result",
+              //       onPress: () => {},
+              //       vertical: 20,
+              //       horizontal: 40,
+              //       width: 0.5),
+              // )
             ],
           ),
         ),

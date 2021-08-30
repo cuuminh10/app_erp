@@ -6,10 +6,14 @@ import 'package:gmc_erp/blocs/product_order_bloc.dart';
 import 'package:gmc_erp/common/component/list_card/List_card_jobs.dart';
 import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:gmc_erp/models/ProductOrderOpen.dart';
+import 'package:gmc_erp/screens/JobDetail/job_detail_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/screens/ListJobs/component/background.dart';
 import 'package:gmc_erp/states/product_order_state.dart';
 import 'package:gmc_erp/public/constant/color.dart';
+import 'package:gmc_erp/common/component/buttons/fancy.dart';
+
 
 class Body extends StatefulWidget {
   final String tittle;
@@ -22,7 +26,9 @@ class Body extends StatefulWidget {
 
 class _Body extends State<Body> {
   String data = '';
+  bool isExtended = false;
   ProductOrderBloc? _productOrderBloc;
+  late List<ProductOrderOpen> _listProductOrderOpen = [];
 
   @override
   void initState() {
@@ -30,6 +36,10 @@ class _Body extends State<Body> {
     _productOrderBloc = BlocProvider.of(context);
     _productOrderBloc!.add(
         getPoOrderEvent(type: 'jobticket', statusType: this.widget.tittle));
+  }
+
+  void onHandleClickItem(String no) {
+    _productOrderBloc!.add(getPoOrderDetailEvent(type: 'jobticket', no: no));
   }
 
   @override
@@ -45,11 +55,39 @@ class _Body extends State<Body> {
           await FlutterBarcodeScanner.scanBarcode(
                   "#ff6666", "Cancel", false, ScanMode.DEFAULT)
               .then((barcode) {
-            this.setState(() {
-              data = barcode;
-            });
+            onHandleClickItem(barcode);
           })
         };
+
+    Widget enbleButtons() {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FloatingActionButton(
+            onPressed: () {
+              // Respond to button press
+            },
+            child: Icon(Icons.add),
+          ),
+          SizedBox(height: 8.0),
+          FloatingActionButton(
+            mini: true,
+            onPressed: () {
+              // Respond to button press
+            },
+            child: Icon(Icons.add),
+          ),
+          SizedBox(height: 8.0),
+          FloatingActionButton.extended(
+            onPressed: () {
+              // Respond to button press
+            },
+            icon: Icon(Icons.add),
+            label: Text('EXTENDED'),
+          ),
+        ],
+      );
+    }
 
     return Background(
       child: Scaffold(
@@ -81,40 +119,82 @@ class _Body extends State<Body> {
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: BlocConsumer<ProductOrderBloc, ProductOrderState>(
                 listener: (context, state) {
-              // do stuff here based on BlocA's state
-            }, builder: (context, state) {
               if (state is ProductOrderSuccess) {
-                return GridView.count(
-                    crossAxisCount: 1,
-                    childAspectRatio: 8 / 2,
-                    children: List.generate(
-                      state.productOrderOpen.length,
-                      (index) {
-                        return ListCardJobs(
-                          no: state.productOrderOpen[index].no,
-                          phaseName: state.productOrderOpen[index].phaseName,
-                          productDate:
-                              state.productOrderOpen[index].productDate,
-                        );
-                      },
-                    ));
-              } else {
-                return Container(
-                  child: Text(''),
+                setState(() {
+                  this._listProductOrderOpen = state.productOrderOpen;
+                });
+              }
+
+              if (state is ProductOrderDetailSuccess) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) {
+                    return JobDetailScreen(
+                        productOrderDetail: state.productOrderDetail);
+                  }),
                 );
               }
+            }, builder: (context, state) {
+              return this._listProductOrderOpen.length > 0
+                  ? GridView.count(
+                      crossAxisCount: 1,
+                      childAspectRatio: 8 / 2,
+                      children: List.generate(
+                        this._listProductOrderOpen.length,
+                        (index) {
+                          return ListCardJobs(
+                            no: this._listProductOrderOpen[index].no,
+                            phaseName:
+                                this._listProductOrderOpen[index].phaseName,
+                            productDate:
+                                this._listProductOrderOpen[index].productDate,
+                            onTap: (e) => {onHandleClickItem(e)},
+                          );
+                        },
+                      ))
+                  : SizedBox();
             }),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            child:  SvgPicture.asset(
-              "assets/images/Paper.svg",
-              width: 20.0,
-              height: 20.0,
-              color: HexColor(kWhite),
-            ),
-            backgroundColor: HexColor(kOrange600),
-          )),
+          floatingActionButton: FancyFab(),
+          // floatingActionButton: FloatingActionButton.extended(
+          //     backgroundColor: HexColor(kOrange600),
+          //     onPressed: () => {
+          //           setState(() {
+          //             isExtended = !isExtended;
+          //           })
+          //         },
+          //     label: AnimatedSwitcher(
+          //       duration: Duration(seconds: 1),
+          //       transitionBuilder:
+          //           (Widget child, Animation<double> animation) =>
+          //               FadeTransition(
+          //         opacity: animation,
+          //         child: SizeTransition(
+          //           child: child,
+          //           sizeFactor: animation,
+          //           axis: Axis.horizontal,
+          //         ),
+          //       ),
+          //       child: !isExtended
+          //           ? SvgPicture.asset(
+          //               "assets/images/Paper.svg",
+          //               width: 20.0,
+          //               height: 20.0,
+          //               color: HexColor(kWhite),
+          //             )
+          //           : Row(
+          //               children: [
+          //                 Padding(
+          //                     padding: const EdgeInsets.only(right: 4.0),
+          //                     child: SvgPicture.asset("assets/images/Paper.svg",
+          //                         width: 20.0,
+          //                         height: 20.0,
+          //                         color: HexColor(kWhite))),
+          //                 Text("EXTEND")
+          //               ],
+          //             ),
+          //     ))
+      ),
     );
   }
 }

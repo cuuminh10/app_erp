@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gmc_erp/blocs/favor_bloc.dart';
+import 'package:gmc_erp/blocs/file_comment_bloc.dart';
 import 'package:gmc_erp/blocs/product_order_bloc.dart';
 import 'package:gmc_erp/events/favor_event.dart';
 import 'package:gmc_erp/screens/welcome.dart';
 import 'package:gmc_erp/servicesImpl/AuthServiceImpl.dart';
 import 'package:gmc_erp/servicesImpl/FavorServiceImpl.dart';
+import 'package:gmc_erp/servicesImpl/FileCommentSerivceImpl.dart';
 import 'package:gmc_erp/servicesImpl/ProductOrderServiceImpl.dart';
 
 
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
             create: (context) => ProductOrderServiceImpl()),
         RepositoryProvider<FavorServiceImpl>(
             create: (context) => FavorServiceImpl()),
+        RepositoryProvider<FileCommentServiceImpl>(
+            create: (context) => FileCommentServiceImpl()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -48,6 +52,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) {
             final service = RepositoryProvider.of<FavorServiceImpl>(context);
             return FavorBloc(service)..add(getFavorEvent());
+          }),
+          BlocProvider(create: (context) {
+            final service = RepositoryProvider.of<FileCommentServiceImpl>(context);
+            return FileCommentBloc(service);
           })
         ],
         child: MaterialApp(

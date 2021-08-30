@@ -36,6 +36,10 @@ class _Body extends State<Body> {
     _productOrderBloc!.add(getCountEvent(type: 'jobticket'));
   }
 
+  void onHandleClickItem (String no) {
+  //   _productOrderBloc!.add(getPoOrderDetailEvent(type: 'jobticket', no: no));
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -87,16 +91,20 @@ class _Body extends State<Body> {
                   productOrderCount = state.productOrderCount;
                 });
               }
+
+              if (state is ProductOrderDetailSuccess) {
+                print('12333333');
+              }
           }, builder: (context, state) {
             if (state is ProductOrderCountSuccess) {
               return GridView.count(
                 crossAxisCount: 1,
                 childAspectRatio: 5 / 1,
                 children: [
-                  ListCardBadge(tittle: 'Open', count: state.productOrderCount.opens),
-                  ListCardBadge(tittle: 'Overdue', count: state.productOrderCount.overdue),
-                  ListCardBadge(tittle: 'Incomplete', count: state.productOrderCount.incompleted),
-                  ListCardBadge(tittle: 'Complete', count: state.productOrderCount.completed),
+                  ListCardBadge(tittle: 'Open', count: state.productOrderCount.opens, onTap: (e) => {onHandleClickItem(e)}),
+                  ListCardBadge(tittle: 'Overdue', count: state.productOrderCount.overdue, onTap: (e) => {onHandleClickItem(e)}),
+                  ListCardBadge(tittle: 'Incomplete', count: state.productOrderCount.incompleted, onTap: (e) => {onHandleClickItem(e)}),
+                  ListCardBadge(tittle: 'Complete', count: state.productOrderCount.completed, onTap: (e) => {onHandleClickItem(e)}),
                 ],
               );
             } else {
@@ -105,10 +113,10 @@ class _Body extends State<Body> {
                   crossAxisCount: 1,
                   childAspectRatio: 5 / 1,
                   children: [
-                    ListCardBadge(tittle: 'Open', count: productOrderCount!.opens),
-                    ListCardBadge(tittle: 'Overdue', count: productOrderCount!.overdue),
-                    ListCardBadge(tittle: 'Incomplete', count: productOrderCount!.incompleted),
-                    ListCardBadge(tittle: 'Complete', count: productOrderCount!.completed),
+                    ListCardBadge(tittle: 'Open', count: productOrderCount!.opens, onTap: (e) => {onHandleClickItem(e)}),
+                    ListCardBadge(tittle: 'Overdue', count: productOrderCount!.overdue, onTap: (e) => {onHandleClickItem(e)}),
+                    ListCardBadge(tittle: 'Incomplete', count: productOrderCount!.incompleted, onTap: (e) => {onHandleClickItem(e)}),
+                    ListCardBadge(tittle: 'Complete', count: productOrderCount!.completed, onTap: (e) => {onHandleClickItem(e)}),
                   ],
                 );
               }else {

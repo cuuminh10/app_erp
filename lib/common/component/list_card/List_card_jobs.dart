@@ -10,9 +10,10 @@ class ListCardJobs extends StatelessWidget {
   final String no;
   final String phaseName;
   final String productDate;
+  final Set<void> Function(String) onTap;
 
   const ListCardJobs(
-      {Key? key, required String this.no, required String this.phaseName, required String this.productDate})
+      {Key? key, required String this.no, required String this.phaseName, required String this.productDate, required Set<void> Function(String) this.onTap})
       : super(key: key);
 
   @override
@@ -20,12 +21,14 @@ class ListCardJobs extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () => {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) {
-            return JobDetailScreen(tittle: no,);
-          }),
-        ),
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (_) {
+        //     return JobDetailScreen(tittle: no,);
+        //   }),
+        // ),
+
+        this.onTap(no)
       },
       child: Card(
         shape: RoundedRectangleBorder(

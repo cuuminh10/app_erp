@@ -4,6 +4,7 @@ import 'package:gmc_erp/models/Favor.dart';
 import 'package:gmc_erp/screens/ResultList/result_list_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
+import 'package:gmc_erp/public/ultis/filter_name_dashboard.dart';
 
 class GmcDashBoard extends StatelessWidget {
   final List<Favor> list;
@@ -40,10 +41,10 @@ class GmcDashBoard extends StatelessWidget {
                     child: Column(
                       children: [
                         SvgPicture.asset(
-                          "assets/images/Jobticket.svg",
+                          "assets/images/${FilterNameDashboard.FilterImage(list[index].moduleName)}",
                         ),
                         Text(
-                          '${list[index].moduleName}',
+                          '${FilterNameDashboard.FilterName(list[index].moduleName)}',
                           style: TextStyle(
                               color: HexColor(kNormalString),
                               fontSize: 13,

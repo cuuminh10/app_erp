@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:gmc_erp/models/ProductOrderCount.dart';
+import 'package:gmc_erp/models/ProductOrderDetail.dart';
+import 'package:gmc_erp/models/ProductOrderDetail.dart';
+import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/models/ProductOrderOpen.dart';
 import 'package:gmc_erp/models/User.dart';
 import 'package:gmc_erp/models/login.dart';
@@ -38,5 +41,20 @@ class ProductOrderSuccess extends ProductOrderState {
   List<Object> get props => [productOrderOpen];
   ProductOrderSuccess cloneWith({required List<ProductOrderOpen> productOrderOpen}) {
     return ProductOrderSuccess(productOrderOpen: productOrderOpen);
+  }
+}
+
+class ProductOrderDetailSuccess extends ProductOrderState {
+  final ProductOrderDetail productOrderDetail;
+
+  ProductOrderDetailSuccess({required this.productOrderDetail}) : assert (productOrderDetail != null);
+
+  @override
+  String toString() => "data : $productOrderDetail";
+  @override
+  // TODO: implement props
+  List<Object> get props => [productOrderDetail];
+  ProductOrderDetailSuccess cloneWith({required ProductOrderDetail productOrderOpen}) {
+    return ProductOrderDetailSuccess(productOrderDetail: productOrderOpen);
   }
 }

@@ -46,5 +46,15 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
       yield ProductOrderSuccess(productOrderOpen: result);
       return;
     }
+
+    if (event is getPoOrderDetailEvent) {
+      String type = event.type!;
+      String no = event.no!;
+
+      final result =  await _productOrderService.getDetail(type, no);
+      // Write value
+      yield ProductOrderDetailSuccess(productOrderDetail: result);
+      return;
+    }
   }
 }
