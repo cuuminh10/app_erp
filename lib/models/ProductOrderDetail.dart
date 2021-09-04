@@ -33,8 +33,8 @@ class ProductOrderDetail {
         name = map["name"],
         description = map["description"],
         ordDate = map["ordDate"],
-        employeeName = map["employeeName"],
-        woNo = map["woNo"],
+        employeeName = map["employeeName"] ?? '',
+        woNo = map["woNo"]  ?? '',
         listDetail = List<Detail>.from(
             map["detail"].map((x) => Detail.fromJsonMap(x))),
         listAttach = List<Attach>.from(

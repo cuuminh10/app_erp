@@ -13,8 +13,9 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
 class Body extends StatefulWidget {
-  const Body({
-    Key? key,
+  final dynamic infoScreen;
+  const Body( {
+    Key? key,required this.infoScreen,
   }) : super(key: key);
 
   @override
@@ -22,8 +23,7 @@ class Body extends StatefulWidget {
 }
 
 class _Body extends State<Body> {
-  // String json = '{ "incompleted": 21,  "completed": 26, "opens": 9, "overdue": 12}';
-  // ProductOrductCount entries = new ProductOrductCount.fromJsonMap(map)
+
   String data = '';
   ProductOrderBloc? _productOrderBloc;
   ProductOrderCount? productOrderCount;
@@ -33,11 +33,11 @@ class _Body extends State<Body> {
   void initState() {
     super.initState();
     _productOrderBloc = BlocProvider.of(context);
-    _productOrderBloc!.add(getCountEvent(type: 'jobticket'));
+    _productOrderBloc!.add(getCountEvent(type: this.widget.infoScreen['code']));
   }
 
   void onHandleClickItem (String no) {
-  //   _productOrderBloc!.add(getPoOrderDetailEvent(type: 'jobticket', no: no));
+     // _productOrderBloc!.add(getPoOrderDetailEvent(type: this.widget.infoScreen['code'], no: no));
   }
 
   @override
@@ -63,7 +63,7 @@ class _Body extends State<Body> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('Job Ticket'),
+          title: Text(this.widget.infoScreen['name']),
           actions: <Widget>[
             IconButton(
                 icon: SvgPicture.asset(
@@ -101,10 +101,10 @@ class _Body extends State<Body> {
                 crossAxisCount: 1,
                 childAspectRatio: 5 / 1,
                 children: [
-                  ListCardBadge(tittle: 'Open', count: state.productOrderCount.opens, onTap: (e) => {onHandleClickItem(e)}),
-                  ListCardBadge(tittle: 'Overdue', count: state.productOrderCount.overdue, onTap: (e) => {onHandleClickItem(e)}),
-                  ListCardBadge(tittle: 'Incomplete', count: state.productOrderCount.incompleted, onTap: (e) => {onHandleClickItem(e)}),
-                  ListCardBadge(tittle: 'Complete', count: state.productOrderCount.completed, onTap: (e) => {onHandleClickItem(e)}),
+                  ListCardBadge(tittle: 'Open',code: this.widget.infoScreen['code'] ,count: state.productOrderCount.opens, onTap: (e) => {onHandleClickItem(e)}),
+                  ListCardBadge(tittle: 'Overdue',code: this.widget.infoScreen['code'] , count: state.productOrderCount.overdue, onTap: (e) => {onHandleClickItem(e)}),
+                  ListCardBadge(tittle: 'Incomplete',code: this.widget.infoScreen['code'] , count: state.productOrderCount.incompleted, onTap: (e) => {onHandleClickItem(e)}),
+                  ListCardBadge(tittle: 'Complete',code: this.widget.infoScreen['code'] , count: state.productOrderCount.completed, onTap: (e) => {onHandleClickItem(e)}),
                 ],
               );
             } else {
@@ -113,10 +113,10 @@ class _Body extends State<Body> {
                   crossAxisCount: 1,
                   childAspectRatio: 5 / 1,
                   children: [
-                    ListCardBadge(tittle: 'Open', count: productOrderCount!.opens, onTap: (e) => {onHandleClickItem(e)}),
-                    ListCardBadge(tittle: 'Overdue', count: productOrderCount!.overdue, onTap: (e) => {onHandleClickItem(e)}),
-                    ListCardBadge(tittle: 'Incomplete', count: productOrderCount!.incompleted, onTap: (e) => {onHandleClickItem(e)}),
-                    ListCardBadge(tittle: 'Complete', count: productOrderCount!.completed, onTap: (e) => {onHandleClickItem(e)}),
+                    ListCardBadge(tittle: 'Open',code: this.widget.infoScreen['code'] , count: productOrderCount!.opens, onTap: (e) => {onHandleClickItem(e)}),
+                    ListCardBadge(tittle: 'Overdue',code: this.widget.infoScreen['code'] , count: productOrderCount!.overdue, onTap: (e) => {onHandleClickItem(e)}),
+                    ListCardBadge(tittle: 'Incomplete',code: this.widget.infoScreen['code'] , count: productOrderCount!.incompleted, onTap: (e) => {onHandleClickItem(e)}),
+                    ListCardBadge(tittle: 'Complete',code: this.widget.infoScreen['code'] , count: productOrderCount!.completed, onTap: (e) => {onHandleClickItem(e)}),
                   ],
                 );
               }else {

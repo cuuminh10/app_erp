@@ -42,6 +42,8 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   intl: ^0.17.0
   dotted_border: ^2.0.0+1
+  file_picker: ^4.0.1
+  url_launcher: ^6.0.9
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.2
@@ -92,6 +94,8 @@ flutter:
     - assets/images/cart.svg
     - assets/images/purchase-order.svg
     - assets/images/Purchase_Request.svg
+    - assets/images/docs.svg
+    - assets/images/xlsx.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

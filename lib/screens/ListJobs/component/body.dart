@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gmc_erp/blocs/product_order_bloc.dart';
 import 'package:gmc_erp/common/component/list_card/List_card_jobs.dart';
+import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gmc_erp/models/ProductOrderOpen.dart';
+import 'package:gmc_erp/public/ultis/ultis.dart';
 import 'package:gmc_erp/screens/JobDetail/job_detail_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/screens/ListJobs/component/background.dart';
@@ -17,8 +19,9 @@ import 'package:gmc_erp/common/component/buttons/fancy.dart';
 
 class Body extends StatefulWidget {
   final String tittle;
+  final String code;
 
-  const Body({Key? key, required this.tittle}) : super(key: key);
+  const Body({Key? key, required this.tittle, required this.code}) : super(key: key);
 
   @override
   _Body createState() => _Body();
@@ -29,17 +32,19 @@ class _Body extends State<Body> {
   bool isExtended = false;
   ProductOrderBloc? _productOrderBloc;
   late List<ProductOrderOpen> _listProductOrderOpen = [];
+  dynamic infoScreen;
 
   @override
   void initState() {
     super.initState();
     _productOrderBloc = BlocProvider.of(context);
+    infoScreen = Ultis.filterScreensGMC(this.widget.code);
     _productOrderBloc!.add(
-        getPoOrderEvent(type: 'jobticket', statusType: this.widget.tittle));
+        getPoOrderEvent(type: this.widget.code, statusType: this.widget.tittle));
   }
 
   void onHandleClickItem(String no) {
-    _productOrderBloc!.add(getPoOrderDetailEvent(type: 'jobticket', no: no));
+    _productOrderBloc!.add(getPoOrderDetailEvent(type: this.widget.code, no: no));
   }
 
   @override
@@ -50,6 +55,7 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
 
     _scan() async => {
           await FlutterBarcodeScanner.scanBarcode(

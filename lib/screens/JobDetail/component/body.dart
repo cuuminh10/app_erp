@@ -1,21 +1,22 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gmc_erp/blocs/file_comment_bloc.dart';
 import 'package:gmc_erp/blocs/product_order_bloc.dart';
-import 'package:gmc_erp/common/component/buttons/gmc_button_container.dart';
 import 'package:gmc_erp/common/component/comment/CommenBox.dart';
+import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/events/file_comment_event.dart';
-import 'package:gmc_erp/events/product_order_event.dart';
-import 'package:gmc_erp/models/Comments.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/states/file_comment_state.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/screens/ListJobs/component/background.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 import 'package:gmc_erp/public/ultis/convert_date.dart';
+import 'package:gmc_erp/public/ultis/ultis.dart';
 import 'package:gmc_erp/common/component/buttons/gmc_button_dotted.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Body extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;
@@ -40,22 +41,32 @@ class _Body extends State<Body> {
       TextEditingController();
   final TextEditingController _woTextFieldController = TextEditingController();
   final TextEditingController _noTextFieldController = TextEditingController();
-
   List<Comment> _comments = [];
+  List<Attach> _attach = [];
   FileCommentBloc? _fileCommentBloc;
 
-  List filedata = [
-    {
-      'name': 'Adeleye Ayodeji',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to code'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'Very cool'
-    },
-  ];
+  Future _openFileExplorer() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null) {
+      print(result);
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  String _launched = 'Unknown';
+
+  Future<void> _makeCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   Widget commentChild(List<Comment> data) {
     return ListView(
@@ -126,8 +137,13 @@ class _Body extends State<Body> {
         TextEditingValue(text: this.widget.productOrderDetail.woNo);
     _comments = this.widget.productOrderDetail.listComment!;
 
-    _noTextFieldController.value  =
+    _noTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.no);
+
+    setState(() {
+      _comments = this.widget.productOrderDetail.listComment!;
+      _attach = this.widget.productOrderDetail.listAttach!;
+    });
   }
 
   void _changePage(int pageNum) {
@@ -150,7 +166,7 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    final infoScreen = BaseInheritedWidget.of(context);
     return Background(
         child: Scaffold(
       appBar: AppBar(
@@ -194,7 +210,7 @@ class _Body extends State<Body> {
                                 labelStyle: TextStyle(
                                     color: HexColor(kBlue800),
                                     fontWeight: FontWeight.bold),
-                                labelText: 'Job Ticket',
+                                labelText: '',
                                 hintText: 'Enter Job Ticket Here'))),
                     new Expanded(
                       child: SizedBox(height: size.width * 0.01),
@@ -213,7 +229,7 @@ class _Body extends State<Body> {
                                 labelStyle: TextStyle(
                                     color: HexColor(kBlue800),
                                     fontWeight: FontWeight.bold),
-                                labelText: 'Work Order',
+                                labelText: '',
                                 hintText: 'Enter Work Order Here'))),
                   ],
                 ),
@@ -290,10 +306,7 @@ class _Body extends State<Body> {
                         style: TextStyle(
                             color: HexColor(kBlue800),
                             fontWeight: FontWeight.bold)),
-                    Text('  • Tạo kết quả sản xuất cho thẻ giao việc',
-                        style: TextStyle(color: HexColor(kBlue500))),
-                    Text(
-                        '  • Ghi nhận số lượng thực tế sản xuất, số lượng hàng hỏng',
+                    Text(this.widget.productOrderDetail.description,
                         style: TextStyle(color: HexColor(kBlue500))),
                   ],
                 ),
@@ -561,38 +574,78 @@ class _Body extends State<Body> {
                             ),
                           ),
                           Container(
-                              margin: EdgeInsets.only(top: 70.0),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/attachment-place-holder.png",
-                                      alignment: Alignment.topCenter,
-                                    ),
-                                    SizedBox(height: size.height * 0.02),
-                                    Text(
-                                      'There are no any documents yet',
-                                      style: TextStyle(
-                                          color: HexColor(kBlue800),
-                                          fontFamily: 'Gotham',
-                                          fontWeight: FontWeight.normal,
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: 14.0),
-                                    ),
-                                    SizedBox(height: size.height * 0.02),
-                                    DottedButton(
-                                        text: "Attachment",
-                                        onPress: () => {},
-                                        vertical: 15,
-                                        horizontal: 40,
-                                        width: 0.48,
-                                        color: HexColor(kWhite),
-                                        colorText: HexColor(kBlue900),)
-                                  ],
-                                ),
-                              ))
+                              margin: EdgeInsets.only(
+                                  top: this._attach.length == 0 ? 70.0 : 0),
+                              child: this._attach.length == 0
+                                  ? SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/attachment-place-holder.png",
+                                            alignment: Alignment.topCenter,
+                                          ),
+                                          SizedBox(height: size.height * 0.02),
+                                          Text(
+                                            'There are no any documents yet',
+                                            style: TextStyle(
+                                                color: HexColor(kBlue800),
+                                                fontFamily: 'Gotham',
+                                                fontWeight: FontWeight.normal,
+                                                fontStyle: FontStyle.normal,
+                                                fontSize: 14.0),
+                                          ),
+                                          SizedBox(height: size.height * 0.02),
+                                          DottedButton(
+                                            text: "Attachment",
+                                            onPress: () =>
+                                                {_openFileExplorer()},
+                                            vertical: 15,
+                                            horizontal: 40,
+                                            width: 0.48,
+                                            color: HexColor(kWhite),
+                                            colorText: HexColor(kBlue900),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : Container(
+                                      child: ListView.builder(
+                                      itemCount: this._attach.length,
+                                      itemBuilder: (context, index) =>
+                                          GestureDetector(
+                                        onTap: () => {
+                                          _makeCall(
+                                              'http://175.41.183.152:8080/fc/viewFile/jobticket/${this._attach[index].saveName}')
+                                        },
+                                        child: Card(
+                                          elevation: 1,
+                                          margin: EdgeInsets.all(10),
+                                          child: !Ultis.isImages(
+                                              this._attach[index].realName)
+                                              ? ListTile(
+                                                  leading: SvgPicture.asset(
+                                                    Ultis.isFile(this._attach[index].saveName),
+                                                  ),
+                                                  title: Text(this
+                                                      ._attach[index]
+                                                      .realName),
+                                                  subtitle: Text(this
+                                                      ._attach[index]
+                                                      .realName),
+                                                  //  trailing: Icon(Icons.add_a_photo),
+                                                )
+                                              : Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: SizedBox(
+                                                    child: Image.network(
+                                                        'http://175.41.183.152:8080/fc/viewFile/jobticket/${this._attach[index].saveName}', width: 100, height: 100,),
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    )))
                         ],
                       ),
                     )
@@ -620,6 +673,7 @@ class TabButton extends StatelessWidget {
   final int selectedPage;
   final int pageNumber;
   final Set<void> Function() onPressed;
+
   TabButton(
       {required this.text,
       required this.selectedPage,

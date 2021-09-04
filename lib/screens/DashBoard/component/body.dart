@@ -126,7 +126,6 @@ class _Body extends State<Body> with TickerProviderStateMixin {
               child: BlocConsumer<FavorBloc, FavorState>(
                   listener: (context, state) {
                 if (state is FavorSuccess) {
-                  print('vao dashboard');
                   setState(() {
                     _listFavor = state.favor;
                   });

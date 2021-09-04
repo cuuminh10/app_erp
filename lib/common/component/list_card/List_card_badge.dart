@@ -1,16 +1,18 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/screens/ListJobs/list_job_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
 class ListCardBadge extends StatelessWidget {
   final String tittle;
+  final String code;
   final int count;
   final Set<void> Function(String) onTap;
 
   const ListCardBadge(
-      {Key? key, required String this.tittle, required int this.count, required Set<void> Function(String) this.onTap})
+      {Key? key, required String this.tittle, required String this.code, required int this.count, required Set<void> Function(String) this.onTap})
       : super(key: key);
 
   @override
@@ -22,7 +24,7 @@ class ListCardBadge extends StatelessWidget {
         Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ListJobsScreen(tittle: tittle)))
+                    builder: (context) => ListJobsScreen(tittle: tittle, code: code)))
             .then((context) {
               print('vao 123123123');
         }),

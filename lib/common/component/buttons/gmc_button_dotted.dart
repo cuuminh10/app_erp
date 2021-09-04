@@ -60,9 +60,10 @@ class DottedButton extends StatelessWidget {
                   message: Text('Which option?'),
                   actions: <Widget>[
                     CupertinoActionSheetAction(
-                      child: Text('1'),
+                      child: Text('Images'),
                       onPressed: () {
                         print('pressed');
+                        onPress();
                         Navigator.of(context, rootNavigator: true).pop("1");
                       },
                     )

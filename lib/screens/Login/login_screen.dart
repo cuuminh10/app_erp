@@ -19,7 +19,7 @@ class _LoginScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BaseInheritedWidget(myData: counter, child: Body(), state: this,),
+      body: Body()
     );
   }
 }

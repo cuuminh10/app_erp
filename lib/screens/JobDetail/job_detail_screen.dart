@@ -24,7 +24,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BaseInheritedWidget(myData: counter, child: Body(productOrderDetail: this.widget.productOrderDetail,), state: this,),
+      body:  Body(productOrderDetail: this.widget.productOrderDetail)
     );
   }
 }
