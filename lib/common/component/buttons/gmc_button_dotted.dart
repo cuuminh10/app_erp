@@ -20,7 +20,8 @@ import 'package:dotted_border/dotted_border.dart';
 
 class DottedButton extends StatelessWidget {
   final String text;
-  final Set<void> Function() onPress;
+  final Set<void> Function(List<String>) onPress;
+  final Set<void> Function() onPickImage;
   final double vertical;
   final double horizontal;
   final double width;
@@ -31,6 +32,7 @@ class DottedButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onPress,
+    required this.onPickImage,
     required this.vertical,
     required this.horizontal,
     required this.width,
@@ -56,14 +58,27 @@ class DottedButton extends StatelessWidget {
             color: this.color != null ? color : HexColor(kLogin),
             onPressed: () {
               final act = CupertinoActionSheet(
-                  title: Text('Select Option'),
-                  message: Text('Which option?'),
+                  title: Text('Attachment', style: TextStyle(color: HexColor(kBlue500)),),
                   actions: <Widget>[
+                    CupertinoActionSheetAction(
+                      child: Text('Document'),
+                      onPressed: () {
+                        onPress(['pdf', 'docs', 'xlsx']);
+                        Navigator.of(context, rootNavigator: true).pop("0");
+                      },
+                    ),
                     CupertinoActionSheetAction(
                       child: Text('Images'),
                       onPressed: () {
+                        onPickImage();
+                        Navigator.of(context, rootNavigator: true).pop("1");
+                      },
+                    ),
+                    CupertinoActionSheetAction(
+                      child: Text('Camera'),
+                      onPressed: () {
                         print('pressed');
-                        onPress();
+                        onPress(['jpg', 'jpeg', 'png']);
                         Navigator.of(context, rootNavigator: true).pop("1");
                       },
                     )

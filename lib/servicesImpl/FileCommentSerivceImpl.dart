@@ -11,4 +11,9 @@ class FileCommentServiceImpl extends BaseServiceImpl<Comment, int> implements Fi
   Future<Comment> postComment(String type, String no, String content) {
     return repository.postComments(type, no, content);
   }
+
+  @override
+  Future<Attach> postAttach(String type, int objectId, String file) {
+    return repository.postAttach(type, objectId, file);
+  }
 }

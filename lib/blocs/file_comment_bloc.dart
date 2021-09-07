@@ -41,5 +41,16 @@ class FileCommentBloc extends Bloc<FileCommentEvent, FileCommentState> {
       yield FileCommentStateSuccess(comments: result);
       return;
     }
+
+    if (event is postAttach) {
+      String type = event.type;
+      int objectId = event.objectId;
+      String file = event.file;
+
+      final result =  await _fileCommentService.postAttach(type, objectId, file);
+
+      yield FileAttachStateSuccess(attach: result);
+      return;
+    }
   }
 }

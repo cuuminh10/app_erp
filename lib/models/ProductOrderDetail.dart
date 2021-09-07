@@ -61,11 +61,14 @@ class ProductOrderDetail {
 
 class Detail {
   int itemID;
-  double qty;
   String remark;
   String productNo;
   String phaseName;
   String unit;
+  double qty;
+  double cancelQty;
+  double setUpQty;
+  double ncrQty;
 
   Detail.fromJsonMap(Map<String, dynamic> map):
         itemID = map["itemID"],
@@ -73,7 +76,10 @@ class Detail {
         remark = map["remark"],
         productNo = map["productNo"],
         phaseName = map["phaseName"],
-        unit = map["unit"];
+        unit = map["unit"],
+        cancelQty = map["cancelQty"] ?? 0,
+        setUpQty = map["setUpQty"] ?? 0,
+        ncrQty = map["ncrQty"] ?? 0;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -83,6 +89,9 @@ class Detail {
     data['productNo'] = productNo;
     data['phaseName'] = phaseName;
     data['unit'] = unit;
+    data['cancelQty'] = cancelQty;
+    data['setUpQty'] = setUpQty;
+    data['ncrQty'] = ncrQty;
     return data;
   }
 

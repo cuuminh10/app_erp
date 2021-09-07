@@ -24,7 +24,7 @@ class ListCardBadge extends StatelessWidget {
         Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ListJobsScreen(tittle: tittle, code: code)))
+                    builder: (context) => ListJobsScreen(tittle)))
             .then((context) {
               print('vao 123123123');
         }),

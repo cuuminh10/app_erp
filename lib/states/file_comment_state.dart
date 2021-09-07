@@ -31,3 +31,18 @@ class FileCommentStateSuccess extends FileCommentState {
   }
 }
 
+class FileAttachStateSuccess extends FileCommentState {
+  final Attach attach;
+
+  const FileAttachStateSuccess({required this.attach}) : assert(attach != null);
+
+  @override
+  String toString() => "attach : $attach";
+  @override
+  // TODO: implement props
+  List<Object> get props => [attach];
+  FileAttachStateSuccess cloneWith({required Attach attach}) {
+    return FileAttachStateSuccess(attach: attach);
+  }
+}
+

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/models/Favor.dart';
 import 'package:gmc_erp/public/ultis/ultis.dart';
+import 'package:gmc_erp/screens/ListJobs/list_job_screen.dart';
 import 'package:gmc_erp/screens/ResultList/result_list_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
@@ -30,11 +31,10 @@ class GmcDashBoard extends StatelessWidget {
 
 
                 if (data['name'] != '') {
-                  //Navigator pages
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return  ResultListScreen(infoScreen: Ultis.filterScreensGMC(list[index].moduleName));
+                      return list[index].moduleName == 'ProductionFG' ? ListJobsScreen('Production Result')  :  ResultListScreen(infoScreen: Ultis.filterScreensGMC(list[index].moduleName));
                     }),
                   );
                 }

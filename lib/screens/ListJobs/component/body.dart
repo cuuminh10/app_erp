@@ -19,9 +19,8 @@ import 'package:gmc_erp/common/component/buttons/fancy.dart';
 
 class Body extends StatefulWidget {
   final String tittle;
-  final String code;
 
-  const Body({Key? key, required this.tittle, required this.code}) : super(key: key);
+  const Body({Key? key, required this.tittle}) : super(key: key);
 
   @override
   _Body createState() => _Body();
@@ -38,13 +37,20 @@ class _Body extends State<Body> {
   void initState() {
     super.initState();
     _productOrderBloc = BlocProvider.of(context);
-    infoScreen = Ultis.filterScreensGMC(this.widget.code);
-    _productOrderBloc!.add(
-        getPoOrderEvent(type: this.widget.code, statusType: this.widget.tittle));
+    Future.delayed(Duration.zero, () {
+      infoScreen = BaseInheritedWidget.of(context)!.infoScreen;
+      _productOrderBloc!.add(
+          getPoOrderEvent(type: infoScreen['code'], statusType: this.widget.tittle));
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   void onHandleClickItem(String no) {
-    _productOrderBloc!.add(getPoOrderDetailEvent(type: this.widget.code, no: no));
+    _productOrderBloc!.add(getPoOrderDetailEvent(type: infoScreen['code'], no: no));
   }
 
   @override
