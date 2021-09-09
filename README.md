@@ -1,6 +1,6 @@
-# gmc_erp
+# app_erp
 
-A new gmc_erp.
+A new app_erp
 
 ## Getting Started
 
