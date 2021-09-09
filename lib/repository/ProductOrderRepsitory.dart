@@ -41,7 +41,8 @@ class ProductOrderRepsitory {
     }
   }
 
-  Future<List<ProductOrderOpen>> getListPoOrder(String type, String statusType) async {
+  Future<List<ProductOrderOpen>> getListPoOrder(
+      String type, String statusType) async {
     final url = "${Constants.apiBaseURL}/productOrder/${type}/${statusType}";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await httpClient.post(
@@ -53,7 +54,7 @@ class ProductOrderRepsitory {
     );
 
     if (response.statusCode == 200) {
-     // return ProductOrderOpen.fromJsonMap(json.decode(response.body));
+      // return ProductOrderOpen.fromJsonMap(json.decode(response.body));
       final respondData = json.decode(response.body) as List;
       final List<ProductOrderOpen> listResult = respondData.map((comment) {
         return ProductOrderOpen.fromJsonMap(comment);
@@ -67,8 +68,8 @@ class ProductOrderRepsitory {
   }
 
   Future<ProductOrderDetail> getDetail(String type, String no) async {
-
-    final url = "${Constants.apiBaseURL}/productOrder/detail/${type}/${no.replaceAll(RegExp(r'/'), '%2F')}";
+    final url =
+        "${Constants.apiBaseURL}/productOrder/detail/${type}/${no.replaceAll(RegExp(r'/'), '%2F')}";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await httpClient.get(
       Uri.parse(url),
@@ -83,6 +84,56 @@ class ProductOrderRepsitory {
     } else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load get');
+    }
+  }
+
+  Future<String> putDetailPR(int id, dynamic detail) async {
+    var data = detail["detail"].map(
+      (product) {
+        return {
+          'id': product.itemID,
+          'qty': product.qty,
+          'cancelQty': product.cancelQty,
+          'setUpQty': product.setUpQty,
+          'ncrQty': product.ncrQty,
+        };
+      },
+    ).toList();
+
+    final url = "${Constants.apiBaseURL}/productOrder/${id}";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await httpClient.put(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${prefs.getString('token')!}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          "description": detail["description"],
+          "detail": data
+        }));
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load put');
+    }
+  }
+
+  Future<ProductOrderDetail> getCreateScanPr(String no) async {
+    final url = "${Constants.apiBaseURL}/productOrder/scanProdRstFromJT/${no.replaceAll(RegExp(r'/'), '%2F')}";;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await httpClient.get(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${prefs.getString('token')!}',
+        });
+
+    if (response.statusCode == 200) {
+      return ProductOrderDetail.fromJsonMap(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load put');
     }
   }
 }

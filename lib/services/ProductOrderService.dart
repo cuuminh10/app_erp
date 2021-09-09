@@ -24,4 +24,15 @@ abstract class ProductOrderService implements BaseService {
    */
   Future<ProductOrderDetail> getDetail(String type, String no);
 
+  /**
+   * get count
+   * @Param String: type
+   */
+  Future<String> putDetailPR(int id, dynamic detail);
+
+  /**
+   * get count
+   * @Param String: type
+   */
+  Future<ProductOrderDetail> getCreateScanPr(String no);
 }

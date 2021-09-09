@@ -416,7 +416,7 @@ class _Body extends State<Body> {
                             child: FlatButton(
                               color: HexColor(kBlue100),
                               onPressed: () => {setState(() {
-                                this.widget.detail.cancelQty--;
+                                this.widget.detail.cancelQty++;
                               })},
                               child: Text(
                                 '+',

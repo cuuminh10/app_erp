@@ -11,6 +11,7 @@ import 'package:gmc_erp/common/component/buttons/gmc_button_container.dart';
 import 'package:gmc_erp/common/component/comment/CommenBox.dart';
 import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/events/file_comment_event.dart';
+import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/screens/RemarkDetail/remark_detail_screen.dart';
 import 'package:gmc_erp/states/file_comment_state.dart';
@@ -50,6 +51,8 @@ class _Body extends State<Body> {
   List<Attach> _attach = [];
   FileCommentBloc? _fileCommentBloc;
   dynamic infoScreen;
+  final TextEditingController _descriptionTextFieldController =
+  TextEditingController();
 
   Future _openFileExplorer(List<String> files) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -165,6 +168,9 @@ class _Body extends State<Body> {
     _noTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.no);
 
+    _descriptionTextFieldController.value =
+        TextEditingValue(text: this.widget.productOrderDetail.description);
+
     Future.delayed(Duration.zero, () {
       setState(() {
         infoScreen = BaseInheritedWidget.of(context)!.infoScreen;
@@ -186,6 +192,19 @@ class _Body extends State<Body> {
         curve: Curves.fastLinearToSlowEaseIn,
       );
     });
+  }
+
+  void _onHandleButton() {
+    if (this.infoScreen["code"] == "jobticket") {
+    } else {
+      Map<String, dynamic> body = {
+        "description": this.widget.productOrderDetail.description,
+        "detail": this.widget.productOrderDetail.listDetail
+      };
+
+      _productOrderBloc!.add(putPrDeatilEvent(
+          detail: body, id: this.widget.productOrderDetail.id));
+    }
   }
 
   @override
@@ -340,8 +359,20 @@ class _Body extends State<Body> {
                           style: TextStyle(
                               color: HexColor(kBlue800),
                               fontWeight: FontWeight.bold)),
-                      Text(this.widget.productOrderDetail.description,
-                          style: TextStyle(color: HexColor(kBlue500))),
+                      this.infoScreen["code"] == "jobticket"
+                          ? Text(this.widget.productOrderDetail.description,
+                              style: TextStyle(color: HexColor(kBlue500)))
+                          : TextField(
+                          style: TextStyle(color: HexColor(kBlue500)),
+                          controller: _descriptionTextFieldController,
+                          showCursor: true,
+                          decoration: InputDecoration(
+                              enabledBorder: new UnderlineInputBorder(
+                                  borderSide: new BorderSide(
+                                      color: HexColor(kBlue100))),
+                              labelStyle: TextStyle(
+                                  color: HexColor(kBlue800),
+                                  fontWeight: FontWeight.bold))),
                     ],
                   ),
                 ),
@@ -572,11 +603,13 @@ class _Body extends State<Body> {
                                                                             this.widget.productOrderDetail.no))).then(
                                                                     (detail) =>
                                                                         {
-                                                                          setState(
-                                                                              () {
-                                                                            this.widget.productOrderDetail.listDetail![i] =
-                                                                                detail;
-                                                                          })
+                                                                          if (detail
+                                                                              is Detail)
+                                                                            {
+                                                                              setState(() {
+                                                                                this.widget.productOrderDetail.listDetail![i] = detail;
+                                                                              })
+                                                                            }
                                                                         })
                                                               }
                                                             : null,
@@ -602,7 +635,7 @@ class _Body extends State<Body> {
                                                   "jobticket"
                                               ? "Result"
                                               : "Save",
-                                          onPress: () => {},
+                                          onPress: () => {_onHandleButton()},
                                           vertical: 20,
                                           horizontal: 40,
                                           width: 0.5),
@@ -705,7 +738,8 @@ class _Body extends State<Body> {
                                         child: BlocListener<FileCommentBloc,
                                             FileCommentState>(
                                           listener: (context, state) {
-                                            if (state is FileAttachStateSuccess) {
+                                            if (state
+                                                is FileAttachStateSuccess) {
                                               _attach.insert(0, state.attach);
                                               setState(() {
                                                 _attach = _attach;

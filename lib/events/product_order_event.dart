@@ -34,3 +34,14 @@ class getPoOrderDetailEvent extends ProductOrderEvent {
   final String? no;
   getPoOrderDetailEvent({this.type, this.no});
 }
+
+class putPrDeatilEvent extends ProductOrderEvent {
+  final int? id;
+  final dynamic detail;
+  putPrDeatilEvent({this.id, this.detail});
+}
+
+class getNewPrScanEvent extends ProductOrderEvent {
+  final String no;
+  getNewPrScanEvent({required this.no});
+}

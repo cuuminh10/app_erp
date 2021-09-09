@@ -26,4 +26,14 @@ class ProductOrderServiceImpl extends BaseServiceImpl<ProductOrderServiceImpl, i
   Future<ProductOrderDetail> getDetail(String type, String no) {
     return repository.getDetail(type, no);
   }
+
+  @override
+  Future<String> putDetailPR(int id, detail) {
+    return repository.putDetailPR(id, detail);
+  }
+
+  @override
+  Future<ProductOrderDetail> getCreateScanPr(String no) {
+    return repository.getCreateScanPr(no);
+  }
 }

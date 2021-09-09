@@ -10,6 +10,7 @@
  *
  */
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:gmc_erp/services/ProductOrderService.dart';
@@ -54,6 +55,16 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
       final result =  await _productOrderService.getDetail(type, no);
       // Write value
       yield ProductOrderDetailSuccess(productOrderDetail: result);
+      return;
+    }
+
+    if (event is putPrDeatilEvent) {
+      int id = event.id!;
+      dynamic detail = event.detail;
+
+      final result = await _productOrderService.putDetailPR(id, detail);
+      // Write value
+      yield ProductOrderPutDetailSuccess(id: result);
       return;
     }
   }
