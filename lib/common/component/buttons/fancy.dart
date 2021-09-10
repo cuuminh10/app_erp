@@ -4,6 +4,13 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
 class FancyFab extends StatefulWidget {
+
+  final void Function()  onScan;
+
+  const FancyFab({
+    Key? key,
+    required this.onScan,
+  }) : super(key: key);
   @override
   _FancyFabState createState() => _FancyFabState();
 }
@@ -72,7 +79,7 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(
         backgroundColor:  HexColor(kOrange600),
-        onPressed: null,
+        onPressed: () => {this.widget.onScan()},
         tooltip: 'Add',
         child: SvgPicture.asset(
           "assets/images/Scan.svg",

@@ -131,6 +131,27 @@ class ProductOrderRepsitory {
 
     if (response.statusCode == 200) {
       return ProductOrderDetail.fromJsonMap(json.decode(response.body));
+    }else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load put');
+    }
+  }
+
+  Future<String> postCreateScanPr(String no, dynamic detail) async {
+    final url = "${Constants.apiBaseURL}/productOrder/createProdRst/${no.replaceAll(RegExp(r'/'), '%2F')}";;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await httpClient.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${prefs.getString('token')!}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          "description": detail["description"],
+          "detail": detail["detail"],
+        }));
+
+    if (response.statusCode == 200) {
+      return response.body;
     } else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load put');

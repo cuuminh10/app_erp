@@ -53,6 +53,22 @@ class _Body extends State<Body> {
     _productOrderBloc!.add(getPoOrderDetailEvent(type: infoScreen['code'], no: no));
   }
 
+  void scan() async => {
+    await FlutterBarcodeScanner.scanBarcode(
+        "#ff6666", "Cancel", false, ScanMode.DEFAULT)
+        .then((barcode) {
+      onHandleClickItem(barcode);
+    })
+  };
+
+  void scanCreate() async => {
+    await FlutterBarcodeScanner.scanBarcode(
+        "#ff6666", "Cancel", false, ScanMode.DEFAULT)
+        .then((barcode) {
+      _productOrderBloc!.add(getNewPrScanEvent(no: barcode));
+    })
+  };
+
   @override
   void dispose() {
     super.dispose();
@@ -61,15 +77,6 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-
-    _scan() async => {
-          await FlutterBarcodeScanner.scanBarcode(
-                  "#ff6666", "Cancel", false, ScanMode.DEFAULT)
-              .then((barcode) {
-            onHandleClickItem(barcode);
-          })
-        };
 
     Widget enbleButtons() {
       return Column(
@@ -114,7 +121,7 @@ class _Body extends State<Body> {
                   icon: SvgPicture.asset(
                     "assets/images/Scan.svg",
                   ),
-                  onPressed: () => _scan()),
+                  onPressed: () => scan()),
               IconButton(
                   icon: SvgPicture.asset(
                     "assets/images/Filter.svg",
@@ -146,6 +153,16 @@ class _Body extends State<Body> {
                   }),
                 );
               }
+              //
+              // if (state is ProductOrderCreateSuccess) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(builder: (_) {
+              //       return JobDetailScreen(
+              //           productOrderDetail: state.productOrderDetail, isNewProduct: true,);
+              //     }),
+              //   );
+              // }
             }, builder: (context, state) {
               return this._listProductOrderOpen.length > 0
                   ? GridView.count(
@@ -167,7 +184,7 @@ class _Body extends State<Body> {
                   : SizedBox();
             }),
           ),
-          floatingActionButton: FancyFab(),
+          floatingActionButton: FancyFab(onScan: () => scanCreate()),
           // floatingActionButton: FloatingActionButton.extended(
           //     backgroundColor: HexColor(kOrange600),
           //     onPressed: () => {

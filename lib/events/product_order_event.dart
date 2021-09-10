@@ -45,3 +45,9 @@ class getNewPrScanEvent extends ProductOrderEvent {
   final String no;
   getNewPrScanEvent({required this.no});
 }
+
+class postNewPrEvent extends ProductOrderEvent {
+  final String no;
+  final dynamic detail;
+  postNewPrEvent({required this.no, this.detail});
+}

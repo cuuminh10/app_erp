@@ -89,3 +89,18 @@ class ProductOrderCreateSuccess extends ProductOrderState {
     return ProductOrderCreateSuccess(productOrderDetail: productOrderDetail);
   }
 }
+
+class ProductOrderPostSuccess extends ProductOrderState {
+  final  String id;
+
+  ProductOrderPostSuccess({required this.id}) : assert (id != null);
+
+  @override
+  String toString() => "data : $id";
+  @override
+  // TODO: implement props
+  List<Object> get props => [id];
+  ProductOrderPostSuccess cloneWith({required String id}) {
+    return ProductOrderPostSuccess(id: id);
+  }
+}

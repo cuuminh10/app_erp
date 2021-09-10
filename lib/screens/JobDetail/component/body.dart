@@ -15,6 +15,7 @@ import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/screens/RemarkDetail/remark_detail_screen.dart';
 import 'package:gmc_erp/states/file_comment_state.dart';
+import 'package:gmc_erp/states/product_order_state.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/screens/ListJobs/component/background.dart';
 import 'package:gmc_erp/public/constant/color.dart';
@@ -26,8 +27,9 @@ import 'package:image_picker/image_picker.dart';
 
 class Body extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;
+  final bool isNewProduct;
 
-  const Body({Key? key, required this.productOrderDetail}) : super(key: key);
+  const Body({Key? key, required this.productOrderDetail, required this.isNewProduct}) : super(key: key);
 
   @override
   _Body createState() => _Body();
@@ -171,6 +173,7 @@ class _Body extends State<Body> {
     _descriptionTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.description);
 
+    this.widget.isNewProduct == true ? infoScreen = Ultis.filterScreensGMC('ProductionFG') :
     Future.delayed(Duration.zero, () {
       setState(() {
         infoScreen = BaseInheritedWidget.of(context)!.infoScreen;
@@ -196,12 +199,14 @@ class _Body extends State<Body> {
 
   void _onHandleButton() {
     if (this.infoScreen["code"] == "jobticket") {
+      _productOrderBloc!.add(getNewPrScanEvent(no: this.widget.productOrderDetail.no));
     } else {
       Map<String, dynamic> body = {
         "description": this.widget.productOrderDetail.description,
         "detail": this.widget.productOrderDetail.listDetail
       };
 
+      this.widget.isNewProduct == true ?  _productOrderBloc!.add(postNewPrEvent(no: this.widget.productOrderDetail.jobTicketNo!, detail: body)) :
       _productOrderBloc!.add(putPrDeatilEvent(
           detail: body, id: this.widget.productOrderDetail.id));
     }
@@ -323,7 +328,7 @@ class _Body extends State<Body> {
                           flex: 3,
                           child: TextField(
                               style: TextStyle(color: HexColor(kBlue500)),
-                              controller: _userTextFieldController,
+                              controller: _woTextFieldController,
                               showCursor: false,
                               readOnly: true,
                               decoration: InputDecoration(
@@ -424,223 +429,230 @@ class _Body extends State<Body> {
                           },
                           controller: _pageController,
                           children: [
-                            SingleChildScrollView(
-                              child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.55,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Table(
-                                      columnWidths: {
-                                        0: FlexColumnWidth(3),
-                                        1: FlexColumnWidth(2),
-                                        2: FlexColumnWidth(2),
-                                        3: FlexColumnWidth(2),
-                                        4: FlexColumnWidth(3),
-                                      },
-                                      defaultColumnWidth:
-                                          IntrinsicColumnWidth(),
-                                      border: TableBorder.all(
-                                          width: 1.0,
-                                          color: HexColor(kBlue500)),
-                                      children: [
-                                        TableRow(
-                                            decoration: BoxDecoration(
-                                                color: HexColor(kBlue800)),
-                                            children: [
-                                              TableCell(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    'Item',
-                                                    style: TextStyle(
-                                                        color: HexColor(kWhite),
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontFamily: 'Gotham'),
-                                                  ),
-                                                ),
-                                              ),
-                                              TableCell(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    'Phase',
-                                                    style: TextStyle(
-                                                        color: HexColor(kWhite),
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontFamily: 'Gotham'),
-                                                  ),
-                                                ),
-                                              ),
-                                              TableCell(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    'Qty',
-                                                    style: TextStyle(
-                                                        color: HexColor(kWhite),
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontFamily: 'Gotham'),
-                                                  ),
-                                                ),
-                                              ),
-                                              TableCell(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    'Unit',
-                                                    style: TextStyle(
-                                                        color: HexColor(kWhite),
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontFamily: 'Gotham'),
-                                                  ),
-                                                ),
-                                              ),
-                                              TableCell(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    'Remark',
-                                                    style: TextStyle(
-                                                        color: HexColor(kWhite),
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontFamily: 'Gotham'),
-                                                  ),
-                                                ),
-                                              )
-                                            ]),
-                                        for (var i = 0;
-                                            i <
-                                                this
-                                                    .widget
-                                                    .productOrderDetail
-                                                    .listDetail!
-                                                    .length;
-                                            i++)
+                            BlocListener<ProductOrderBloc, ProductOrderState>(
+                              listener: (context, state) async {
+                                if (state is ProductOrderPostSuccess || state is ProductOrderPutDetailSuccess) {
+                                  Navigator.pop(context, true);
+                                }
+                              },
+                              child: SingleChildScrollView(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.55,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Table(
+                                        columnWidths: {
+                                          0: FlexColumnWidth(3),
+                                          1: FlexColumnWidth(2),
+                                          2: FlexColumnWidth(2),
+                                          3: FlexColumnWidth(2),
+                                          4: FlexColumnWidth(3),
+                                        },
+                                        defaultColumnWidth:
+                                            IntrinsicColumnWidth(),
+                                        border: TableBorder.all(
+                                            width: 1.0,
+                                            color: HexColor(kBlue500)),
+                                        children: [
                                           TableRow(
                                               decoration: BoxDecoration(
-                                                  color: i % 2 == 0
-                                                      ? HexColor(kBlue100)
-                                                      : HexColor(kBlue200)),
+                                                  color: HexColor(kBlue800)),
                                               children: [
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                        const EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      '${this.widget.productOrderDetail.listDetail![i].productNo}',
+                                                      'Item',
                                                       style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
+                                                          color: HexColor(kWhite),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: 'Gotham'),
                                                     ),
                                                   ),
                                                 ),
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                        const EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      '${this.widget.productOrderDetail.listDetail![i].phaseName}',
+                                                      'Phase',
                                                       style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
+                                                          color: HexColor(kWhite),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: 'Gotham'),
                                                     ),
                                                   ),
                                                 ),
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                        const EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      '${this.widget.productOrderDetail.listDetail![i].qty}',
+                                                      'Qty',
                                                       style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
+                                                          color: HexColor(kWhite),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: 'Gotham'),
                                                     ),
                                                   ),
                                                 ),
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                        const EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      '${this.widget.productOrderDetail.listDetail![i].unit}',
+                                                      'Unit',
                                                       style: TextStyle(
-                                                          color: HexColor(
-                                                              kBlue800)),
+                                                          color: HexColor(kWhite),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: 'Gotham'),
                                                     ),
                                                   ),
                                                 ),
                                                 TableCell(
-                                                  child: GestureDetector(
-                                                    onTap: () =>
-                                                        this.infoScreen[
-                                                                    "code"] ==
-                                                                "producResult"
-                                                            ? {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (context) => RemarkDetailScreen(
-                                                                            this.widget.productOrderDetail.listDetail![
-                                                                                i],
-                                                                            this.widget.productOrderDetail.no))).then(
-                                                                    (detail) =>
-                                                                        {
-                                                                          if (detail
-                                                                              is Detail)
-                                                                            {
-                                                                              setState(() {
-                                                                                this.widget.productOrderDetail.listDetail![i] = detail;
-                                                                              })
-                                                                            }
-                                                                        })
-                                                              }
-                                                            : null,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      'Remark',
+                                                      style: TextStyle(
+                                                          color: HexColor(kWhite),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: 'Gotham'),
+                                                    ),
+                                                  ),
+                                                )
+                                              ]),
+                                          for (var i = 0;
+                                              i <
+                                                  this
+                                                      .widget
+                                                      .productOrderDetail
+                                                      .listDetail!
+                                                      .length;
+                                              i++)
+                                            TableRow(
+                                                decoration: BoxDecoration(
+                                                    color: i % 2 == 0
+                                                        ? HexColor(kBlue100)
+                                                        : HexColor(kBlue200)),
+                                                children: [
+                                                  TableCell(
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: Text(
-                                                        ' >',
+                                                        '${this.widget.productOrderDetail.listDetail![i].productNo}',
                                                         style: TextStyle(
                                                             color: HexColor(
                                                                 kBlue800)),
                                                       ),
                                                     ),
                                                   ),
-                                                )
-                                              ])
-                                      ],
-                                    ),
-                                    Center(
-                                      child: NormalButton(
-                                          text: this.infoScreen["code"] ==
-                                                  "jobticket"
-                                              ? "Result"
-                                              : "Save",
-                                          onPress: () => {_onHandleButton()},
-                                          vertical: 20,
-                                          horizontal: 40,
-                                          width: 0.5),
-                                    )
-                                  ],
+                                                  TableCell(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        '${this.widget.productOrderDetail.listDetail![i].phaseName}',
+                                                        style: TextStyle(
+                                                            color: HexColor(
+                                                                kBlue800)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  TableCell(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        '${this.widget.productOrderDetail.listDetail![i].qty}',
+                                                        style: TextStyle(
+                                                            color: HexColor(
+                                                                kBlue800)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  TableCell(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        '${this.widget.productOrderDetail.listDetail![i].unit}',
+                                                        style: TextStyle(
+                                                            color: HexColor(
+                                                                kBlue800)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  TableCell(
+                                                    child: GestureDetector(
+                                                      onTap: () =>
+                                                          this.infoScreen[
+                                                                      "code"] ==
+                                                                  "producResult"
+                                                              ? {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) => RemarkDetailScreen(
+                                                                              this.widget.productOrderDetail.listDetail![
+                                                                                  i],
+                                                                              this.widget.productOrderDetail.no))).then(
+                                                                      (detail) =>
+                                                                          {
+                                                                            if (detail
+                                                                                is Detail)
+                                                                              {
+                                                                                setState(() {
+                                                                                  this.widget.productOrderDetail.listDetail![i] = detail;
+                                                                                })
+                                                                              }
+                                                                          })
+                                                                }
+                                                              : null,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                                8.0),
+                                                        child: Text(
+                                                          ' >',
+                                                          style: TextStyle(
+                                                              color: HexColor(
+                                                                  kBlue800)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ])
+                                        ],
+                                      ),
+                                      Center(
+                                        child: NormalButton(
+                                            text: this.infoScreen["code"] ==
+                                                    "jobticket"
+                                                ? "Result"
+                                                : "Save",
+                                            onPress: () => {_onHandleButton()},
+                                            vertical: 20,
+                                            horizontal: 40,
+                                            width: 0.5),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

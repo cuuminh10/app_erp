@@ -67,5 +67,24 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
       yield ProductOrderPutDetailSuccess(id: result);
       return;
     }
+
+    if (event is getNewPrScanEvent) {
+      String no = event.no;
+
+      final result = await _productOrderService.getCreateScanPr(no);
+      // Write value
+      yield ProductOrderCreateSuccess(productOrderDetail: result);
+      return;
+    }
+
+    if (event is postNewPrEvent) {
+      String no = event.no;
+      dynamic detail = event.detail;
+
+      final result = await _productOrderService.postNewDetailPR(no, detail);
+      // Write value
+      yield ProductOrderPostSuccess(id: result);
+      return;
+    }
   }
 }
