@@ -70,7 +70,7 @@ class DottedButton extends StatelessWidget {
                     CupertinoActionSheetAction(
                       child: Text('Images'),
                       onPressed: () {
-                        onPickImage();
+                        onPress(['jpg', 'jpeg', 'png']);
                         Navigator.of(context, rootNavigator: true).pop("1");
                       },
                     ),
@@ -78,8 +78,8 @@ class DottedButton extends StatelessWidget {
                       child: Text('Camera'),
                       onPressed: () {
                         print('pressed');
-                        onPress(['jpg', 'jpeg', 'png']);
-                        Navigator.of(context, rootNavigator: true).pop("1");
+                        onPickImage();
+                        Navigator.of(context, rootNavigator: true).pop("2");
                       },
                     )
                   ],

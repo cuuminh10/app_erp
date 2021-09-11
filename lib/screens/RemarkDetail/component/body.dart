@@ -84,7 +84,7 @@ class _Body extends State<Body> {
             ),
             SizedBox(height: size.width * 0.05),
             Text(
-              'Phase ' + this.widget.detail.unit.toString(),
+              'Phase ' + this.widget.detail.phaseName.toString(),
               style: TextStyle(color: HexColor(kBlue500), fontSize: 16.0),
             ),
             SizedBox(height: size.width * 0.05),
@@ -115,7 +115,7 @@ class _Body extends State<Body> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Phase',
+                            'Finish Qty',
                             style: TextStyle(color: HexColor(kBlue800)),
                           ),
                         ),

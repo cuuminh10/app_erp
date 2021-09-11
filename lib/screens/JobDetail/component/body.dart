@@ -154,6 +154,46 @@ class _Body extends State<Body> {
     );
   }
 
+  Widget renderTableCell (dynamic name,int index) {
+    return      TableCell(
+      child: GestureDetector(
+        onTap: () =>
+        this.infoScreen[
+        "code"] ==
+            "producResult"
+            ? {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      RemarkDetailScreen(this.widget.productOrderDetail.listDetail![index], this.widget.productOrderDetail.no))).then(
+                  (detail) =>
+              {
+                if (detail
+                is Detail)
+                  {
+                    setState(() {
+                      this.widget.productOrderDetail.listDetail![index] = detail;
+                    })
+                  }
+              })
+        }
+            : null,
+        child: Padding(
+          padding:
+          const EdgeInsets
+              .all(8.0),
+          child: Text(
+            name.toString(),
+            style: TextStyle(
+                color: HexColor(
+                    kBlue800)),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -458,10 +498,9 @@ class _Body extends State<Body> {
                                       Table(
                                         columnWidths: {
                                           0: FlexColumnWidth(3),
-                                          1: FlexColumnWidth(2),
+                                          1: FlexColumnWidth(3),
                                           2: FlexColumnWidth(2),
                                           3: FlexColumnWidth(2),
-                                          4: FlexColumnWidth(3),
                                         },
                                         defaultColumnWidth:
                                             IntrinsicColumnWidth(),
@@ -536,22 +575,6 @@ class _Body extends State<Body> {
                                                           fontFamily: 'Gotham'),
                                                     ),
                                                   ),
-                                                ),
-                                                TableCell(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      'Remark',
-                                                      style: TextStyle(
-                                                          color:
-                                                              HexColor(kWhite),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Gotham'),
-                                                    ),
-                                                  ),
                                                 )
                                               ]),
                                           for (var i = 0;
@@ -567,96 +590,13 @@ class _Body extends State<Body> {
                                                     color: i % 2 == 0
                                                         ? HexColor(kBlue100)
                                                         : HexColor(kBlue200)),
+
+
                                                 children: [
-                                                  TableCell(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        '${this.widget.productOrderDetail.listDetail![i].productNo}',
-                                                        style: TextStyle(
-                                                            color: HexColor(
-                                                                kBlue800)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  TableCell(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        '${this.widget.productOrderDetail.listDetail![i].phaseName}',
-                                                        style: TextStyle(
-                                                            color: HexColor(
-                                                                kBlue800)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  TableCell(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        '${this.widget.productOrderDetail.listDetail![i].qty}',
-                                                        style: TextStyle(
-                                                            color: HexColor(
-                                                                kBlue800)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  TableCell(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        '${this.widget.productOrderDetail.listDetail![i].unit}',
-                                                        style: TextStyle(
-                                                            color: HexColor(
-                                                                kBlue800)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  TableCell(
-                                                    child: GestureDetector(
-                                                      onTap: () =>
-                                                          this.infoScreen[
-                                                                      "code"] ==
-                                                                  "producResult"
-                                                              ? {
-                                                                  Navigator.push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              RemarkDetailScreen(this.widget.productOrderDetail.listDetail![i], this.widget.productOrderDetail.no))).then(
-                                                                      (detail) =>
-                                                                          {
-                                                                            if (detail
-                                                                                is Detail)
-                                                                              {
-                                                                                setState(() {
-                                                                                  this.widget.productOrderDetail.listDetail![i] = detail;
-                                                                                })
-                                                                              }
-                                                                          })
-                                                                }
-                                                              : null,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Text(
-                                                          ' >',
-                                                          style: TextStyle(
-                                                              color: HexColor(
-                                                                  kBlue800)),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
+                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].productNo, i),
+                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].phaseName, i),
+                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].qty, i),
+                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].unit, i)
                                                 ])
                                         ],
                                       ),
