@@ -131,6 +131,8 @@ class ProductOrderRepsitory {
 
     if (response.statusCode == 200) {
       return ProductOrderDetail.fromJsonMap(json.decode(response.body));
+    }else if (response.statusCode == 400) {
+      throw Exception(response.body);
     }else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load put');

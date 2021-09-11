@@ -68,12 +68,17 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
       return;
     }
 
-    if (event is getNewPrScanEvent) {
-      String no = event.no;
+    try {
+      if (event is getNewPrScanEvent) {
+        String no = event.no;
 
-      final result = await _productOrderService.getCreateScanPr(no);
-      // Write value
-      yield ProductOrderCreateSuccess(productOrderDetail: result);
+        final result = await _productOrderService.getCreateScanPr(no);
+        // Write value
+        yield ProductOrderCreateSuccess(productOrderDetail: result);
+        return;
+      }
+    }catch (error) {
+      yield ProductOrderCreateFailer(error:  error);
       return;
     }
 

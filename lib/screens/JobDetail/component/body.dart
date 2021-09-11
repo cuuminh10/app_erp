@@ -29,7 +29,9 @@ class Body extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;
   final bool isNewProduct;
 
-  const Body({Key? key, required this.productOrderDetail, required this.isNewProduct}) : super(key: key);
+  const Body(
+      {Key? key, required this.productOrderDetail, required this.isNewProduct})
+      : super(key: key);
 
   @override
   _Body createState() => _Body();
@@ -54,7 +56,7 @@ class _Body extends State<Body> {
   FileCommentBloc? _fileCommentBloc;
   dynamic infoScreen;
   final TextEditingController _descriptionTextFieldController =
-  TextEditingController();
+      TextEditingController();
 
   Future _openFileExplorer(List<String> files) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -173,12 +175,13 @@ class _Body extends State<Body> {
     _descriptionTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.description);
 
-    this.widget.isNewProduct == true ? infoScreen = Ultis.filterScreensGMC('ProductionFG') :
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        infoScreen = BaseInheritedWidget.of(context)!.infoScreen;
-      });
-    });
+    this.widget.isNewProduct == true
+        ? infoScreen = Ultis.filterScreensGMC('ProductionFG')
+        : Future.delayed(Duration.zero, () {
+            setState(() {
+              infoScreen = BaseInheritedWidget.of(context)!.infoScreen;
+            });
+          });
 
     setState(() {
       _comments = this.widget.productOrderDetail.listComment!;
@@ -199,16 +202,19 @@ class _Body extends State<Body> {
 
   void _onHandleButton() {
     if (this.infoScreen["code"] == "jobticket") {
-      _productOrderBloc!.add(getNewPrScanEvent(no: this.widget.productOrderDetail.no));
+      _productOrderBloc!
+          .add(getNewPrScanEvent(no: this.widget.productOrderDetail.no));
     } else {
       Map<String, dynamic> body = {
         "description": this.widget.productOrderDetail.description,
         "detail": this.widget.productOrderDetail.listDetail
       };
 
-      this.widget.isNewProduct == true ?  _productOrderBloc!.add(postNewPrEvent(no: this.widget.productOrderDetail.jobTicketNo!, detail: body)) :
-      _productOrderBloc!.add(putPrDeatilEvent(
-          detail: body, id: this.widget.productOrderDetail.id));
+      this.widget.isNewProduct == true
+          ? _productOrderBloc!.add(postNewPrEvent(
+              no: this.widget.productOrderDetail.jobTicketNo!, detail: body))
+          : _productOrderBloc!.add(putPrDeatilEvent(
+              detail: body, id: this.widget.productOrderDetail.id));
     }
   }
 
@@ -368,16 +374,16 @@ class _Body extends State<Body> {
                           ? Text(this.widget.productOrderDetail.description,
                               style: TextStyle(color: HexColor(kBlue500)))
                           : TextField(
-                          style: TextStyle(color: HexColor(kBlue500)),
-                          controller: _descriptionTextFieldController,
-                          showCursor: true,
-                          decoration: InputDecoration(
-                              enabledBorder: new UnderlineInputBorder(
-                                  borderSide: new BorderSide(
-                                      color: HexColor(kBlue100))),
-                              labelStyle: TextStyle(
-                                  color: HexColor(kBlue800),
-                                  fontWeight: FontWeight.bold))),
+                              style: TextStyle(color: HexColor(kBlue500)),
+                              controller: _descriptionTextFieldController,
+                              showCursor: true,
+                              decoration: InputDecoration(
+                                  enabledBorder: new UnderlineInputBorder(
+                                      borderSide: new BorderSide(
+                                          color: HexColor(kBlue100))),
+                                  labelStyle: TextStyle(
+                                      color: HexColor(kBlue800),
+                                      fontWeight: FontWeight.bold))),
                     ],
                   ),
                 ),
@@ -431,9 +437,15 @@ class _Body extends State<Body> {
                           children: [
                             BlocListener<ProductOrderBloc, ProductOrderState>(
                               listener: (context, state) async {
-                                if (state is ProductOrderPostSuccess || state is ProductOrderPutDetailSuccess) {
+                                if (state is ProductOrderPostSuccess ||
+                                    state is ProductOrderPutDetailSuccess) {
                                   Navigator.pop(context, true);
                                 }
+
+                                if (state is ProductOrderDetailSuccess) {
+                                  print('12333333');
+                                }
+
                               },
                               child: SingleChildScrollView(
                                 child: Container(
@@ -464,11 +476,13 @@ class _Body extends State<Body> {
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
                                                       'Item',
                                                       style: TextStyle(
-                                                          color: HexColor(kWhite),
+                                                          color:
+                                                              HexColor(kWhite),
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           fontFamily: 'Gotham'),
@@ -478,11 +492,13 @@ class _Body extends State<Body> {
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
                                                       'Phase',
                                                       style: TextStyle(
-                                                          color: HexColor(kWhite),
+                                                          color:
+                                                              HexColor(kWhite),
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           fontFamily: 'Gotham'),
@@ -492,11 +508,13 @@ class _Body extends State<Body> {
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
                                                       'Qty',
                                                       style: TextStyle(
-                                                          color: HexColor(kWhite),
+                                                          color:
+                                                              HexColor(kWhite),
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           fontFamily: 'Gotham'),
@@ -506,11 +524,13 @@ class _Body extends State<Body> {
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
                                                       'Unit',
                                                       style: TextStyle(
-                                                          color: HexColor(kWhite),
+                                                          color:
+                                                              HexColor(kWhite),
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           fontFamily: 'Gotham'),
@@ -520,11 +540,13 @@ class _Body extends State<Body> {
                                                 TableCell(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
                                                       'Remark',
                                                       style: TextStyle(
-                                                          color: HexColor(kWhite),
+                                                          color:
+                                                              HexColor(kWhite),
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           fontFamily: 'Gotham'),
@@ -608,10 +630,8 @@ class _Body extends State<Body> {
                                                                   Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) => RemarkDetailScreen(
-                                                                              this.widget.productOrderDetail.listDetail![
-                                                                                  i],
-                                                                              this.widget.productOrderDetail.no))).then(
+                                                                          builder: (context) =>
+                                                                              RemarkDetailScreen(this.widget.productOrderDetail.listDetail![i], this.widget.productOrderDetail.no))).then(
                                                                       (detail) =>
                                                                           {
                                                                             if (detail
@@ -626,8 +646,8 @@ class _Body extends State<Body> {
                                                               : null,
                                                       child: Padding(
                                                         padding:
-                                                            const EdgeInsets.all(
-                                                                8.0),
+                                                            const EdgeInsets
+                                                                .all(8.0),
                                                         child: Text(
                                                           ' >',
                                                           style: TextStyle(

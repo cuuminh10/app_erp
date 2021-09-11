@@ -105,6 +105,33 @@ class _Body extends State<Body> {
               print('12333333');
             }
 
+            if (state is ProductOrderCreateFailer) {
+              // set up the AlertDialog
+
+              // set up the AlertDialog
+              AlertDialog alert = AlertDialog(
+                title: Text("Error"),
+                content: Text(
+                    "Phiếu không có chi tiết hoặc đã ra hết số lượng!"),
+                actions: [
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+
+              // show the dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                },
+              );
+            }
+
             if (state is ProductOrderCreateSuccess) {
               Navigator.push(
                 context,

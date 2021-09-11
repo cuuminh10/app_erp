@@ -90,6 +90,21 @@ class ProductOrderCreateSuccess extends ProductOrderState {
   }
 }
 
+class ProductOrderCreateFailer extends ProductOrderState {
+  final  dynamic error;
+
+  ProductOrderCreateFailer({required this.error}) : assert (error != null);
+
+  @override
+  String toString() => "data : $error";
+  @override
+  // TODO: implement props
+  List<Object> get props => [error];
+  ProductOrderCreateFailer cloneWith({required dynamic error}) {
+    return ProductOrderCreateFailer(error: error);
+  }
+}
+
 class ProductOrderPostSuccess extends ProductOrderState {
   final  String id;
 
