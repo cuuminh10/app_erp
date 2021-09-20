@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,23 +24,23 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  AuthBloc? _authBloc;
+  AuthBloc _authBloc;
 
   @override
   void initState() {
     super.initState();
     _authBloc = BlocProvider.of(context);
-  //  _authBloc!.add(LoginEvent(username: 'hoang'));
+    //  _authBloc!.add(LoginEvent(username: 'hoang'));
   }
 
   void handleLogin() {
     final username = usernameController.text;
     final password = passwordController.text;
-    _authBloc!.add(LoginEvent(username: username, password: password));
+    _authBloc.add(LoginEvent(username: username, password: password));
   }
 
-  void getData(int? n) {
-    print(n! * 2);
+  void getData(int n) {
+    print(n * 2);
   }
 
   @override
@@ -49,7 +48,7 @@ class _SignInState extends State<SignIn> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthStateSuccess) {
-          final auth =  state.props;
+          final auth = state.props;
           print('day la ${auth}');
         }
       },
@@ -90,7 +89,7 @@ class _SignInState extends State<SignIn> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     TextField(
+                    TextField(
                       controller: usernameController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(
@@ -103,7 +102,7 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: 20),
                     Stack(
                       children: [
-                         TextField(
+                        TextField(
                           controller: passwordController,
                           obscureText: true,
                           decoration: const InputDecoration(
@@ -142,7 +141,8 @@ class _SignInState extends State<SignIn> {
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15.0)))),
+                                        borderRadius:
+                                            BorderRadius.circular(15.0)))),
                             onPressed: () => {},
                             child: const Text("Sign in")))
                   ],

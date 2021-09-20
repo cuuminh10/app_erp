@@ -21,13 +21,13 @@ class postComment extends FileCommentEvent {
   final String type;
   final String no;
   final String content;
-  postComment({required this.type, required this.no, required this.content});
+  postComment({ this.type,  this.no,  this.content});
 }
 
 class postAttach extends FileCommentEvent {
   final String type;
   final int objectId;
   final String file;
-  postAttach({required this.type, required this.objectId, required this.file});
+  postAttach({ this.type,  this.objectId,  this.file});
 }
 

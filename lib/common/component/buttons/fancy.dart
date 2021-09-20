@@ -8,8 +8,8 @@ class FancyFab extends StatefulWidget {
   final void Function()  onScan;
 
   const FancyFab({
-    Key? key,
-    required this.onScan,
+    Key key,
+     this.onScan,
   }) : super(key: key);
   @override
   _FancyFabState createState() => _FancyFabState();
@@ -18,10 +18,10 @@ class FancyFab extends StatefulWidget {
 class _FancyFabState extends State<FancyFab>
     with SingleTickerProviderStateMixin {
   bool isOpened = false;
-  late AnimationController _animationController;
-   Animation<Color?>? _buttonColor;
-    Animation<double>? _animateIcon;
-  late Animation<double> _translateButton;
+   AnimationController _animationController;
+   Animation<Color> _buttonColor;
+    Animation<double> _animateIcon;
+   Animation<double> _translateButton;
   Curve _curve = Curves.easeOut;
   double _fabHeight = 56.0;
 
@@ -103,11 +103,11 @@ class _FancyFabState extends State<FancyFab>
   Widget toggle() {
     return Container(
       child: FloatingActionButton(
-        backgroundColor: _buttonColor!.value,
+        backgroundColor: _buttonColor.value,
         onPressed: animate,
         child:isOpened ? AnimatedIcon(
           icon: AnimatedIcons.menu_close,
-          progress: _animateIcon!,
+          progress: _animateIcon,
         ) :  SvgPicture.asset(
           "assets/images/Paper.svg",
           width: 30,

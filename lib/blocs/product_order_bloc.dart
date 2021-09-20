@@ -30,7 +30,7 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
   @override
   Stream<ProductOrderState> mapEventToState(ProductOrderEvent event) async*{
     if (event is getCountEvent) {
-      String type = event.type!;
+      String type = event.type;
 
       final result =  await _productOrderService.getCount(type);
       // Write value
@@ -39,8 +39,8 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
     }
 
     if (event is getPoOrderEvent) {
-      String type = event.type!;
-      String statusType = event.statusType!;
+      String type = event.type;
+      String statusType = event.statusType;
 
       final result =  await _productOrderService.getListPoOrder(type, statusType);
       // Write value
@@ -49,8 +49,8 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
     }
 
     if (event is getPoOrderDetailEvent) {
-      String type = event.type!;
-      String no = event.no!;
+      String type = event.type;
+      String no = event.no;
 
       final result =  await _productOrderService.getDetail(type, no);
       // Write value
@@ -59,7 +59,7 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
     }
 
     if (event is putPrDeatilEvent) {
-      int id = event.id!;
+      int id = event.id;
       dynamic detail = event.detail;
 
       final result = await _productOrderService.putDetailPR(id, detail);

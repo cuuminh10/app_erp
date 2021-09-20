@@ -7,10 +7,10 @@ class ServerTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final Set<void> Function() onPress;
   const ServerTextField({
-    Key? key,
-    required this.hintText,
-    required this.onChanged,
-    required this.onPress,
+    Key key,
+     this.hintText,
+     this.onChanged,
+     this.onPress,
   }) : super(key: key);
 
   @override

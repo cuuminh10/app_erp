@@ -29,8 +29,7 @@ class Body extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;
   final bool isNewProduct;
 
-  const Body(
-      {Key? key, required this.productOrderDetail, required this.isNewProduct})
+  const Body({Key key, this.productOrderDetail, this.isNewProduct})
       : super(key: key);
 
   @override
@@ -39,9 +38,9 @@ class Body extends StatefulWidget {
 
 class _Body extends State<Body> {
   String data = '';
-  ProductOrderBloc? _productOrderBloc;
+  ProductOrderBloc _productOrderBloc;
   int _selectedPage = 0;
-  late PageController _pageController;
+  PageController _pageController;
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
   final listServer = ['one', 'two', 'three', 'Four'];
@@ -53,21 +52,21 @@ class _Body extends State<Body> {
   final TextEditingController _noTextFieldController = TextEditingController();
   List<Comment> _comments = [];
   List<Attach> _attach = [];
-  FileCommentBloc? _fileCommentBloc;
+  FileCommentBloc _fileCommentBloc;
   dynamic infoScreen;
   final TextEditingController _descriptionTextFieldController =
       TextEditingController();
 
   Future _openFileExplorer(List<String> files) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: files,
     );
 
     if (result != null) {
       // print(result);
-      _fileCommentBloc!.add(postAttach(
-          type: infoScreen!["code"],
+      _fileCommentBloc.add(postAttach(
+          type: infoScreen["code"],
           objectId: this.widget.productOrderDetail.id,
           file: result.files[0].path));
     } else {
@@ -80,8 +79,8 @@ class _Body extends State<Body> {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
       if (image != null) {
-        _fileCommentBloc!.add(postAttach(
-            type: infoScreen!["code"],
+        _fileCommentBloc.add(postAttach(
+            type: infoScreen["code"],
             objectId: this.widget.productOrderDetail.id,
             file: image.path));
       }
@@ -154,40 +153,35 @@ class _Body extends State<Body> {
     );
   }
 
-  Widget renderTableCell (dynamic name,int index) {
-    return      TableCell(
+  Widget renderTableCell(dynamic name, int index) {
+    return TableCell(
       child: GestureDetector(
-        onTap: () =>
-        this.infoScreen[
-        "code"] ==
-            "producResult"
+        onTap: () => this.infoScreen["code"] == "producResult"
             ? {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      RemarkDetailScreen(this.widget.productOrderDetail.listDetail![index], this.widget.productOrderDetail.no))).then(
-                  (detail) =>
-              {
-                if (detail
-                is Detail)
-                  {
-                    setState(() {
-                      this.widget.productOrderDetail.listDetail![index] = detail;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RemarkDetailScreen(
+                            this.widget.productOrderDetail.listDetail[index],
+                            this
+                                .widget
+                                .productOrderDetail
+                                .no))).then((detail) => {
+                      if (detail is Detail)
+                        {
+                          setState(() {
+                            this.widget.productOrderDetail.listDetail[index] =
+                                detail;
+                          })
+                        }
                     })
-                  }
-              })
-        }
+              }
             : null,
         child: Padding(
-          padding:
-          const EdgeInsets
-              .all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(
             name.toString(),
-            style: TextStyle(
-                color: HexColor(
-                    kBlue800)),
+            style: TextStyle(color: HexColor(kBlue800)),
           ),
         ),
       ),
@@ -207,7 +201,7 @@ class _Body extends State<Body> {
         TextEditingValue(text: this.widget.productOrderDetail.employeeName);
     _woTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.woNo);
-    _comments = this.widget.productOrderDetail.listComment!;
+    _comments = this.widget.productOrderDetail.listComment;
 
     _noTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.no);
@@ -219,13 +213,13 @@ class _Body extends State<Body> {
         ? infoScreen = Ultis.filterScreensGMC('ProductionFG')
         : Future.delayed(Duration.zero, () {
             setState(() {
-              infoScreen = BaseInheritedWidget.of(context)!.infoScreen;
+              infoScreen = BaseInheritedWidget.of(context).infoScreen;
             });
           });
 
     setState(() {
-      _comments = this.widget.productOrderDetail.listComment!;
-      _attach = this.widget.productOrderDetail.listAttach!;
+      _comments = this.widget.productOrderDetail.listComment;
+      _attach = this.widget.productOrderDetail.listAttach;
     });
   }
 
@@ -242,7 +236,7 @@ class _Body extends State<Body> {
 
   void _onHandleButton() {
     if (this.infoScreen["code"] == "jobticket") {
-      _productOrderBloc!
+      _productOrderBloc
           .add(getNewPrScanEvent(no: this.widget.productOrderDetail.no));
     } else {
       Map<String, dynamic> body = {
@@ -251,9 +245,9 @@ class _Body extends State<Body> {
       };
 
       this.widget.isNewProduct == true
-          ? _productOrderBloc!.add(postNewPrEvent(
-              no: this.widget.productOrderDetail.jobTicketNo!, detail: body))
-          : _productOrderBloc!.add(putPrDeatilEvent(
+          ? _productOrderBloc.add(postNewPrEvent(
+              no: this.widget.productOrderDetail.jobTicketNo, detail: body))
+          : _productOrderBloc.add(putPrDeatilEvent(
               detail: body, id: this.widget.productOrderDetail.id));
     }
   }
@@ -485,7 +479,6 @@ class _Body extends State<Body> {
                                 if (state is ProductOrderDetailSuccess) {
                                   print('12333333');
                                 }
-
                               },
                               child: SingleChildScrollView(
                                 child: Container(
@@ -582,7 +575,7 @@ class _Body extends State<Body> {
                                                   this
                                                       .widget
                                                       .productOrderDetail
-                                                      .listDetail!
+                                                      .listDetail
                                                       .length;
                                               i++)
                                             TableRow(
@@ -590,13 +583,35 @@ class _Body extends State<Body> {
                                                     color: i % 2 == 0
                                                         ? HexColor(kBlue100)
                                                         : HexColor(kBlue200)),
-
-
                                                 children: [
-                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].productNo, i),
-                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].phaseName, i),
-                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].qty, i),
-                                                  renderTableCell(this.widget.productOrderDetail.listDetail![i].unit, i)
+                                                  renderTableCell(
+                                                      this
+                                                          .widget
+                                                          .productOrderDetail
+                                                          .listDetail[i]
+                                                          .productNo,
+                                                      i),
+                                                  renderTableCell(
+                                                      this
+                                                          .widget
+                                                          .productOrderDetail
+                                                          .listDetail[i]
+                                                          .phaseName,
+                                                      i),
+                                                  renderTableCell(
+                                                      this
+                                                          .widget
+                                                          .productOrderDetail
+                                                          .listDetail[i]
+                                                          .qty,
+                                                      i),
+                                                  renderTableCell(
+                                                      this
+                                                          .widget
+                                                          .productOrderDetail
+                                                          .listDetail[i]
+                                                          .unit,
+                                                      i)
                                                 ])
                                         ],
                                       ),
@@ -642,12 +657,12 @@ class _Body extends State<Body> {
                                   labelText: 'Write a comment...',
                                   errorText: 'Comment cannot be blank',
                                   sendButtonMethod: () {
-                                    if (formKey.currentState!.validate()) {
+                                    if (formKey.currentState.validate()) {
                                       print(commentController.text);
                                       ProductOrderDetail productOrderDetail =
                                           this.widget.productOrderDetail;
 
-                                      _fileCommentBloc!.add(postComment(
+                                      _fileCommentBloc.add(postComment(
                                           type: 'jobticket',
                                           no: productOrderDetail.id.toString(),
                                           content: commentController.text));
@@ -827,11 +842,7 @@ class TabButton extends StatelessWidget {
   final int pageNumber;
   final Set<void> Function() onPressed;
 
-  TabButton(
-      {required this.text,
-      required this.selectedPage,
-      required this.pageNumber,
-      required this.onPressed});
+  TabButton({this.text, this.selectedPage, this.pageNumber, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

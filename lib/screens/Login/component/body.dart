@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gmc_erp/blocs/auth_bloc.dart';
-import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
-import 'package:gmc_erp/events/auth_event.dart';
-import 'package:gmc_erp/models/User.dart';
-import 'package:gmc_erp/screens/DashBoard/danhboard_screen.dart';
-import 'package:gmc_erp/screens/JobDetail/job_detail_screen.dart';
-import 'package:gmc_erp/screens/Login/component/backgroud.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gmc_erp/blocs/auth_bloc.dart';
+import 'package:gmc_erp/common/component/buttons/gmc_button_container.dart';
 import 'package:gmc_erp/common/component/textfields/normal_field_container.dart';
 import 'package:gmc_erp/common/component/textfields/password_field_container.dart';
 import 'package:gmc_erp/common/component/textfields/server_field_container.dart';
-import 'package:gmc_erp/common/component/buttons/gmc_button_container.dart';
-import 'package:gmc_erp/screens/ResultList/result_list_screen.dart';
+import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
+import 'package:gmc_erp/events/auth_event.dart';
+import 'package:gmc_erp/models/User.dart';
+import 'package:gmc_erp/public/constant/color.dart';
+import 'package:gmc_erp/screens/DashBoard/danhboard_screen.dart';
+import 'package:gmc_erp/screens/Login/component/backgroud.dart';
 import 'package:gmc_erp/states/auth_states.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:gmc_erp/public/constant/color.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class Body extends StatefulWidget {
   const Body({
-    Key? key,
+    Key key,
   }) : super(key: key);
+
   @override
   _Body createState() => _Body();
 }
@@ -32,32 +31,41 @@ class _Body extends State<Body> {
   final passwordController = TextEditingController();
   bool hidePassword = true;
   final listServer = ['one', 'two', 'three', 'Four'];
-  AuthBloc? _authBloc;
+  AuthBloc _authBloc;
   String token = "";
-
+  ProgressDialog progressDialog;
 
   @override
   void initState() {
     super.initState();
     _authBloc = BlocProvider.of(context);
-     getData();
+    getData();
+
     //  _authBloc!.add(LoginEvent(username: 'hoang'));
   }
 
   void handleLogin() {
     final username = usernameController.text;
     final password = passwordController.text;
-    _authBloc!.add(LoginEvent(username: username, password: password));
+
+    if (progressDialog == null) {
+      progressDialog = ProgressDialog(context);
+    }
+
+    progressDialog.show();
+
+    _authBloc.add(LoginEvent(username: username, password: password));
   }
 
   void getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('token')!.isNotEmpty) {
+    if (prefs.getString('token').isNotEmpty) {
+      progressDialog.hide();
       Future.delayed(Duration(seconds: 1), () {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) {
-              return DashBoardScreen();
+            return DashBoardScreen();
             // return JobDetailScreen(tittle: '123');
           }),
         );
@@ -77,6 +85,36 @@ class _Body extends State<Body> {
           prefs.setString('token', auth.token);
           getData();
         }
+
+        if (state is AuthStateFailure) {
+          // set up the AlertDialog
+          progressDialog.hide().whenComplete(() {
+            print(progressDialog.isShowing());
+          });
+          AlertDialog alert = AlertDialog(
+            title: Text("Error"),
+            content: Text(state.errorMsg.replaceAll("Exception:", "")),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  progressDialog.hide();
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+
+          // show the dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
+        }else {
+          print('vao');
+        }
       },
       child: SafeArea(
         child: Background(
@@ -92,7 +130,10 @@ class _Body extends State<Body> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.01),
-                NormalTextField(hintText: "Username *", controller: usernameController,),
+                NormalTextField(
+                  hintText: "Username *",
+                  controller: usernameController,
+                ),
                 SizedBox(height: size.height * 0.01),
                 PasswordTextField(
                     hintText: "Password *",
@@ -112,15 +153,15 @@ class _Body extends State<Body> {
                 NormalButton(
                     text: "Login",
                     onPress: () => {
-                      // BaseInheritedWidget.of(context)!.state.changePageIndex(2),
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(
-                      //     content:
-                      //     Text('${counter}'),
-                      //   ),
-                      // ),
-                      handleLogin()
-                    },
+                          // BaseInheritedWidget.of(context)!.state.changePageIndex(2),
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content:
+                          //     Text('${counter}'),
+                          //   ),
+                          // ),
+                          handleLogin()
+                        },
                     vertical: 20,
                     horizontal: 40,
                     width: 0.8),
@@ -135,7 +176,7 @@ class _Body extends State<Body> {
 
   void _showModal(List<String> listServer) {
     Size size = MediaQuery.of(context).size;
-    var counter = BaseInheritedWidget.of(context)!.myData;
+    var counter = BaseInheritedWidget.of(context).myData;
     final snackBar = ScaffoldMessenger.of(context);
     final _formKey = GlobalKey<FormState>();
     final serverController = TextEditingController();
@@ -209,8 +250,7 @@ class _Body extends State<Body> {
                                             //BaseInheritedWidget.of(context)
                                             snackBar.showSnackBar(
                                               SnackBar(
-                                                content:
-                                                    Text('${counter}'),
+                                                content: Text('${counter}'),
                                               ),
                                             ),
                                             setState(() {

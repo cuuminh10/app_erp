@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 class Background extends StatelessWidget {
   final Widget child;
   const Background({
-    Key? key,
-    required this.child,
+    Key key,
+     this.child,
   }) : super(key: key);
 
   @override

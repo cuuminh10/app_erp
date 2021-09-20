@@ -6,9 +6,9 @@ class NormalTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   const NormalTextField({
-    Key? key,
-    required this.hintText,
-    required this.controller,
+    Key key,
+     this.hintText,
+     this.controller,
   }) : super(key: key);
 
   @override

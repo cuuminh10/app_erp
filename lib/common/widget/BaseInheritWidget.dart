@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class BaseInheritedWidget extends InheritedWidget {
 
-  BaseInheritedWidget({required Widget child,  this.myData, this.state, this.infoScreen}) : super(child: child);
+  BaseInheritedWidget({ Widget child,  this.myData, this.state, this.infoScreen}) : super(child: child);
 
   final dynamic myData;
   final state;
@@ -13,7 +13,7 @@ class BaseInheritedWidget extends InheritedWidget {
     return myData != oldWidget.myData;
   }
 
-  static BaseInheritedWidget? of(BuildContext context){
+  static BaseInheritedWidget of(BuildContext context){
     return context.dependOnInheritedWidgetOfExactType<BaseInheritedWidget>();
   }
 }

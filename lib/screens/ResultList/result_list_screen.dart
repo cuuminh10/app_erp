@@ -5,7 +5,7 @@ import 'package:gmc_erp/screens/ResultList/component/body.dart';
 class ResultListScreen extends StatefulWidget {
 
   final dynamic infoScreen;
-  const ResultListScreen ({ Key? key, required this.infoScreen }): super(key: key);
+  const ResultListScreen ({ Key key,  this.infoScreen }): super(key: key);
 
   @override
   _ResultListScreen createState() => _ResultListScreen();

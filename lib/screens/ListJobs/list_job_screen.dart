@@ -5,7 +5,7 @@ import 'package:gmc_erp/screens/ListJobs/component/body.dart';
 class ListJobsScreen extends StatefulWidget {
   final String tittle;
 
-  const ListJobsScreen (this.tittle ,{ Key? key }): super(key: key);
+  const ListJobsScreen (this.tittle ,{ Key key }): super(key: key);
 
 
   @override

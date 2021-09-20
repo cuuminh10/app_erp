@@ -11,7 +11,7 @@ import 'package:gmc_erp/public/ultis/filter_name_dashboard.dart';
 
 class GmcDashBoard extends StatelessWidget {
   final List<Favor> list;
-  const GmcDashBoard({Key? key, required List<Favor> this.list})
+  const GmcDashBoard({Key key,  List<Favor> this.list})
       : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class GmcDashBoard extends StatelessWidget {
               onTap: ()  {
                 final data = Ultis.filterScreensGMC(list[index].moduleName);
                 final  wrapper = BaseInheritedWidget.of(context);
-                BaseInheritedWidget.of(context)!.state.setInfoScreen(data);
+                BaseInheritedWidget.of(context).state.setInfoScreen(data);
 
 
                 if (data['name'] != '') {

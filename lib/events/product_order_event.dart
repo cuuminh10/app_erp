@@ -19,35 +19,35 @@ abstract class ProductOrderEvent extends Equatable {
 
 }
 class getCountEvent extends ProductOrderEvent {
-  final String? type;
+  final String type;
   getCountEvent({this.type});
 }
 
 class getPoOrderEvent extends ProductOrderEvent {
-  final String? type;
-  final String? statusType;
+  final String type;
+  final String statusType;
   getPoOrderEvent({this.type, this.statusType});
 }
 
 class getPoOrderDetailEvent extends ProductOrderEvent {
-  final String? type;
-  final String? no;
+  final String type;
+  final String no;
   getPoOrderDetailEvent({this.type, this.no});
 }
 
 class putPrDeatilEvent extends ProductOrderEvent {
-  final int? id;
+  final int id;
   final dynamic detail;
   putPrDeatilEvent({this.id, this.detail});
 }
 
 class getNewPrScanEvent extends ProductOrderEvent {
   final String no;
-  getNewPrScanEvent({required this.no});
+  getNewPrScanEvent({ this.no});
 }
 
 class postNewPrEvent extends ProductOrderEvent {
   final String no;
   final dynamic detail;
-  postNewPrEvent({required this.no, this.detail});
+  postNewPrEvent({ this.no, this.detail});
 }

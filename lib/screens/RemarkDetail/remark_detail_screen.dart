@@ -9,7 +9,7 @@ class RemarkDetailScreen extends StatefulWidget {
   final Detail detail;
   final String no;
 
-  const RemarkDetailScreen (this.detail, this.no ,{ Key? key }): super(key: key);
+  const RemarkDetailScreen (this.detail, this.no ,{ Key key }): super(key: key);
 
   @override
   _RemarkDetailScreen createState() => _RemarkDetailScreen();

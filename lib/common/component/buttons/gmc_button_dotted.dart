@@ -25,17 +25,17 @@ class DottedButton extends StatelessWidget {
   final double vertical;
   final double horizontal;
   final double width;
-  final HexColor? color;
-  final HexColor? colorText;
-  final HexColor? colorBorder;
+  final HexColor color;
+  final HexColor colorText;
+  final HexColor colorBorder;
   const DottedButton({
-    Key? key,
-    required this.text,
-    required this.onPress,
-    required this.onPickImage,
-    required this.vertical,
-    required this.horizontal,
-    required this.width,
+    Key key,
+     this.text,
+     this.onPress,
+     this.onPickImage,
+     this.vertical,
+     this.horizontal,
+     this.width,
     this.color,
     this.colorText,
     this.colorBorder,

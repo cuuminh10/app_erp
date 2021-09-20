@@ -13,7 +13,7 @@ import 'package:gmc_erp/public/constant/color.dart';
 
 class Body extends StatefulWidget {
   const Body({
-    Key? key,
+    Key key,
   }) : super(key: key);
   @override
   _Body createState() => _Body();
@@ -25,10 +25,10 @@ class _Body extends State<Body> with TickerProviderStateMixin {
   // _listProduction.add
   // new Favor(1, 'ProductionOrdr', 'Jobticket.svg','Job Ticket')
   int _selectedPage = 0;
-  late PageController _pageController;
-  FavorBloc? _favorBloc;
-  Favor? deleteFavor;
-  List<Favor>? _listFavor = [];
+  PageController _pageController;
+  FavorBloc _favorBloc;
+  Favor deleteFavor;
+  List<Favor> _listFavor = [];
 
   void _changePage(int pageNum) {
     setState(() {
@@ -42,7 +42,7 @@ class _Body extends State<Body> with TickerProviderStateMixin {
   }
 
   List<Favor>  checkContains (String moduleName) {
-    List<Favor>  contain = _listFavor!.where((element) => element.moduleName == moduleName).toList();
+    List<Favor>  contain = _listFavor.where((element) => element.moduleName == moduleName).toList();
 
     return contain;
   }
@@ -50,12 +50,12 @@ class _Body extends State<Body> with TickerProviderStateMixin {
   void onHandleChangeFavor (String moduleName) {
     final favor = checkContains(moduleName);
     if (favor.length > 0) {
-      _favorBloc!.add(deleteFavorEvent(id: favor[0].id));
+      _favorBloc.add(deleteFavorEvent(id: favor[0].id));
       setState(() {
         deleteFavor = favor[0];
       });
     }else {
-      _favorBloc!.add(postFavorEvent(moduleName: moduleName));
+      _favorBloc.add(postFavorEvent(moduleName: moduleName));
     }
   }
 
@@ -131,13 +131,13 @@ class _Body extends State<Body> with TickerProviderStateMixin {
                   });
                 }
                 if (state is FavorPostSuccess) {
-                  _listFavor!.add(state.favor);
+                  _listFavor.add(state.favor);
                   setState(() {
                     _listFavor = _listFavor;
                   });
                 }
                 if (state is FavorDeleteSuccess) {
-                  _listFavor!.removeWhere((element) => element.id == state.id);
+                  _listFavor.removeWhere((element) => element.id == state.id);
                   setState(() {
                     _listFavor = _listFavor;
                   });
@@ -151,20 +151,20 @@ class _Body extends State<Body> with TickerProviderStateMixin {
                   },
                   controller: _pageController,
                   children: [
-                    _listFavor!.length > 0
+                    _listFavor.length > 0
                         ? GmcDashBoard(
-                            list: _listFavor!,
+                            list: _listFavor,
                           )
-                        : SizedBox(child: Text(  _listFavor!.length.toString()),),
+                        : SizedBox(child: Text(''),),
                     Container(
                       child: Column(
                         children: <Widget>[
                           new Expanded(
                               child: ListCard(
-                                  tittle: 'Production', list: this.listProduction, listEnable: _listFavor!,onTap: (e) => { onHandleChangeFavor(e)} )),
+                                  tittle: 'Production', list: this.listProduction, listEnable: _listFavor,onTap: (e) => { onHandleChangeFavor(e)} )),
                           new Expanded(
                               child: ListCard(
-                                  tittle: 'Purchase', list: this.listPurchase, listEnable: _listFavor!, onTap: (e) => { onHandleChangeFavor(e)}))
+                                  tittle: 'Purchase', list: this.listPurchase, listEnable: _listFavor, onTap: (e) => { onHandleChangeFavor(e)}))
                         ],
                       ),
                     ),
@@ -185,10 +185,10 @@ class TabButton extends StatelessWidget {
   final int pageNumber;
   final Set<void> Function() onPressed;
   TabButton(
-      {required this.text,
-      required this.selectedPage,
-      required this.pageNumber,
-      required this.onPressed});
+      { this.text,
+       this.selectedPage,
+       this.pageNumber,
+       this.onPressed});
 
   @override
   Widget build(BuildContext context) {

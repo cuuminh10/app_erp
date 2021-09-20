@@ -10,7 +10,7 @@ class ListCard extends StatelessWidget {
   final List<Favor> listEnable;
   final  Set<void> Function(dynamic)   onTap;
   const ListCard(
-      {Key? key, required String this.tittle, required List<Favor> this.list, required List<Favor> this.listEnable, required  Set<void> Function(dynamic)   this.onTap})
+      {Key key,  String this.tittle,  List<Favor> this.list,  List<Favor> this.listEnable,   Set<void> Function(dynamic)   this.onTap})
       : super(key: key);
 
   List<Favor>  checkContains (String moduleName) {

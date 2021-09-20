@@ -10,11 +10,11 @@ class PasswordTextField extends StatelessWidget {
   final Set<void> Function() onPress;
   final bool hidePassword;
   const PasswordTextField({
-    Key? key,
-    required this.hintText,
-    required this.controller,
-    required this.onPress,
-    required this.hidePassword,
+    Key key,
+     this.hintText,
+     this.controller,
+     this.onPress,
+     this.hidePassword,
   }) : super(key: key);
 
   @override

@@ -22,11 +22,11 @@ class getFavorEvent extends FavorEvent {
 }
 
 class postFavorEvent extends FavorEvent {
-  final String? moduleName;
+  final String moduleName;
   postFavorEvent({this.moduleName});
 }
 
 class deleteFavorEvent extends FavorEvent {
-  final int? id;
+  final int id;
   deleteFavorEvent({this.id});
 }

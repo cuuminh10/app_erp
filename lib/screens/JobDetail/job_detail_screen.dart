@@ -5,9 +5,9 @@ import 'package:gmc_erp/screens/JobDetail/component/body.dart';
 
 class JobDetailScreen extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;
-  final bool? isNewProduct;
+  final bool isNewProduct;
 
-  const JobDetailScreen ({ Key? key, required this.productOrderDetail, this.isNewProduct = false }): super(key: key);
+  const JobDetailScreen ({ Key key,  this.productOrderDetail, this.isNewProduct = false }): super(key: key);
 
   @override
   _JobDetailScreen createState() => _JobDetailScreen();
@@ -25,7 +25,7 @@ class _JobDetailScreen extends State<JobDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  Body(productOrderDetail: this.widget.productOrderDetail, isNewProduct:  this.widget.isNewProduct!)
+      body:  Body(productOrderDetail: this.widget.productOrderDetail, isNewProduct:  this.widget.isNewProduct)
     );
   }
 }

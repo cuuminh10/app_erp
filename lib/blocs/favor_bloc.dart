@@ -37,17 +37,17 @@ class FavorBloc extends Bloc<FavorEvent, FavorState> {
     }
 
     if (event is postFavorEvent) {
-      String? moduleName = event.moduleName;
+      String moduleName = event.moduleName;
 
-      final result = await _favorService.postFavor(moduleName!);
+      final result = await _favorService.postFavor(moduleName);
       yield FavorPostSuccess(favor: result);
       return;
     }
 
     if (event is deleteFavorEvent) {
-      int? id = event.id;
+      int id = event.id;
 
-      final result = await _favorService.deleteFavor(id!);
+      final result = await _favorService.deleteFavor(id);
       yield FavorDeleteSuccess(id: result);
       return;
     }

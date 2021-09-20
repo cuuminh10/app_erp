@@ -33,8 +33,8 @@ class AuthRepository {
     if (response.statusCode == 200) {
       return User.fromJsonMap(json.decode(response.body));
     } else {
-      // If that call was not successful, throw an error.
-      throw Exception('Failed to load post');
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
     }
   }
 }

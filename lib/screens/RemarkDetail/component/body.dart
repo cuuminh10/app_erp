@@ -23,7 +23,7 @@ class Body extends StatefulWidget {
   final Detail detail;
   final String no;
 
-  const Body(this.detail, this.no, {Key? key}) : super(key: key);
+  const Body(this.detail, this.no, {Key key}) : super(key: key);
 
   @override
   _Body createState() => _Body();

@@ -36,15 +36,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async*{
-    if (event is LoginEvent) {
-     // _commentService.getCommentFromApi();
-      //_authService.getALl();
-      String username = event.username!;
-      String password = event.password!;
+    try{
+      if (event is LoginEvent) {
+        // _commentService.getCommentFromApi();
+        //_authService.getALl();
+        String username = event.username;
+        String password = event.password;
 
-      final user =  await _authService.login(username, password);
-      // Write value
-      yield AuthStateSuccess(user: user);
+        final user =  await _authService.login(username, password);
+        // Write value
+        yield AuthStateSuccess(user: user);
+        return;
+      }
+    }catch (error) {
+
+      print(error);
+      yield AuthStateFailure(errorMsg: error.toString(), date: new DateTime.now().toString());
       return;
     }
   }

@@ -21,26 +21,26 @@ class ProductOrderFailure extends ProductOrderState {}
 
 class ProductOrderCountSuccess extends ProductOrderState {
   final ProductOrderCount productOrderCount;
-  const ProductOrderCountSuccess({required this.productOrderCount});
+  const ProductOrderCountSuccess({ this.productOrderCount});
   @override
   String toString() => "data : $productOrderCount";
   @override
   // TODO: implement props
   List<Object> get props => [productOrderCount];
-  ProductOrderCountSuccess cloneWith({required ProductOrderCount productOrderCount}) {
+  ProductOrderCountSuccess cloneWith({ ProductOrderCount productOrderCount}) {
     return ProductOrderCountSuccess(productOrderCount: productOrderCount);
   }
 }
 
 class ProductOrderSuccess extends ProductOrderState {
   final List<ProductOrderOpen> productOrderOpen;
-  const ProductOrderSuccess({required this.productOrderOpen});
+  const ProductOrderSuccess({ this.productOrderOpen});
   @override
   String toString() => "data : $productOrderOpen";
   @override
   // TODO: implement props
   List<Object> get props => [productOrderOpen];
-  ProductOrderSuccess cloneWith({required List<ProductOrderOpen> productOrderOpen}) {
+  ProductOrderSuccess cloneWith({ List<ProductOrderOpen> productOrderOpen}) {
     return ProductOrderSuccess(productOrderOpen: productOrderOpen);
   }
 }
@@ -48,14 +48,14 @@ class ProductOrderSuccess extends ProductOrderState {
 class ProductOrderDetailSuccess extends ProductOrderState {
   final ProductOrderDetail productOrderDetail;
 
-  ProductOrderDetailSuccess({required this.productOrderDetail}) : assert (productOrderDetail != null);
+  ProductOrderDetailSuccess({ this.productOrderDetail}) : assert (productOrderDetail != null);
 
   @override
   String toString() => "data : $productOrderDetail";
   @override
   // TODO: implement props
   List<Object> get props => [productOrderDetail];
-  ProductOrderDetailSuccess cloneWith({required ProductOrderDetail productOrderOpen}) {
+  ProductOrderDetailSuccess cloneWith({ ProductOrderDetail productOrderOpen}) {
     return ProductOrderDetailSuccess(productOrderDetail: productOrderOpen);
   }
 }
@@ -63,14 +63,14 @@ class ProductOrderDetailSuccess extends ProductOrderState {
 class ProductOrderPutDetailSuccess extends ProductOrderState {
   final String id;
 
-  ProductOrderPutDetailSuccess({required this.id}) : assert (id != null);
+  ProductOrderPutDetailSuccess({ this.id}) : assert (id != null);
 
   @override
   String toString() => "data : $id";
   @override
   // TODO: implement props
   List<Object> get props => [id];
-  ProductOrderPutDetailSuccess cloneWith({required String id}) {
+  ProductOrderPutDetailSuccess cloneWith({ String id}) {
     return ProductOrderPutDetailSuccess(id: id);
   }
 }
@@ -78,14 +78,14 @@ class ProductOrderPutDetailSuccess extends ProductOrderState {
 class ProductOrderCreateSuccess extends ProductOrderState {
   final  ProductOrderDetail productOrderDetail;
 
-  ProductOrderCreateSuccess({required this.productOrderDetail}) : assert (productOrderDetail != null);
+  ProductOrderCreateSuccess({ this.productOrderDetail}) : assert (productOrderDetail != null);
 
   @override
   String toString() => "data : $productOrderDetail";
   @override
   // TODO: implement props
   List<Object> get props => [productOrderDetail];
-  ProductOrderCreateSuccess cloneWith({required ProductOrderDetail productOrderDetail}) {
+  ProductOrderCreateSuccess cloneWith({ ProductOrderDetail productOrderDetail}) {
     return ProductOrderCreateSuccess(productOrderDetail: productOrderDetail);
   }
 }
@@ -93,14 +93,14 @@ class ProductOrderCreateSuccess extends ProductOrderState {
 class ProductOrderCreateFailer extends ProductOrderState {
   final  dynamic error;
 
-  ProductOrderCreateFailer({required this.error}) : assert (error != null);
+  ProductOrderCreateFailer({ this.error}) : assert (error != null);
 
   @override
   String toString() => "data : $error";
   @override
   // TODO: implement props
   List<Object> get props => [error];
-  ProductOrderCreateFailer cloneWith({required dynamic error}) {
+  ProductOrderCreateFailer cloneWith({ dynamic error}) {
     return ProductOrderCreateFailer(error: error);
   }
 }
@@ -108,14 +108,14 @@ class ProductOrderCreateFailer extends ProductOrderState {
 class ProductOrderPostSuccess extends ProductOrderState {
   final  String id;
 
-  ProductOrderPostSuccess({required this.id}) : assert (id != null);
+  ProductOrderPostSuccess({ this.id}) : assert (id != null);
 
   @override
   String toString() => "data : $id";
   @override
   // TODO: implement props
   List<Object> get props => [id];
-  ProductOrderPostSuccess cloneWith({required String id}) {
+  ProductOrderPostSuccess cloneWith({ String id}) {
     return ProductOrderPostSuccess(id: id);
   }
 }

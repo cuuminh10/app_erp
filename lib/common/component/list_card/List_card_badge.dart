@@ -12,7 +12,7 @@ class ListCardBadge extends StatelessWidget {
   final Set<void> Function(String) onTap;
 
   const ListCardBadge(
-      {Key? key, required String this.tittle, required String this.code, required int this.count, required Set<void> Function(String) this.onTap})
+      {Key key,  String this.tittle,  String this.code,  int this.count,  Set<void> Function(String) this.onTap})
       : super(key: key);
 
   @override

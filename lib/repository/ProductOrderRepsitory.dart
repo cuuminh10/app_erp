@@ -29,7 +29,7 @@ class ProductOrderRepsitory {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}'
+        'Authorization': 'Bearer ${prefs.getString('token')}'
       },
     );
 
@@ -49,7 +49,7 @@ class ProductOrderRepsitory {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}'
+        'Authorization': 'Bearer ${prefs.getString('token')}'
       },
     );
 
@@ -75,7 +75,7 @@ class ProductOrderRepsitory {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}',
+        'Authorization': 'Bearer ${prefs.getString('token')}',
       },
     );
 
@@ -105,7 +105,7 @@ class ProductOrderRepsitory {
     final response = await httpClient.put(Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${prefs.getString('token')!}',
+          'Authorization': 'Bearer ${prefs.getString('token')}',
         },
         body: jsonEncode(<String, dynamic>{
           "description": detail["description"],
@@ -126,7 +126,7 @@ class ProductOrderRepsitory {
     final response = await httpClient.get(Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${prefs.getString('token')!}',
+          'Authorization': 'Bearer ${prefs.getString('token')}',
         });
 
     if (response.statusCode == 200) {
@@ -145,7 +145,7 @@ class ProductOrderRepsitory {
     final response = await httpClient.post(Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${prefs.getString('token')!}',
+          'Authorization': 'Bearer ${prefs.getString('token')}',
         },
         body: jsonEncode(<String, dynamic>{
           "description": detail["description"],

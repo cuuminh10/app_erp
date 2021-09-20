@@ -27,7 +27,7 @@ class FavorRepsitory {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}'
+        'Authorization': 'Bearer ${prefs.getString('token')}'
       },
     );
 
@@ -51,7 +51,7 @@ class FavorRepsitory {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}',
+        'Authorization': 'Bearer ${prefs.getString('token')}',
       },
       body: jsonEncode(<String, String>{
         'moduleName': moduleName,
@@ -73,7 +73,7 @@ class FavorRepsitory {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}',
+        'Authorization': 'Bearer ${prefs.getString('token')}',
       },
     );
 

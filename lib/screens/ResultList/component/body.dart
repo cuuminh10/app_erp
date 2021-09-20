@@ -18,8 +18,8 @@ class Body extends StatefulWidget {
   final dynamic infoScreen;
 
   const Body({
-    Key? key,
-    required this.infoScreen,
+    Key key,
+     this.infoScreen,
   }) : super(key: key);
 
   @override
@@ -28,14 +28,14 @@ class Body extends StatefulWidget {
 
 class _Body extends State<Body> {
   String data = '';
-  ProductOrderBloc? _productOrderBloc;
-  ProductOrderCount? productOrderCount;
+  ProductOrderBloc _productOrderBloc;
+  ProductOrderCount productOrderCount;
 
   @override
   void initState() {
     super.initState();
     _productOrderBloc = BlocProvider.of(context);
-    _productOrderBloc!.add(getCountEvent(type: this.widget.infoScreen['code']));
+    _productOrderBloc.add(getCountEvent(type: this.widget.infoScreen['code']));
   }
 
   @override
@@ -44,7 +44,7 @@ class _Body extends State<Body> {
   }
 
   void onHandleClickItem(String no) {
-    _productOrderBloc!.add(
+    _productOrderBloc.add(
         getPoOrderDetailEvent(type: this.widget.infoScreen['code'], no: no));
   }
 
@@ -60,7 +60,7 @@ class _Body extends State<Body> {
         await FlutterBarcodeScanner.scanBarcode(
                 "#ff6666", "Cancel", false, ScanMode.DEFAULT)
             .then((barcode) {
-          _productOrderBloc!.add(getNewPrScanEvent(no: barcode));
+          _productOrderBloc.add(getNewPrScanEvent(no: barcode));
         })
       };
 
@@ -182,22 +182,22 @@ class _Body extends State<Body> {
                     ListCardBadge(
                         tittle: 'Open',
                         code: this.widget.infoScreen['code'],
-                        count: productOrderCount!.opens,
+                        count: productOrderCount.opens,
                         onTap: (e) => {onHandleClickItem(e)}),
                     ListCardBadge(
                         tittle: 'Overdue',
                         code: this.widget.infoScreen['code'],
-                        count: productOrderCount!.overdue,
+                        count: productOrderCount.overdue,
                         onTap: (e) => {onHandleClickItem(e)}),
                     ListCardBadge(
                         tittle: 'Incomplete',
                         code: this.widget.infoScreen['code'],
-                        count: productOrderCount!.incompleted,
+                        count: productOrderCount.incompleted,
                         onTap: (e) => {onHandleClickItem(e)}),
                     ListCardBadge(
                         tittle: 'Complete',
                         code: this.widget.infoScreen['code'],
-                        count: productOrderCount!.completed,
+                        count: productOrderCount.completed,
                         onTap: (e) => {onHandleClickItem(e)}),
                   ],
                 );

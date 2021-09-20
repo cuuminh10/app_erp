@@ -28,7 +28,7 @@ class FileCommentRepository {
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${prefs.getString('token')!}'
+        'Authorization': 'Bearer ${prefs.getString('token')}'
       },
       body: jsonEncode({'content': content}),
     );
@@ -47,7 +47,7 @@ class FileCommentRepository {
     map['file'] = file;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, String> headers = { "Authorization": 'Bearer ${prefs.getString('token')!}'};
+    Map<String, String> headers = { "Authorization": 'Bearer ${prefs.getString('token')}'};
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('file', file));

@@ -23,10 +23,10 @@ class ProductOrderDetail {
   String ordDate;
   String employeeName;
   String woNo;
-  String? jobTicketNo;
-  List<Detail>? listDetail;
-  List<Attach>? listAttach;
-  List<Comment>? listComment;
+  String jobTicketNo;
+  List<Detail> listDetail;
+  List<Attach> listAttach;
+  List<Comment> listComment;
 
   ProductOrderDetail.fromJsonMap(Map<String, dynamic> map):
         id = map["id"],

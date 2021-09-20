@@ -13,7 +13,7 @@ class ListCardJobs extends StatelessWidget {
   final Set<void> Function(String) onTap;
 
   const ListCardJobs(
-      {Key? key, required String this.no, required String this.phaseName, required String this.productDate, required Set<void> Function(String) this.onTap})
+      {Key key,  String this.no,  String this.phaseName,  String this.productDate,  Set<void> Function(String) this.onTap})
       : super(key: key);
 
   @override

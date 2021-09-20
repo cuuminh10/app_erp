@@ -15,8 +15,8 @@ class Favor {
 
   int id;
   String moduleName;
-  String? image;
-  String? name;
+  String image;
+  String name;
 
   Favor(this.id, this.moduleName, this.image, this.name);
 

@@ -14,39 +14,39 @@ class FavorFailure extends FavorState {}
 
 class FavorSuccess extends FavorState {
   final List<Favor> favor;
-  const FavorSuccess({required this.favor});
+  const FavorSuccess({this.favor});
   @override
   String toString() => "data : $favor";
   @override
   // TODO: implement props
   List<Object> get props => [favor];
-  FavorSuccess cloneWith({required List<Favor> favor}) {
+  FavorSuccess cloneWith({List<Favor> favor}) {
     return FavorSuccess(favor: favor);
   }
 }
 
 class FavorPostSuccess extends FavorState {
   final Favor favor;
-  const FavorPostSuccess({required this.favor});
+  const FavorPostSuccess({this.favor});
   @override
   String toString() => "data : $favor";
   @override
   // TODO: implement props
   List<Object> get props => [favor];
-  FavorPostSuccess cloneWith({required Favor favor}) {
+  FavorPostSuccess cloneWith({Favor favor}) {
     return FavorPostSuccess(favor: favor);
   }
 }
 
 class FavorDeleteSuccess extends FavorState {
   final int id;
-  const FavorDeleteSuccess({required this.id});
+  const FavorDeleteSuccess({this.id});
   @override
   String toString() => "data : $id";
   @override
   // TODO: implement props
   List<Object> get props => [id];
-  FavorDeleteSuccess cloneWith({required int id}) {
+  FavorDeleteSuccess cloneWith({int id}) {
     return FavorDeleteSuccess(id: id);
   }
 }
