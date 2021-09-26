@@ -23,7 +23,8 @@ class ProductOrderDetail {
   String ordDate;
   String employeeName;
   String woNo;
-  String jobTicketNo;
+  String phaseNo;
+  String workCenterName;
   List<Detail> listDetail;
   List<Attach> listAttach;
   List<Comment> listComment;
@@ -36,13 +37,14 @@ class ProductOrderDetail {
         ordDate = map["ordDate"],
         employeeName = map["employeeName"] ?? '',
         woNo = map["woNo"]  ?? '',
-        jobTicketNo = map["jobTicketNo"]  ?? '',
-        listDetail = List<Detail>.from(
-            map["detail"].map((x) => Detail.fromJsonMap(x))),
-        listAttach = List<Attach>.from(
-            map["attach"].map((x) => Attach.fromJsonMap(x))),
-        listComment = List<Comment>.from(
-            map["comment"].map((x) => Comment.fromJsonMap(x)));
+        phaseNo = map["phaseNo"]  ?? '',
+        workCenterName = map["workCenterName"]  ?? '',
+        listDetail = map["detail"] != null ? List<Detail>.from(
+            map["detail"].map((x) => Detail.fromJsonMap(x))) : [],
+        listAttach =  map["attach"] != null ? List<Attach>.from(
+            map["attach"].map((x) => Attach.fromJsonMap(x))) : [],
+        listComment =  map["comment"] != null ? List<Comment>.from(
+            map["comment"].map((x) => Comment.fromJsonMap(x))) : [];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -56,7 +58,8 @@ class ProductOrderDetail {
     data['detail'] = listDetail;
     data['attach'] = listAttach;
     data['comment'] = listComment;
-    data['jobTicketNo'] = jobTicketNo;
+    data['phaseNo'] = phaseNo;
+    data['workCenterName'] = workCenterName;
     return data;
   }
 

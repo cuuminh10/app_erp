@@ -246,7 +246,7 @@ class _Body extends State<Body> {
 
       this.widget.isNewProduct == true
           ? _productOrderBloc.add(postNewPrEvent(
-              no: this.widget.productOrderDetail.jobTicketNo, detail: body))
+              no: this.widget.productOrderDetail.phaseNo, detail: body))
           : _productOrderBloc.add(putPrDeatilEvent(
               detail: body, id: this.widget.productOrderDetail.id));
     }

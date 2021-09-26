@@ -7,23 +7,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gmc_erp/blocs/file_comment_bloc.dart';
 import 'package:gmc_erp/blocs/product_order_bloc.dart';
-import 'package:gmc_erp/common/component/buttons/gmc_button_container.dart';
+import 'package:gmc_erp/common/component/buttons/gmc_button_dotted.dart';
 import 'package:gmc_erp/common/component/comment/CommenBox.dart';
 import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/events/file_comment_event.dart';
 import 'package:gmc_erp/events/product_order_event.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
+import 'package:gmc_erp/public/constant/color.dart';
+import 'package:gmc_erp/public/ultis/convert_date.dart';
+import 'package:gmc_erp/public/ultis/ultis.dart';
+import 'package:gmc_erp/screens/ListJobs/component/background.dart';
 import 'package:gmc_erp/screens/RemarkDetail/remark_detail_screen.dart';
 import 'package:gmc_erp/states/file_comment_state.dart';
 import 'package:gmc_erp/states/product_order_state.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:gmc_erp/screens/ListJobs/component/background.dart';
-import 'package:gmc_erp/public/constant/color.dart';
-import 'package:gmc_erp/public/ultis/convert_date.dart';
-import 'package:gmc_erp/public/ultis/ultis.dart';
-import 'package:gmc_erp/common/component/buttons/gmc_button_dotted.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Body extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;
@@ -199,12 +198,12 @@ class _Body extends State<Body> {
             this.widget.productOrderDetail.ordDate));
     _userTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.employeeName);
-    _woTextFieldController.value =
-        TextEditingValue(text: this.widget.productOrderDetail.woNo);
+    _woTextFieldController.value = TextEditingValue(
+        text: this.widget.productOrderDetail.workCenterName);
     _comments = this.widget.productOrderDetail.listComment;
 
     _noTextFieldController.value =
-        TextEditingValue(text: this.widget.productOrderDetail.no);
+        TextEditingValue(text: this.widget.productOrderDetail.phaseNo);
 
     _descriptionTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.description);
@@ -246,7 +245,7 @@ class _Body extends State<Body> {
 
       this.widget.isNewProduct == true
           ? _productOrderBloc.add(postNewPrEvent(
-              no: this.widget.productOrderDetail.jobTicketNo, detail: body))
+              no: this.widget.productOrderDetail.phaseNo, detail: body))
           : _productOrderBloc.add(putPrDeatilEvent(
               detail: body, id: this.widget.productOrderDetail.id));
     }
@@ -273,12 +272,15 @@ class _Body extends State<Body> {
             onPressed: () => {Navigator.pop(context, true)}),
         actions: <Widget>[
           GestureDetector(
-            onTap: () => {print('vao Result')},
+            onTap: () => {_onHandleButton()},
             child: Center(
                 child: Container(
                     margin: EdgeInsets.only(right: 10.0),
                     child: Text(
-                      'Result',
+                      this.infoScreen["code"] ==
+                          "jobticket"
+                          ? "Result"
+                          : "Save",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0,
@@ -328,7 +330,7 @@ class _Body extends State<Body> {
                                   prefixIcon: Container(
                                     margin: EdgeInsets.only(right: 10.0),
                                     child: SvgPicture.asset(
-                                      "assets/images/prefix_user.svg",
+                                      "assets/images/phase_icon.svg",
                                     ), // myIcon is a 48px-wide widget.
                                   ),
                                   // set the prefix icon constraints
@@ -360,7 +362,7 @@ class _Body extends State<Body> {
                                   prefixIcon: Container(
                                     margin: EdgeInsets.only(right: 10.0),
                                     child: SvgPicture.asset(
-                                      "assets/images/prefix_user.svg",
+                                      "assets/images/work_center.svg",
                                     ), // myIcon is a 48px-wide widget.
                                   ),
                                   // set the prefix icon constraints
@@ -383,7 +385,7 @@ class _Body extends State<Body> {
                               style: TextStyle(
                                   color: HexColor(KContent),
                                   fontWeight: FontWeight.w600),
-                              controller: _dateTextFieldController,
+                              controller: _userTextFieldController,
                               showCursor: false,
                               readOnly: true,
                               decoration: InputDecoration(
@@ -395,8 +397,9 @@ class _Body extends State<Body> {
                                       color: HexColor(KContent)),
                                   prefixIcon: Container(
                                     margin: EdgeInsets.only(right: 10.0),
-                                    child: SvgPicture.asset(
-                                      "assets/images/prefix_user.svg",
+                                    child: CircleAvatar(
+                                      backgroundColor: HexColor('#F178B6'),
+                                      child: Text('${Ultis.cutName(this.widget.productOrderDetail.employeeName)}', style: TextStyle(color: Colors.white),),
                                     ), // myIcon is a 48px-wide widget.
                                   ),
                                   // set the prefix icon constraints
@@ -406,7 +409,7 @@ class _Body extends State<Body> {
                                   ),
                                   labelText:
                                       this.infoScreen['label_bottomLeft'],
-                                  hintText: 'Enter Date Here'))),
+                                  hintText: ''))),
                       new Expanded(
                         child: SizedBox(width: size.width * 0.01),
                       ),
@@ -416,7 +419,7 @@ class _Body extends State<Body> {
                               style: TextStyle(
                                   color: HexColor(KContent),
                                   fontWeight: FontWeight.w600),
-                              controller: _woTextFieldController,
+                              controller: _dateTextFieldController,
                               showCursor: false,
                               readOnly: true,
                               decoration: InputDecoration(
@@ -431,7 +434,7 @@ class _Body extends State<Body> {
                                   prefixIcon: Container(
                                     margin: EdgeInsets.only(right: 10.0),
                                     child: SvgPicture.asset(
-                                      "assets/images/prefix_user.svg",
+                                      "assets/images/due_date.svg",
                                     ), // myIcon is a 48px-wide widget.
                                   ),
                                   // set the prefix icon constraints
@@ -523,10 +526,10 @@ class _Body extends State<Body> {
                               },
                               child: Container(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.55,
+                                      MediaQuery.of(context).size.height * 0.7,
                                   child: GridView.count(
                                       crossAxisCount: 1,
-                                      childAspectRatio: 6 / 2,
+                                      childAspectRatio: 7 / 3,
                                       children: List.generate(
                                           this
                                               .widget
@@ -535,48 +538,154 @@ class _Body extends State<Body> {
                                               .length, (index) {
                                         return Card(
                                           shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color: HexColor(kBlue200),
+                                                width: 1),
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
                                           ),
-                                          color: HexColor(kNormalBackground),
+                                          elevation: 7.0,
                                           margin: EdgeInsets.symmetric(
                                               vertical: 10, horizontal: 20),
-                                          child: Container(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Expanded(
-                                                    child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("#${this
-                                                        .widget
-                                                        .productOrderDetail
-                                                        .listDetail[index]
-                                                        .productNo.toString()}"),
-                                                    Text( this
-                                                        .widget
-                                                        .productOrderDetail
-                                                        .listDetail[index]
-                                                        .qty.toString())
-                                                  ],
-                                                )),
-                                                Expanded(child: Text(this
-                                                    .widget
-                                                    .productOrderDetail
-                                                    .listDetail[index]
-                                                    .phaseName)),
-                                                Expanded(child: Text(this
-                                                    .widget
-                                                    .productOrderDetail
-                                                    .listDetail[index]
-                                                    .)),
-                                                Expanded(child: Text('123'))
-                                              ],
+                                          child: GestureDetector(
+                                            onTap: () => this
+                                                        .infoScreen["code"] ==
+                                                    "producResult"
+                                                ? {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => RemarkDetailScreen(
+                                                                this
+                                                                        .widget
+                                                                        .productOrderDetail
+                                                                        .listDetail[
+                                                                    index],
+                                                                this
+                                                                    .widget
+                                                                    .productOrderDetail
+                                                                    .no))).then(
+                                                        (detail) => {
+                                                              if (detail
+                                                                  is Detail)
+                                                                {
+                                                                  setState(() {
+                                                                    this
+                                                                        .widget
+                                                                        .productOrderDetail
+                                                                        .listDetail[index] = detail;
+                                                                  })
+                                                                }
+                                                            })
+                                                  }
+                                                : null,
+                                            child: Container(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                      child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "#${this.widget.productOrderDetail.listDetail[index].productNo.toString()}",
+                                                        style: TextStyle(
+                                                            color: HexColor(
+                                                                kBlue500),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      Text(
+                                                          this
+                                                              .widget
+                                                              .productOrderDetail
+                                                              .listDetail[index]
+                                                              .qty
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color: HexColor(
+                                                                  kBlue500)))
+                                                    ],
+                                                  )),
+                                                  Container(
+                                                      margin: EdgeInsets.only(
+                                                          bottom: 7.0),
+                                                      decoration: BoxDecoration(
+                                                          border: Border(
+                                                              bottom: BorderSide(
+                                                                  color: HexColor(
+                                                                      kBlue200),
+                                                                  width: 1))),
+                                                      child: SizedBox(
+                                                        height:
+                                                            size.height * 0.01,
+                                                        width: size.width,
+                                                      )),
+                                                  Expanded(
+                                                      child: Text(
+                                                          this
+                                                              .widget
+                                                              .productOrderDetail
+                                                              .listDetail[index]
+                                                              .phaseName,
+                                                          style: TextStyle(
+                                                              color: HexColor(
+                                                                  kBlue500)))),
+                                                  Container(
+                                                      margin: EdgeInsets.only(
+                                                          bottom: 7.0),
+                                                      decoration: BoxDecoration(
+                                                          border: Border(
+                                                              bottom: BorderSide(
+                                                                  color: HexColor(
+                                                                      kBlue200),
+                                                                  width: 1))),
+                                                      child: SizedBox(
+                                                        height:
+                                                            size.height * 0.01,
+                                                        width: size.width,
+                                                      )),
+                                                  Expanded(
+                                                      child: Text(
+                                                          this
+                                                              .widget
+                                                              .productOrderDetail
+                                                              .listDetail[index]
+                                                              .phaseName,
+                                                          style: TextStyle(
+                                                              color: HexColor(
+                                                                  kBlue500)))),
+                                                  Container(
+                                                      margin: EdgeInsets.only(
+                                                          bottom: 7.0),
+                                                      decoration: BoxDecoration(
+                                                          border: Border(
+                                                              bottom: BorderSide(
+                                                                  color: HexColor(
+                                                                      kBlue200),
+                                                                  width: 1))),
+                                                      child: SizedBox(
+                                                        height:
+                                                            size.height * 0.01,
+                                                        width: size.width,
+                                                      )),
+                                                  Expanded(
+                                                      child: Text(
+                                                          this
+                                                              .widget
+                                                              .productOrderDetail
+                                                              .listDetail[index]
+                                                              .unit,
+                                                          style: TextStyle(
+                                                              color: HexColor(
+                                                                  kBlue500))))
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );

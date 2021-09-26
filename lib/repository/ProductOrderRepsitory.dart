@@ -73,7 +73,7 @@ class ProductOrderRepsitory {
 
   Future<ProductOrderDetail> getDetail(String type, String no) async {
     final url =
-        "${Constants.apiBaseURL}/productOrder/detail/${type}/${no.replaceAll(RegExp(r'/'), '%2F')}";
+        "${Constants.apiBaseURL}/productOrder/detail/v2/${type}/${no.replaceAll(RegExp(r'/'), '%2F')}";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await httpClient.get(
       Uri.parse(url),
