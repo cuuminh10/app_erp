@@ -1,8 +1,7 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class PasswordTextField extends StatelessWidget {
   final String hintText;

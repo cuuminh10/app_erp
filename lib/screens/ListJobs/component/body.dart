@@ -113,6 +113,8 @@ class _Body extends State<Body> {
     return Background(
       child: Scaffold(
         appBar: AppBar(
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
           elevation: 0,
           title: Text(this.widget.tittle),
           leading: new IconButton(

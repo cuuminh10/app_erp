@@ -60,7 +60,6 @@ class _Body extends State<Body> {
   void getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('token').isNotEmpty) {
-      progressDialog.hide();
       Future.delayed(Duration(seconds: 1), () {
         Navigator.push(
           context,

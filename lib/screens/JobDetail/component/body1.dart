@@ -272,12 +272,19 @@ class _Body extends State<Body> {
             icon: new Icon(Icons.arrow_back),
             onPressed: () => {Navigator.pop(context, true)}),
         actions: <Widget>[
-          IconButton(
-              icon: SvgPicture.asset(
-                "assets/images/dot.svg",
-              ),
-              onPressed: () => {} //do something,
-              ),
+          GestureDetector(
+            onTap: () => {print('vao Result')},
+            child: Center(
+                child: Container(
+                    margin: EdgeInsets.only(right: 10.0),
+                    child: Text(
+                      'Result',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                          color: HexColor(kBlue500)),
+                    ))),
+          )
         ],
       ),
       body: SizedBox(
@@ -291,13 +298,23 @@ class _Body extends State<Body> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text(
+                  this.widget.productOrderDetail.no,
+                  style: TextStyle(
+                      fontFamily: 'Gotham',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                      color: HexColor('#002158')),
+                ),
                 Container(
                   child: Row(
                     children: <Widget>[
                       new Expanded(
                           flex: 3,
                           child: TextField(
-                              style: TextStyle(color: HexColor(kBlue500)),
+                              style: TextStyle(
+                                  color: HexColor(KContent),
+                                  fontWeight: FontWeight.w600),
                               controller: _noTextFieldController,
                               showCursor: false,
                               readOnly: true,
@@ -306,8 +323,19 @@ class _Body extends State<Body> {
                                       borderSide: new BorderSide(
                                           color: HexColor(kBlue100))),
                                   labelStyle: TextStyle(
-                                      color: HexColor(kBlue800),
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w400,
+                                      color: HexColor(KContent)),
+                                  prefixIcon: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
+                                    child: SvgPicture.asset(
+                                      "assets/images/prefix_user.svg",
+                                    ), // myIcon is a 48px-wide widget.
+                                  ),
+                                  // set the prefix icon constraints
+                                  prefixIconConstraints: BoxConstraints(
+                                    minWidth: 25,
+                                    minHeight: 25,
+                                  ),
                                   labelText: this.infoScreen['label_topLeft'],
                                   hintText: 'Enter Job Ticket Here'))),
                       new Expanded(
@@ -316,7 +344,9 @@ class _Body extends State<Body> {
                       new Expanded(
                           flex: 3,
                           child: TextField(
-                              style: TextStyle(color: HexColor(kBlue500)),
+                              style: TextStyle(
+                                  color: HexColor(KContent),
+                                  fontWeight: FontWeight.w600),
                               controller: _woTextFieldController,
                               showCursor: false,
                               readOnly: true,
@@ -325,8 +355,19 @@ class _Body extends State<Body> {
                                       borderSide: new BorderSide(
                                           color: HexColor(kBlue100))),
                                   labelStyle: TextStyle(
-                                      color: HexColor(kBlue800),
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w400,
+                                      color: HexColor(KContent)),
+                                  prefixIcon: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
+                                    child: SvgPicture.asset(
+                                      "assets/images/prefix_user.svg",
+                                    ), // myIcon is a 48px-wide widget.
+                                  ),
+                                  // set the prefix icon constraints
+                                  prefixIconConstraints: BoxConstraints(
+                                    minWidth: 25,
+                                    minHeight: 25,
+                                  ),
                                   labelText: this.infoScreen['label_topRight'],
                                   hintText: 'Enter Work Order Here'))),
                     ],
@@ -339,7 +380,9 @@ class _Body extends State<Body> {
                       new Expanded(
                           flex: 3,
                           child: TextField(
-                              style: TextStyle(color: HexColor(kBlue500)),
+                              style: TextStyle(
+                                  color: HexColor(KContent),
+                                  fontWeight: FontWeight.w600),
                               controller: _dateTextFieldController,
                               showCursor: false,
                               readOnly: true,
@@ -348,11 +391,12 @@ class _Body extends State<Body> {
                                       borderSide: new BorderSide(
                                           color: HexColor(kBlue100))),
                                   labelStyle: TextStyle(
-                                      color: HexColor(kBlue800),
-                                      fontWeight: FontWeight.bold),
-                                  prefixIcon: SizedBox(
+                                      fontWeight: FontWeight.w400,
+                                      color: HexColor(KContent)),
+                                  prefixIcon: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
                                     child: SvgPicture.asset(
-                                      "assets/images/prefix_date.svg",
+                                      "assets/images/prefix_user.svg",
                                     ), // myIcon is a 48px-wide widget.
                                   ),
                                   // set the prefix icon constraints
@@ -369,7 +413,9 @@ class _Body extends State<Body> {
                       new Expanded(
                           flex: 3,
                           child: TextField(
-                              style: TextStyle(color: HexColor(kBlue500)),
+                              style: TextStyle(
+                                  color: HexColor(KContent),
+                                  fontWeight: FontWeight.w600),
                               controller: _woTextFieldController,
                               showCursor: false,
                               readOnly: true,
@@ -378,11 +424,12 @@ class _Body extends State<Body> {
                                       borderSide: new BorderSide(
                                           color: HexColor(kBlue100))),
                                   labelStyle: TextStyle(
-                                      color: HexColor(kBlue800),
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w400,
+                                      color: HexColor(KContent)),
                                   labelText:
                                       this.infoScreen['label_bottomRight'],
-                                  prefixIcon: SizedBox(
+                                  prefixIcon: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
                                     child: SvgPicture.asset(
                                       "assets/images/prefix_user.svg",
                                     ), // myIcon is a 48px-wide widget.
@@ -449,14 +496,6 @@ class _Body extends State<Body> {
                                   onPressed: () => {_changePage(1)},
                                 ),
                               ),
-                              Expanded(
-                                child: TabButton(
-                                  text: "Documents",
-                                  pageNumber: 2,
-                                  selectedPage: _selectedPage,
-                                  onPressed: () => {_changePage(2)},
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -482,156 +521,66 @@ class _Body extends State<Body> {
                                   print('12333333');
                                 }
                               },
-                              child: SingleChildScrollView(
-                                child: Container(
+                              child: Container(
                                   height:
                                       MediaQuery.of(context).size.height * 0.55,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Table(
-                                        columnWidths: {
-                                          0: FlexColumnWidth(3),
-                                          1: FlexColumnWidth(3),
-                                          2: FlexColumnWidth(2),
-                                          3: FlexColumnWidth(2),
-                                        },
-                                        defaultColumnWidth:
-                                            IntrinsicColumnWidth(),
-                                        border: TableBorder.all(
-                                            width: 1.0,
-                                            color: HexColor(kBlue500)),
-                                        children: [
-                                          TableRow(
-                                              decoration: BoxDecoration(
-                                                  color: HexColor(kBlue800)),
+                                  child: GridView.count(
+                                      crossAxisCount: 1,
+                                      childAspectRatio: 6 / 2,
+                                      children: List.generate(
+                                          this
+                                              .widget
+                                              .productOrderDetail
+                                              .listDetail
+                                              .length, (index) {
+                                        return Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          color: HexColor(kNormalBackground),
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 20),
+                                          child: Container(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                TableCell(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      'Item',
-                                                      style: TextStyle(
-                                                          color:
-                                                              HexColor(kWhite),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Gotham'),
-                                                    ),
-                                                  ),
-                                                ),
-                                                TableCell(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      'Phase',
-                                                      style: TextStyle(
-                                                          color:
-                                                              HexColor(kWhite),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Gotham'),
-                                                    ),
-                                                  ),
-                                                ),
-                                                TableCell(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      'Qty',
-                                                      style: TextStyle(
-                                                          color:
-                                                              HexColor(kWhite),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Gotham'),
-                                                    ),
-                                                  ),
-                                                ),
-                                                TableCell(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      'Unit',
-                                                      style: TextStyle(
-                                                          color:
-                                                              HexColor(kWhite),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Gotham'),
-                                                    ),
-                                                  ),
-                                                )
-                                              ]),
-                                          for (var i = 0;
-                                              i <
-                                                  this
-                                                      .widget
-                                                      .productOrderDetail
-                                                      .listDetail
-                                                      .length;
-                                              i++)
-                                            TableRow(
-                                                decoration: BoxDecoration(
-                                                    color: i % 2 == 0
-                                                        ? HexColor(kBlue100)
-                                                        : HexColor(kBlue200)),
-                                                children: [
-                                                  renderTableCell(
-                                                      this
-                                                          .widget
-                                                          .productOrderDetail
-                                                          .listDetail[i]
-                                                          .productNo,
-                                                      i),
-                                                  renderTableCell(
-                                                      this
-                                                          .widget
-                                                          .productOrderDetail
-                                                          .listDetail[i]
-                                                          .phaseName,
-                                                      i),
-                                                  renderTableCell(
-                                                      this
-                                                          .widget
-                                                          .productOrderDetail
-                                                          .listDetail[i]
-                                                          .qty,
-                                                      i),
-                                                  renderTableCell(
-                                                      this
-                                                          .widget
-                                                          .productOrderDetail
-                                                          .listDetail[i]
-                                                          .unit,
-                                                      i)
-                                                ])
-                                        ],
-                                      ),
-                                      Center(
-                                        child: NormalButton(
-                                            text: this.infoScreen["code"] ==
-                                                    "jobticket"
-                                                ? "Result"
-                                                : "Save",
-                                            onPress: () => {_onHandleButton()},
-                                            vertical: 20,
-                                            horizontal: 40,
-                                            width: 0.5),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                                Expanded(
+                                                    child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text("#${this
+                                                        .widget
+                                                        .productOrderDetail
+                                                        .listDetail[index]
+                                                        .productNo.toString()}"),
+                                                    Text( this
+                                                        .widget
+                                                        .productOrderDetail
+                                                        .listDetail[index]
+                                                        .qty.toString())
+                                                  ],
+                                                )),
+                                                Expanded(child: Text(this
+                                                    .widget
+                                                    .productOrderDetail
+                                                    .listDetail[index]
+                                                    .phaseName)),
+                                                Expanded(child: Text(this
+                                                    .widget
+                                                    .productOrderDetail
+                                                    .listDetail[index]
+                                                    .)),
+                                                Expanded(child: Text('123'))
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }))),
                             ),
                             Container(
                               child: BlocListener<FileCommentBloc,
@@ -797,20 +746,20 @@ class _Body extends State<Body> {
                                                       ),
                                                     ),
                                                   )),
-                                              Center(
-                                                child: DottedButton(
-                                                  text: "Attachment",
-                                                  onPress: (e) =>
-                                                      {_openFileExplorer(e)},
-                                                  onPickImage: () =>
-                                                      {pickImage()},
-                                                  vertical: 15,
-                                                  horizontal: 40,
-                                                  width: 0.48,
-                                                  color: HexColor(kWhite),
-                                                  colorText: HexColor(kBlue900),
-                                                ),
-                                              ),
+                                              // Center(
+                                              //   child: DottedButton(
+                                              //     text: "Attachment",
+                                              //     onPress: (e) =>
+                                              //         {_openFileExplorer(e)},
+                                              //     onPickImage: () =>
+                                              //         {pickImage()},
+                                              //     vertical: 15,
+                                              //     horizontal: 40,
+                                              //     width: 0.48,
+                                              //     color: HexColor(kWhite),
+                                              //     colorText: HexColor(kBlue900),
+                                              //   ),
+                                              // ),
                                             ],
                                           ),
                                         ),

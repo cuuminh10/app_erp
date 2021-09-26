@@ -1,4 +1,6 @@
 import 'package:gmc_erp/common/service/BaseServiceImpl.dart';
+import 'package:gmc_erp/models/DTO/request_product_dto.dart';
+import 'package:gmc_erp/models/DTO/response_product_dto.dart';
 import 'package:gmc_erp/models/ProductOrderCount.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/models/ProductOrderOpen.dart';
@@ -40,5 +42,10 @@ class ProductOrderServiceImpl extends BaseServiceImpl<ProductOrderServiceImpl, i
   @override
   Future<String> postNewDetailPR(String no, detail) {
     return repository.postCreateScanPr(no, detail);
+  }
+
+  @override
+  Future<List<ResponseProduct_1_DTO>> getProductGroup(RequestProductDTO requestProductDTO, String screenCode) {
+    return repository.getProductGroup(requestProductDTO, screenCode);
   }
 }

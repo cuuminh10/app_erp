@@ -1,4 +1,6 @@
 import 'package:gmc_erp/common/service/BaseService.dart';
+import 'package:gmc_erp/models/DTO/request_product_dto.dart';
+import 'package:gmc_erp/models/DTO/response_product_dto.dart';
 import 'package:gmc_erp/models/ProductOrderCount.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/models/ProductOrderOpen.dart';
@@ -41,4 +43,10 @@ abstract class ProductOrderService implements BaseService {
    * @Param String: type
    */
   Future<String> postNewDetailPR(String no, dynamic detail);
+
+  /**
+   * get count
+   * @Param String: type
+   */
+  Future<List<ResponseProduct_1_DTO>> getProductGroup(RequestProductDTO requestProductDTO, String screenCode);
 }

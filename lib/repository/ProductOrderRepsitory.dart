@@ -12,6 +12,8 @@
 
 import 'dart:convert';
 
+import 'package:gmc_erp/models/DTO/request_product_dto.dart';
+import 'package:gmc_erp/models/DTO/response_product_dto.dart';
 import 'package:gmc_erp/models/ProductOrderCount.dart';
 import 'package:gmc_erp/common/constants/Constants.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
@@ -37,7 +39,8 @@ class ProductOrderRepsitory {
       return ProductOrderCount.fromJsonMap(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load get');
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
     }
   }
 
@@ -63,7 +66,8 @@ class ProductOrderRepsitory {
       return listResult;
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load get');
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
     }
   }
 
@@ -83,7 +87,8 @@ class ProductOrderRepsitory {
       return ProductOrderDetail.fromJsonMap(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load get');
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
     }
   }
 
@@ -116,7 +121,8 @@ class ProductOrderRepsitory {
       return response.body;
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load put');
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
     }
   }
 
@@ -135,7 +141,8 @@ class ProductOrderRepsitory {
       throw Exception(response.body);
     }else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load put');
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
     }
   }
 
@@ -156,7 +163,32 @@ class ProductOrderRepsitory {
       return response.body;
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load put');
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
+    }
+  }
+
+  Future<List<ResponseProduct_1_DTO>> getProductGroup(RequestProductDTO requestProductDTO, String screenCode) async {
+    final url = "${Constants.apiBaseURL}/productOrder/groups/v2/${screenCode}";;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await httpClient.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${prefs.getString('token')}',
+        },
+        body: jsonEncode(requestProductDTO.toJson()));
+
+    if (response.statusCode == 200) {
+      final respondData = json.decode(response.body) as List;
+      final List<ResponseProduct_1_DTO> listResult = respondData.map((comment) {
+        return ResponseProduct_1_DTO.fromJsonMap(comment);
+      }).toList();
+
+      return listResult;
+    } else {
+      // If that call was not successful, throw an error.
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"] ?? msg["error"]);
     }
   }
 }

@@ -7,12 +7,11 @@ import 'package:gmc_erp/public/constant/color.dart';
 
 class ListCardBadge extends StatelessWidget {
   final String tittle;
-  final String code;
   final int count;
   final Set<void> Function(String) onTap;
 
   const ListCardBadge(
-      {Key key,  String this.tittle,  String this.code,  int this.count,  Set<void> Function(String) this.onTap})
+      {Key key,  String this.tittle, int this.count,  Set<void> Function(String) this.onTap})
       : super(key: key);
 
   @override

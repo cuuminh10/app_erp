@@ -11,6 +11,7 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:gmc_erp/models/DTO/request_product_dto.dart';
 
 abstract class ProductOrderEvent extends Equatable {
   @override
@@ -50,4 +51,10 @@ class postNewPrEvent extends ProductOrderEvent {
   final String no;
   final dynamic detail;
   postNewPrEvent({ this.no, this.detail});
+}
+
+class getProductGroupEvent extends ProductOrderEvent {
+  final RequestProductDTO requestProductDTO;
+  final String screenCode;
+  getProductGroupEvent({ this.requestProductDTO, this.screenCode});
 }

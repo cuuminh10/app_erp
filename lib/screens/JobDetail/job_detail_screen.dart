@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
-import 'package:gmc_erp/screens/JobDetail/component/body.dart';
+import 'package:gmc_erp/screens/JobDetail/component/body1.dart';
 
 class JobDetailScreen extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;

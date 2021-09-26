@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:gmc_erp/models/DTO/response_product_dto.dart';
 import 'package:gmc_erp/models/ProductOrderCount.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/models/ProductOrderDetail.dart';
@@ -90,18 +91,19 @@ class ProductOrderCreateSuccess extends ProductOrderState {
   }
 }
 
-class ProductOrderCreateFailer extends ProductOrderState {
+class ProductOrderFailer extends ProductOrderState {
   final  dynamic error;
+  final String date;
 
-  ProductOrderCreateFailer({ this.error}) : assert (error != null);
+  ProductOrderFailer({ this.error, this.date}) : assert (error != null);
 
   @override
   String toString() => "data : $error";
   @override
   // TODO: implement props
-  List<Object> get props => [error];
-  ProductOrderCreateFailer cloneWith({ dynamic error}) {
-    return ProductOrderCreateFailer(error: error);
+  List<Object> get props => [date];
+  ProductOrderFailer cloneWith({ dynamic error}) {
+    return ProductOrderFailer(error: error);
   }
 }
 
@@ -117,5 +119,20 @@ class ProductOrderPostSuccess extends ProductOrderState {
   List<Object> get props => [id];
   ProductOrderPostSuccess cloneWith({ String id}) {
     return ProductOrderPostSuccess(id: id);
+  }
+}
+
+class getProductGroupSuccess extends ProductOrderState {
+  final  List<ResponseProduct_1_DTO> list;
+
+  getProductGroupSuccess({ this.list}) : assert (list != null);
+
+  @override
+  String toString() => "data : $list";
+  @override
+  // TODO: implement props
+  List<Object> get props => [list];
+  getProductGroupSuccess cloneWith({ List<ResponseProduct_1_DTO> list}) {
+    return getProductGroupSuccess(list: list);
   }
 }
