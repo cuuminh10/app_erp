@@ -103,6 +103,7 @@ class _Body extends State<Body> {
                 color: Colors.black87,
                 size: 30,
               ),
+                onGroupBy: (e) => groupByProduct(e)
             )
           ],
         ),
@@ -182,7 +183,7 @@ class _Body extends State<Body> {
               ) : SizedBox();
           }),
         ),
-        floatingActionButton: FancyFab(onScan: () => scanCreate()),
+        floatingActionButton: FancyFab(onScan: () => scan()),
       ),
     );
   }
@@ -190,8 +191,9 @@ class _Body extends State<Body> {
 
 class MyPopupMenu1 extends StatefulWidget {
   final Widget child;
+  final void Function(RequestProductDTO requestProductDTO) onGroupBy;
 
-  MyPopupMenu1({Key key, this.child})
+  MyPopupMenu1({Key key, this.child, this.onGroupBy})
       : assert(child.key != null),
         super(key: key);
 
@@ -222,6 +224,7 @@ class _MyPopupMenuState extends State<MyPopupMenu1> {
           return PopupMenuContent(
             position: position,
             size: renderBox.size,
+            onGroupBy: this.widget.onGroupBy,
             onAction: (x) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 duration: Duration(seconds: 1),
@@ -237,8 +240,9 @@ class PopupMenuContent extends StatefulWidget {
   final Offset position;
   final Size size;
   final ValueChanged<String> onAction;
+  final void Function(RequestProductDTO requestProductDTO) onGroupBy;
 
-  const PopupMenuContent({Key key, this.position, this.size, this.onAction})
+  const PopupMenuContent({Key key, this.position, this.size, this.onAction, this.onGroupBy})
       : super(key: key);
 
   @override
@@ -251,7 +255,10 @@ class _PopupMenuContentState extends State<PopupMenuContent>
   AnimationController _animationController;
   Animation<double> _animation;
   String dropdownValue = 'Open';
-  TextEditingController _phaseTextFieldController;
+  TextEditingController _phaseTextFieldController = TextEditingController();
+  TextEditingController _woTextFieldController = TextEditingController();
+  TextEditingController _wcTextFieldController = TextEditingController();
+
 
 
   @override
@@ -448,7 +455,7 @@ class _PopupMenuContentState extends State<PopupMenuContent>
                                     width: MediaQuery.of(context).size.width / 2,
                                     child: TextField(
                                         style: TextStyle(color: HexColor(kBlue500)),
-                                        controller: _phaseTextFieldController,
+                                        controller: _woTextFieldController,
                                         showCursor: true,
                                         decoration: InputDecoration(
                                             enabledBorder: new UnderlineInputBorder(
@@ -491,7 +498,7 @@ class _PopupMenuContentState extends State<PopupMenuContent>
                                     width: MediaQuery.of(context).size.width / 2,
                                     child: TextField(
                                         style: TextStyle(color: HexColor(kBlue500)),
-                                        controller: _phaseTextFieldController,
+                                        controller: _wcTextFieldController,
                                         showCursor: true,
                                         decoration: InputDecoration(
                                             enabledBorder: new UnderlineInputBorder(
@@ -513,7 +520,10 @@ class _PopupMenuContentState extends State<PopupMenuContent>
                             Center(
                               child: NormalButton(
                                   text: 'Search',
-                                  onPress: () => {},
+                                  onPress: () => {
+
+                                    this.widget.onGroupBy(RequestProductDTO(status: dropdownValue, phase: _phaseTextFieldController.text, workOrder: _woTextFieldController.text, workCenter: _wcTextFieldController.text))
+                                  },
                                   vertical: 15,
                                   horizontal: 20,
                                   width: 0.5),

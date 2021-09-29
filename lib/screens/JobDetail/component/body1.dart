@@ -140,11 +140,32 @@ class _Body extends State<Body> {
                   margin: EdgeInsets.only(left: 16.0),
                   child: Align(
                       alignment: Alignment.topLeft,
-                      child: Text(
-                        data[i].comment,
-                        style: TextStyle(color: HexColor(kBlue500)),
-                      )),
-                )
+                      child: SizedBox(
+                        width: 62,
+                        height: 62,
+                        child: Card(
+                          semanticContainer: true,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(7))
+                          ),
+                          child: Image.network(
+                            'https://placeimg.com/640/480/any',
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ))
+                ),
+                // Container(
+                //   margin: EdgeInsets.only(left: 16.0),
+                //   child: Align(
+                //       alignment: Alignment.topLeft,
+                //       child: Text(
+                //         data[i].comment,
+                //         style: TextStyle(color: HexColor(kBlue500)),
+                //       )),
+                // )
               ],
             ),
           )
@@ -233,6 +254,8 @@ class _Body extends State<Body> {
     });
   }
 
+
+
   void _onHandleButton() {
     if (this.infoScreen["code"] == "jobticket") {
       _productOrderBloc
@@ -249,6 +272,10 @@ class _Body extends State<Body> {
           : _productOrderBloc.add(putPrDeatilEvent(
               detail: body, id: this.widget.productOrderDetail.id));
     }
+  }
+
+  Widget showAttachFile() {
+
   }
 
   @override
@@ -504,7 +531,7 @@ class _Body extends State<Body> {
                         ),
                       ),
                       SizedBox(
-                        height: size.height * 0.6,
+                        height: size.height * 0.55,
                         child: PageView(
                           onPageChanged: (int page) {
                             setState(() {
@@ -546,7 +573,7 @@ class _Body extends State<Body> {
                                           ),
                                           elevation: 7.0,
                                           margin: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 20),
+                                              vertical: 10, horizontal: 0),
                                           child: GestureDetector(
                                             onTap: () => this
                                                         .infoScreen["code"] ==
@@ -696,15 +723,17 @@ class _Body extends State<Body> {
                                   FileCommentState>(
                                 listener: (context, state) {
                                   if (state is FileCommentStateSuccess) {
+
                                     _comments.insert(0, state.comments);
                                     setState(() {
                                       _comments = _comments;
                                     });
+                                    print(_comments);
                                   }
                                 },
                                 child: CommentBox(
                                   userImage:
-                                      "https://scontent.fsgn2-2.fna.fbcdn.net/v/t1.6435-9/124207683_3440092012749731_1279502413228474901_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=bv4Wsm-W7RQAX84Xg_Z&_nc_ht=scontent.fsgn2-2.fna&oh=bf3fe2fc238af306e3eb844b59a3fac2&oe=61490AF2",
+                                      "https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg",
                                   child: this._comments.length > 0
                                       ? commentChild(this._comments)
                                       : Container(
@@ -738,141 +767,11 @@ class _Body extends State<Body> {
                                   textColor: Colors.white,
                                   sendWidget: Icon(Icons.send_sharp,
                                       size: 30, color: Colors.white),
+                                  attachWidget: Icon(Icons.attach_file_outlined,
+                                      size: 30, color: Colors.white),
                                 ),
                               ),
                             ),
-                            Container(
-                                margin: EdgeInsets.only(
-                                    top: this._attach.length == 0 ? 70.0 : 0),
-                                child: this._attach.length == 0
-                                    ? SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Image.asset(
-                                              "assets/images/attachment-place-holder.png",
-                                              alignment: Alignment.topCenter,
-                                            ),
-                                            SizedBox(
-                                                height: size.height * 0.02),
-                                            Text(
-                                              'There are no any documents yet',
-                                              style: TextStyle(
-                                                  color: HexColor(kBlue800),
-                                                  fontFamily: 'Gotham',
-                                                  fontWeight: FontWeight.normal,
-                                                  fontStyle: FontStyle.normal,
-                                                  fontSize: 14.0),
-                                            ),
-                                            SizedBox(
-                                                height: size.height * 0.02),
-                                            DottedButton(
-                                              text: "Attachment",
-                                              onPress: (e) =>
-                                                  {_openFileExplorer(e)},
-                                              onPickImage: () => {pickImage()},
-                                              vertical: 15,
-                                              horizontal: 40,
-                                              width: 0.48,
-                                              color: HexColor(kWhite),
-                                              colorText: HexColor(kBlue900),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    : SingleChildScrollView(
-                                        child: BlocListener<FileCommentBloc,
-                                            FileCommentState>(
-                                          listener: (context, state) {
-                                            if (state
-                                                is FileAttachStateSuccess) {
-                                              _attach.insert(0, state.attach);
-                                              setState(() {
-                                                _attach = _attach;
-                                              });
-                                            }
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.5,
-                                                  child: ListView.builder(
-                                                    shrinkWrap: true,
-                                                    itemCount:
-                                                        this._attach.length,
-                                                    itemBuilder:
-                                                        (context, index) =>
-                                                            GestureDetector(
-                                                      onTap: () => {
-                                                        _makeCall(
-                                                            'http://175.41.183.152:8080/fc/viewFile/jobticket/${this._attach[index].saveName}')
-                                                      },
-                                                      child: Card(
-                                                        elevation: 1,
-                                                        margin:
-                                                            EdgeInsets.all(10),
-                                                        child: !Ultis.isImages(
-                                                                this
-                                                                    ._attach[
-                                                                        index]
-                                                                    .realName)
-                                                            ? ListTile(
-                                                                leading:
-                                                                    SvgPicture
-                                                                        .asset(
-                                                                  Ultis.isFile(this
-                                                                      ._attach[
-                                                                          index]
-                                                                      .saveName),
-                                                                ),
-                                                                title: Text(this
-                                                                    ._attach[
-                                                                        index]
-                                                                    .realName),
-                                                                subtitle: Text(this
-                                                                    ._attach[
-                                                                        index]
-                                                                    .createUser),
-                                                                //  trailing: Icon(Icons.add_a_photo),
-                                                              )
-                                                            : Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topLeft,
-                                                                child: SizedBox(
-                                                                  child: Image
-                                                                      .network(
-                                                                    'http://175.41.183.152:8080/fc/viewFile/${this.infoScreen["code"]}/${this._attach[index].saveName}',
-                                                                    width: 100,
-                                                                    height: 100,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                              // Center(
-                                              //   child: DottedButton(
-                                              //     text: "Attachment",
-                                              //     onPress: (e) =>
-                                              //         {_openFileExplorer(e)},
-                                              //     onPickImage: () =>
-                                              //         {pickImage()},
-                                              //     vertical: 15,
-                                              //     horizontal: 40,
-                                              //     width: 0.48,
-                                              //     color: HexColor(kWhite),
-                                              //     colorText: HexColor(kBlue900),
-                                              //   ),
-                                              // ),
-                                            ],
-                                          ),
-                                        ),
-                                      ))
                           ],
                         ),
                       )
@@ -953,3 +852,5 @@ class TabButton extends StatelessWidget {
     );
   }
 }
+
+
