@@ -9,6 +9,10 @@ class Ultis {
     return fileName.contains('.jpg');
   }
 
+  static bool isPdf(String fileName) {
+    return fileName.contains('.pdf');
+  }
+
   static String isFile(String fileName) {
     return fileName.contains('.xlsm')
         ? "assets/images/xlsx.svg"
@@ -54,7 +58,7 @@ class Ultis {
   }
 
   static String cutName(String name) {
-    if (name.isNotEmpty &&  name.split(" ").length > 0) {
+    if (name.trim().isNotEmpty &&  name.split(" ").length > 0) {
        var nameArr = name.split(" ");
        String nameCut = nameArr[0].substring(0,1) + (nameArr[nameArr.length - 1].substring(0,1));
        return nameCut;

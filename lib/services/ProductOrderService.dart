@@ -49,4 +49,10 @@ abstract class ProductOrderService implements BaseService {
    * @Param String: type
    */
   Future<List<ResponseProduct_1_DTO>> getProductGroup(RequestProductDTO requestProductDTO, String screenCode);
+
+  /**
+   * get count
+   * @Param String: type
+   */
+  Future<List<ProductOrderOpen>> getListPoOrderV2(RequestProductDTO requestProductDTO, String screenCode);
 }

@@ -58,3 +58,9 @@ class getProductGroupEvent extends ProductOrderEvent {
   final String screenCode;
   getProductGroupEvent({ this.requestProductDTO, this.screenCode});
 }
+
+class getListPoOrderV2 extends ProductOrderEvent {
+  final RequestProductDTO requestProductDTO;
+  final String screenCode;
+  getListPoOrderV2({ this.requestProductDTO, this.screenCode});
+}

@@ -35,7 +35,7 @@ class _Body extends State<Body> {
   void initState() {
     super.initState();
     _nameTextFieldController.value = TextEditingValue(
-        text: 'item ' + this.widget.detail.productNo.toString());
+        text: 'Item ' + this.widget.detail.productNo.toString());
     _finishQtyTextFieldController.value =
         TextEditingValue(text: this.widget.detail.qty.toString());
     _setupQtyTextFieldController.value =
@@ -83,7 +83,7 @@ class _Body extends State<Body> {
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(this.widget.no),
+        // title: Text(this.widget.no),
         leading: new IconButton(
             icon: new Icon(Icons.arrow_back),
             onPressed: () => {Navigator.pop(context, true)}),
@@ -193,13 +193,23 @@ class _Body extends State<Body> {
                       ),
                       TableCell(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(6.0),
                           child: MyPopupMenu1(
-                              child: Text(
-                                this.widget.detail.qty.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: HexColor(kBlue800)),
+                              child: Container(
+                                foregroundDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    border: Border.all(
+                                        color: HexColor(kBlue500), width: 1.0)),
                                 key: GlobalKey(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    this.widget.detail.qty.toString(),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    style: TextStyle(color: HexColor(kBlue800)),
+                                  ),
+                                ),
                               ),
                               onChange: (e) => {
                                     setState(() {
@@ -285,19 +295,29 @@ class _Body extends State<Body> {
                       ),
                       TableCell(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(6.0),
                           child: MyPopupMenu1(
-                              child: Text(
-                                this.widget.detail.setUpQty.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: HexColor(kBlue800)),
+                              child: Container(
+                                foregroundDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    border: Border.all(
+                                        color: HexColor(kBlue500), width: 1.0)),
                                 key: GlobalKey(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    this.widget.detail.setUpQty.toString(),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    style: TextStyle(color: HexColor(kBlue800)),
+                                  ),
+                                ),
                               ),
                               onChange: (e) => {
-                                    setState(() {
-                                      this.widget.detail.setUpQty = e;
-                                    })
-                                  },
+                                setState(() {
+                                  this.widget.detail.setUpQty = e;
+                                })
+                              },
                               data: this.widget.detail.setUpQty as double),
                         ),
                       ),
@@ -377,19 +397,29 @@ class _Body extends State<Body> {
                       ),
                       TableCell(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(6.0),
                           child: MyPopupMenu1(
-                              child: Text(
-                                this.widget.detail.ncrQty.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: HexColor(kBlue800)),
+                              child: Container(
+                                foregroundDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    border: Border.all(
+                                        color: HexColor(kBlue500), width: 1.0)),
                                 key: GlobalKey(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    this.widget.detail.ncrQty.toString(),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    style: TextStyle(color: HexColor(kBlue800)),
+                                  ),
+                                ),
                               ),
                               onChange: (e) => {
-                                    setState(() {
-                                      this.widget.detail.ncrQty = e;
-                                    })
-                                  },
+                                setState(() {
+                                  this.widget.detail.ncrQty = e;
+                                })
+                              },
                               data: this.widget.detail.ncrQty as double),
                         ),
                       ),
@@ -469,19 +499,29 @@ class _Body extends State<Body> {
                       ),
                       TableCell(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(6.0),
                           child: MyPopupMenu1(
-                              child: Text(
-                                this.widget.detail.cancelQty.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: HexColor(kBlue800)),
+                              child: Container(
+                                foregroundDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    border: Border.all(
+                                        color: HexColor(kBlue500), width: 1.0)),
                                 key: GlobalKey(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    this.widget.detail.cancelQty.toString(),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    style: TextStyle(color: HexColor(kBlue800)),
+                                  ),
+                                ),
                               ),
                               onChange: (e) => {
-                                    setState(() {
-                                      this.widget.detail.cancelQty = e;
-                                    })
-                                  },
+                                setState(() {
+                                  this.widget.detail.cancelQty = e;
+                                })
+                              },
                               data: this.widget.detail.cancelQty as double),
                         ),
                       ),
@@ -691,6 +731,7 @@ class _PopupMenuContentState extends State<PopupMenuContent>
                                     width:
                                         MediaQuery.of(context).size.width / 2,
                                     child: TextField(
+                                        autofocus: true,
                                         style: TextStyle(
                                             color: HexColor(kBlue500)),
                                         controller: _dataTextFieldController,
@@ -722,7 +763,9 @@ class _PopupMenuContentState extends State<PopupMenuContent>
                             Center(
                               child: NormalButton(
                                   text: 'Save',
-                                  onPress: () => {},
+                                  onPress: () => {
+                                    Navigator.of(context).pop()
+                                  },
                                   vertical: 15,
                                   horizontal: 20,
                                   width: 0.5),

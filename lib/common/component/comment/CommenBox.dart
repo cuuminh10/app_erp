@@ -9,6 +9,9 @@ class CommentBox extends StatelessWidget {
   dynamic formKey;
   dynamic sendButtonMethod;
   dynamic commentController;
+  final Set<void> Function(List<String>) onUpload;
+  final Set<void> Function() onPickImage;
+  final Set<void> Function() onPickImageFormGallery;
   String userImage;
   String labelText;
   String errorText;
@@ -34,7 +37,10 @@ class CommentBox extends StatelessWidget {
       this.withBorder = true,
       this.backgroundColor,
       this.attachWidget,
-      this.textColor});
+      this.textColor,
+      this.onPickImage,
+      this.onUpload,
+      this.onPickImageFormGallery});
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +66,7 @@ class CommentBox extends StatelessWidget {
           title: Form(
             key: formKey,
             child: TextFormField(
+              autofocus: true,
               maxLines: 4,
               minLines: 1,
               focusNode: focusNode,
@@ -105,7 +112,7 @@ class CommentBox extends StatelessWidget {
                           CupertinoActionSheetAction(
                             child: Text('Document'),
                             onPressed: () {
-                              // onPress(['pdf', 'docs', 'xlsx']);
+                              onUpload(['pdf']);
                               Navigator.of(context, rootNavigator: true)
                                   .pop("0");
                             },
@@ -113,7 +120,7 @@ class CommentBox extends StatelessWidget {
                           CupertinoActionSheetAction(
                             child: Text('Images'),
                             onPressed: () {
-                              // onPress(['jpg', 'jpeg', 'png']);
+                              onPickImageFormGallery();
                               Navigator.of(context, rootNavigator: true)
                                   .pop("1");
                             },
@@ -122,7 +129,7 @@ class CommentBox extends StatelessWidget {
                             child: Text('Camera'),
                             onPressed: () {
                               print('pressed');
-                              //  onPickImage();
+                              onPickImage();
                               Navigator.of(context, rootNavigator: true)
                                   .pop("2");
                             },

@@ -89,6 +89,21 @@ class _Body extends State<Body> {
     }
   }
 
+  Future pickImageFormGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (image != null) {
+        _fileCommentBloc.add(postAttach(
+            type: infoScreen["code"],
+            objectId: this.widget.productOrderDetail.id,
+            file: image.path));
+      }
+    } catch (exception) {
+      log('Take photo error');
+    }
+  }
+
   String _launched = 'Unknown';
 
   Future<void> _makeCall(String url) async {

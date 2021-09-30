@@ -20,8 +20,9 @@ class RequestProductDTO {
   String phase;
   String createDate;
   String groupByColumn;
+  String groupByValue;
 
-  RequestProductDTO({this.status = "", this.workCenter = "", this.workOrder = "", this.jobTicket = "", this.phase = "", this.createDate = null, this.groupByColumn = ""});
+  RequestProductDTO({this.status = "", this.workCenter = "", this.workOrder = "", this.jobTicket = "", this.phase = "", this.createDate = null, this.groupByColumn = "", this.groupByValue = ""});
   
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -32,6 +33,7 @@ class RequestProductDTO {
     data['phase'] = phase;
     data['createDate'] = createDate;
     data['groupByColumn'] = groupByColumn;
+    data['groupByValue'] = groupByValue;
     return data;
   }
 }

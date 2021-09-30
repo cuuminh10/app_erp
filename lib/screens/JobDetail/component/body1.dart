@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gmc_erp/blocs/file_comment_bloc.dart';
 import 'package:gmc_erp/blocs/product_order_bloc.dart';
-import 'package:gmc_erp/common/component/buttons/gmc_button_dotted.dart';
 import 'package:gmc_erp/common/component/comment/CommenBox.dart';
 import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/events/file_comment_event.dart';
@@ -16,13 +15,18 @@ import 'package:gmc_erp/models/ProductOrderDetail.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 import 'package:gmc_erp/public/ultis/convert_date.dart';
 import 'package:gmc_erp/public/ultis/ultis.dart';
+import 'package:gmc_erp/screens/ImageFullScreen/image_full_screen.dart';
 import 'package:gmc_erp/screens/ListJobs/component/background.dart';
 import 'package:gmc_erp/screens/RemarkDetail/remark_detail_screen.dart';
+import 'package:gmc_erp/screens/ViewPdf/view_dpf.dart';
 import 'package:gmc_erp/states/file_comment_state.dart';
 import 'package:gmc_erp/states/product_order_state.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+
 
 class Body extends StatefulWidget {
   final ProductOrderDetail productOrderDetail;
@@ -88,6 +92,21 @@ class _Body extends State<Body> {
     }
   }
 
+  Future pickImageFormGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (image != null) {
+        _fileCommentBloc.add(postAttach(
+            type: infoScreen["code"],
+            objectId: this.widget.productOrderDetail.id,
+            file: image.path));
+      }
+    } catch (exception) {
+      log('Take photo error');
+    }
+  }
+
   String _launched = 'Unknown';
 
   Future<void> _makeCall(String url) async {
@@ -119,9 +138,6 @@ class _Body extends State<Body> {
                           color: Colors.blue,
                           borderRadius:
                               new BorderRadius.all(Radius.circular(50))),
-                      // child: CircleAvatar(
-                      //     radius: 50,
-                      //     backgroundImage: NetworkImage(data[i]['pic'] + "$i")),
                       child: CircleAvatar(
                         backgroundColor: Colors.brown.shade800,
                         child: Text('${data[i].createUser}'),
@@ -129,43 +145,95 @@ class _Body extends State<Body> {
                     ),
                   ),
                   title: Text(
-                    data[i].createUser,
+                    data[i].createUser ,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: HexColor(kBlue800)),
                   ),
                   subtitle: Text(
                       '${ConvertDate.ConvertDateTime(data[i].createDate)}'),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 16.0),
-                  child: Align(
-                      alignment: Alignment.topLeft,
-                      child: SizedBox(
-                        width: 62,
-                        height: 62,
-                        child: Card(
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(7))
-                          ),
-                          child: Image.network(
-                            'https://placeimg.com/640/480/any',
-                            fit: BoxFit.fill,
+                if (data[i].types == 'attach')
+                   Ultis.isPdf(data[i].realName) ?
+                    Container(
+                      margin: EdgeInsets.only(left: 16.0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: GestureDetector(
+                          onTap: () => {
+                            Future.delayed(Duration(seconds: 1), () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) {
+                                  return ViewPDF(comment: data[i], infoScreen: this.infoScreen,);
+                                  // return JobDetailScreen(tittle: '123');
+                                }),
+                              );
+                            }),
+                          },
+                          child: SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Card(
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(7))),
+                              child: SvgPicture.asset(
+                                "assets/images/xlsx.svg",
+                              )
+                            ),
                           ),
                         ),
-                      ))
-                ),
-                // Container(
-                //   margin: EdgeInsets.only(left: 16.0),
-                //   child: Align(
-                //       alignment: Alignment.topLeft,
-                //       child: Text(
-                //         data[i].comment,
-                //         style: TextStyle(color: HexColor(kBlue500)),
-                //       )),
-                // )
+                      ),
+                    )
+                    // PDFViewer(
+                    //   document: ,
+                    // )
+                  : Container(
+                      margin: EdgeInsets.only(left: 16.0),
+                      child: Align(
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: () => {
+                              Future.delayed(Duration(seconds: 1), () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) {
+                                    return ImageFullScreen(comment: data[i], infoScreen: this.infoScreen,);
+                                    // return JobDetailScreen(tittle: '123');
+                                  }),
+                                );
+                              }),
+                            },
+                            child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: Card(
+                                semanticContainer: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(7))),
+                                child: Image.network(
+                                  'http://175.41.183.152:8080/fc/viewFile/${this.infoScreen["code"]}/${data[i].saveName}',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          )))
+                else
+                  Container(
+                    margin: EdgeInsets.only(left: 16.0),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          data[i].comment,
+                          style: TextStyle(color: HexColor(kBlue500)),
+                        )),
+                  )
               ],
             ),
           )
@@ -219,8 +287,8 @@ class _Body extends State<Body> {
             this.widget.productOrderDetail.ordDate));
     _userTextFieldController.value =
         TextEditingValue(text: this.widget.productOrderDetail.employeeName);
-    _woTextFieldController.value = TextEditingValue(
-        text: this.widget.productOrderDetail.workCenterName);
+    _woTextFieldController.value =
+        TextEditingValue(text: this.widget.productOrderDetail.workCenterName);
     _comments = this.widget.productOrderDetail.listComment;
 
     _noTextFieldController.value =
@@ -254,29 +322,25 @@ class _Body extends State<Body> {
     });
   }
 
-
-
   void _onHandleButton() {
     if (this.infoScreen["code"] == "jobticket") {
       _productOrderBloc
           .add(getNewPrScanEvent(no: this.widget.productOrderDetail.no));
     } else {
       Map<String, dynamic> body = {
-        "description": this.widget.productOrderDetail.description,
+        "description": this._descriptionTextFieldController.text,
         "detail": this.widget.productOrderDetail.listDetail
       };
 
       this.widget.isNewProduct == true
           ? _productOrderBloc.add(postNewPrEvent(
-              no: this.widget.productOrderDetail.phaseNo, detail: body))
+              no: this.widget.productOrderDetail.jobTicketNo, detail: body))
           : _productOrderBloc.add(putPrDeatilEvent(
               detail: body, id: this.widget.productOrderDetail.id));
     }
   }
 
-  Widget showAttachFile() {
-
-  }
+  Widget showAttachFile() {}
 
   @override
   void dispose() {
@@ -293,7 +357,7 @@ class _Body extends State<Body> {
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(this.widget.productOrderDetail.no),
+        // title: Text(this.widget.productOrderDetail.no),
         leading: new IconButton(
             icon: new Icon(Icons.arrow_back),
             onPressed: () => {Navigator.pop(context, true)}),
@@ -304,8 +368,7 @@ class _Body extends State<Body> {
                 child: Container(
                     margin: EdgeInsets.only(right: 10.0),
                     child: Text(
-                      this.infoScreen["code"] ==
-                          "jobticket"
+                      this.infoScreen["code"] == "jobticket"
                           ? "Result"
                           : "Save",
                       style: TextStyle(
@@ -327,14 +390,53 @@ class _Body extends State<Body> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                SizedBox(height: size.height * 0.01),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1.0,
+                          color: HexColor('#D1D5DB'),
+                        ),
+                        borderRadius: BorderRadius.circular(3.0)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Text(this.widget.productOrderDetail.no, style: TextStyle(color: HexColor(kBlue800)),),
+                      ),
+                    ),
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Text("•"),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1.0,
+                            color: HexColor('#D1D5DB'),
+                          ),
+                          borderRadius: BorderRadius.circular(3.0)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Text(this.widget.productOrderDetail.woNo , style: TextStyle(color: HexColor(kBlue800), fontWeight: FontWeight.bold),),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: size.height * 0.01),
                 Text(
-                  this.widget.productOrderDetail.no,
+                  this.widget.productOrderDetail.jobTicketNo,
                   style: TextStyle(
                       fontFamily: 'Gotham',
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500,
                       color: HexColor('#002158')),
                 ),
+                SizedBox(width: size.width * 0.01),
                 Container(
                   child: Row(
                     children: <Widget>[
@@ -367,9 +469,7 @@ class _Body extends State<Body> {
                                   ),
                                   labelText: this.infoScreen['label_topLeft'],
                                   hintText: 'Enter Job Ticket Here'))),
-                      new Expanded(
-                        child: SizedBox(height: size.width * 0.01),
-                      ),
+                      SizedBox(height: size.width * 0.01),
                       new Expanded(
                           flex: 3,
                           child: TextField(
@@ -425,8 +525,12 @@ class _Body extends State<Body> {
                                   prefixIcon: Container(
                                     margin: EdgeInsets.only(right: 10.0),
                                     child: CircleAvatar(
+                                      radius: 16.0,
                                       backgroundColor: HexColor('#F178B6'),
-                                      child: Text('${Ultis.cutName(this.widget.productOrderDetail.employeeName)}', style: TextStyle(color: Colors.white),),
+                                      child: Text(
+                                        '${Ultis.cutName(this.widget.productOrderDetail.employeeName)}',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ), // myIcon is a 48px-wide widget.
                                   ),
                                   // set the prefix icon constraints
@@ -437,9 +541,7 @@ class _Body extends State<Body> {
                                   labelText:
                                       this.infoScreen['label_bottomLeft'],
                                   hintText: ''))),
-                      new Expanded(
-                        child: SizedBox(width: size.width * 0.01),
-                      ),
+                      SizedBox(width: size.width * 0.01),
                       new Expanded(
                           flex: 3,
                           child: TextField(
@@ -479,7 +581,7 @@ class _Body extends State<Body> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Desriptions',
+                      Text('Descriptions',
                           style: TextStyle(
                               color: HexColor(kBlue800),
                               fontWeight: FontWeight.bold)),
@@ -628,12 +730,11 @@ class _Body extends State<Body> {
                                                                     .w700),
                                                       ),
                                                       Text(
-                                                          this
+                                                          NumberFormat.decimalPattern().format(  this
                                                               .widget
                                                               .productOrderDetail
                                                               .listDetail[index]
-                                                              .qty
-                                                              .toString(),
+                                                              .qty).toString(),
                                                           style: TextStyle(
                                                               color: HexColor(
                                                                   kBlue500)))
@@ -659,7 +760,7 @@ class _Body extends State<Body> {
                                                               .widget
                                                               .productOrderDetail
                                                               .listDetail[index]
-                                                              .phaseName,
+                                                              .productName ?? "",
                                                           style: TextStyle(
                                                               color: HexColor(
                                                                   kBlue500)))),
@@ -678,15 +779,18 @@ class _Body extends State<Body> {
                                                         width: size.width,
                                                       )),
                                                   Expanded(
-                                                      child: Text(
-                                                          this
-                                                              .widget
-                                                              .productOrderDetail
-                                                              .listDetail[index]
-                                                              .phaseName,
-                                                          style: TextStyle(
-                                                              color: HexColor(
-                                                                  kBlue500)))),
+                                                      child: SizedBox(
+                                                        width: double.infinity,
+                                                        child: Text(
+                                                            this
+                                                                .widget
+                                                                .productOrderDetail
+                                                                .listDetail[index]
+                                                                .phaseName,
+                                                            style: TextStyle(
+                                                                color: HexColor(
+                                                                    kBlue500))),
+                                                      )),
                                                   Container(
                                                       margin: EdgeInsets.only(
                                                           bottom: 7.0),
@@ -723,8 +827,28 @@ class _Body extends State<Body> {
                                   FileCommentState>(
                                 listener: (context, state) {
                                   if (state is FileCommentStateSuccess) {
+                                    final comment = Comment(
+                                        comment: state.comments.comment,
+                                        createUser: state.comments.createUser,
+                                        createDate: state.comments.createDate);
 
-                                    _comments.insert(0, state.comments);
+                                    _comments.insert(0, comment);
+                                    setState(() {
+                                      _comments = _comments;
+                                    });
+                                    print(_comments);
+                                  }
+
+                                  if (state is FileAttachStateSuccess) {
+                                    final comment = Comment(
+                                        createUser: state.attach.createUser,
+                                        createDate: state.attach.createDate,
+                                        types: "attach",
+                                        saveName: state.attach.saveName,
+                                         realName: state.attach.realName
+                                    );
+
+                                    _comments.insert(0, comment);
                                     setState(() {
                                       _comments = _comments;
                                     });
@@ -769,6 +893,10 @@ class _Body extends State<Body> {
                                       size: 30, color: Colors.white),
                                   attachWidget: Icon(Icons.attach_file_outlined,
                                       size: 30, color: Colors.white),
+                                  onUpload: (e) => {_openFileExplorer(e)},
+                                  onPickImage: () => {pickImage()},
+                                  onPickImageFormGallery: () =>
+                                      {pickImageFormGallery()},
                                 ),
                               ),
                             ),
@@ -778,14 +906,6 @@ class _Body extends State<Body> {
                     ],
                   ),
                 ),
-                // Center(
-                //   child: NormalButton(
-                //       text: "Result",
-                //       onPress: () => {},
-                //       vertical: 20,
-                //       horizontal: 40,
-                //       width: 0.5),
-                // )
               ],
             ),
           ),
@@ -852,5 +972,3 @@ class TabButton extends StatelessWidget {
     );
   }
 }
-
-

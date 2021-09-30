@@ -23,7 +23,7 @@ class Body extends StatefulWidget {
 
   const Body({
     Key key,
-    this.infoScreen,
+    this.infoScreen
   }) : super(key: key);
 
   @override
@@ -36,10 +36,13 @@ class _Body extends State<Body> {
   ProductOrderCount productOrderCount;
   AnimationController _animationController;
   List<ResponseProduct_1_DTO> _list = [];
+  String groupBy = '';
+  RequestProductDTO requestProductDTOSearch ;
 
   @override
   void initState() {
     super.initState();
+    requestProductDTOSearch = RequestProductDTO();
     _productOrderBloc = BlocProvider.of(context);
     _productOrderBloc.add(getCountEvent(type: this.widget.infoScreen['code']));
     _productOrderBloc.add(getProductGroupEvent(requestProductDTO: RequestProductDTO(), screenCode: this.widget.infoScreen['code'] ));
@@ -64,6 +67,14 @@ class _Body extends State<Body> {
       };
 
   void groupByProduct (RequestProductDTO requestProductDTO) {
+    if (requestProductDTO.groupByColumn.isNotEmpty) {
+      setState(() {
+        groupBy = requestProductDTO.groupByColumn;
+      });
+    }
+
+    requestProductDTO.groupByColumn = groupBy;
+    requestProductDTOSearch = requestProductDTO;
     _productOrderBloc.add(getProductGroupEvent(requestProductDTO: requestProductDTO, screenCode: this.widget.infoScreen['code'] ));
   }
 
@@ -177,13 +188,14 @@ class _Body extends State<Body> {
                       return    ListCardBadge(
                           tittle: this._list[index].name,
                           count: this._list[index].counts,
+                          requestProductDTO: this.requestProductDTOSearch,
                           onTap: (e) => {onHandleClickItem(e)});
                     },
                   )
               ) : SizedBox();
           }),
         ),
-        floatingActionButton: FancyFab(onScan: () => scan()),
+        floatingActionButton: FancyFab(onScan: () => scan(), onScanCreat: () => scanCreate(),),
       ),
     );
   }
@@ -254,7 +266,7 @@ class _PopupMenuContentState extends State<PopupMenuContent>
   //Let's create animation
   AnimationController _animationController;
   Animation<double> _animation;
-  String dropdownValue = 'Open';
+  String dropdownValue = '';
   TextEditingController _phaseTextFieldController = TextEditingController();
   TextEditingController _woTextFieldController = TextEditingController();
   TextEditingController _wcTextFieldController = TextEditingController();
@@ -370,6 +382,7 @@ class _PopupMenuContentState extends State<PopupMenuContent>
                                         });
                                       },
                                       items: <String>[
+                                        '',
                                         'Open',
                                         'Overdue',
                                         'Incomplete',

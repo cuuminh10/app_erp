@@ -25,6 +25,7 @@ class ProductOrderDetail {
   String woNo;
   String phaseNo;
   String workCenterName;
+  String jobTicketNo;
   List<Detail> listDetail;
   List<Attach> listAttach;
   List<Comment> listComment;
@@ -39,12 +40,13 @@ class ProductOrderDetail {
         woNo = map["woNo"]  ?? '',
         phaseNo = map["phaseNo"]  ?? '',
         workCenterName = map["workCenterName"]  ?? '',
+        jobTicketNo = map["jobTicketNo"]  ?? '',
         listDetail = map["detail"] != null ? List<Detail>.from(
             map["detail"].map((x) => Detail.fromJsonMap(x))) : [],
         listAttach =  map["attach"] != null ? List<Attach>.from(
             map["attach"].map((x) => Attach.fromJsonMap(x))) : [],
-        listComment =  map["comment"] != null ? List<Comment>.from(
-            map["comment"].map((x) => Comment.fromJsonMap(x))) : [];
+        listComment =  map["document"] != null ? List<Comment>.from(
+            map["document"].map((x) => Comment.fromJsonMap(x))) : [];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -60,6 +62,7 @@ class ProductOrderDetail {
     data['comment'] = listComment;
     data['phaseNo'] = phaseNo;
     data['workCenterName'] = workCenterName;
+    data['jobTicketNo'] = jobTicketNo;
     return data;
   }
 
@@ -71,6 +74,7 @@ class Detail {
   String productNo;
   String phaseName;
   String unit;
+  String productName;
   double qty;
   double cancelQty;
   double setUpQty;
@@ -83,6 +87,7 @@ class Detail {
         productNo = map["productNo"],
         phaseName = map["phaseName"],
         unit = map["unit"],
+        productName = map["productName"],
         cancelQty = double?.parse("0" ?? map["cancelQty"].toString() ),
         setUpQty = double?.parse("0" ?? map["setUpQty"].toString()),
         ncrQty = double?.parse("0" ?? map["ncrQty"].toString());
@@ -98,6 +103,7 @@ class Detail {
     data['cancelQty'] = cancelQty;
     data['setUpQty'] = setUpQty;
     data['ncrQty'] = ncrQty;
+    data['productName'] = productName;
     return data;
   }
 
@@ -130,18 +136,26 @@ class Attach {
 }
 
 class Comment {
+
   int id;
+  String realName;
+  String saveName;
   String comment;
-  String avatarUrl;
+  String types;
   String createUser;
   String createDate;
+
+  Comment({this.comment= "", this.types= "comment", this.saveName= "", this.createUser= "", this.createDate, this.realName = ""});
 
   Comment.fromJsonMap(Map<String, dynamic> map):
         id = map["id"],
         comment = map["comment"],
         createUser = map["createUser"],
         createDate = map["createDate"],
-        avatarUrl = map["avatarUrl"];
+        realName = map["realName"],
+        saveName = map["saveName"],
+        types = map["types"];
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -149,7 +163,9 @@ class Comment {
     data['comment'] = comment;
     data['createUser'] = createUser;
     data['createDate'] = createDate;
-    data['avatarUrl'] = avatarUrl;
+    data['realName'] = realName;
+    data['saveName'] = saveName;
+    data['types'] = types;
     return data;
   }
 }

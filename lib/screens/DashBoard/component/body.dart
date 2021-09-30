@@ -4,9 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gmc_erp/blocs/favor_bloc.dart';
 import 'package:gmc_erp/common/component/dashboard/gmc_dashboard.dart';
 import 'package:gmc_erp/common/component/list_card/list_card.dart';
+import 'package:gmc_erp/common/widget/BaseInheritWidget.dart';
 import 'package:gmc_erp/events/favor_event.dart';
 import 'package:gmc_erp/models/Favor.dart';
+import 'package:gmc_erp/public/ultis/ultis.dart';
 import 'package:gmc_erp/screens/DashBoard/component/background.dart';
+import 'package:gmc_erp/screens/ListJobs/list_job_screen.dart';
+import 'package:gmc_erp/screens/ResultList/result_list_screen.dart';
 import 'package:gmc_erp/states/favor_states.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
@@ -56,6 +60,21 @@ class _Body extends State<Body> with TickerProviderStateMixin {
       });
     }else {
       _favorBloc.add(postFavorEvent(moduleName: moduleName));
+    }
+  }
+
+  void onHandleMoveFromFavor (String moduleName) {
+    final favor = checkContains(moduleName);
+    final data = Ultis.filterScreensGMC(moduleName);
+    final  wrapper = BaseInheritedWidget.of(context);
+    BaseInheritedWidget.of(context).state.setInfoScreen(data);
+    if (data['name'] != '') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return moduleName == 'ProductionFG' ? ListJobsScreen('Production Result')  :  ResultListScreen(infoScreen: Ultis.filterScreensGMC(moduleName));
+        }),
+      );
     }
   }
 
@@ -161,10 +180,10 @@ class _Body extends State<Body> with TickerProviderStateMixin {
                         children: <Widget>[
                           new Expanded(
                               child: ListCard(
-                                  tittle: 'Production', list: this.listProduction, listEnable: _listFavor,onTap: (e) => { onHandleChangeFavor(e)} )),
+                                  tittle: 'Production', list: this.listProduction, listEnable: _listFavor,onTap: (e) => { onHandleChangeFavor(e)}, onMove: (e) => { onHandleMoveFromFavor(e)} )),
                           new Expanded(
                               child: ListCard(
-                                  tittle: 'Purchase', list: this.listPurchase, listEnable: _listFavor, onTap: (e) => { onHandleChangeFavor(e)}))
+                                  tittle: 'Purchase', list: this.listPurchase, listEnable: _listFavor, onTap: (e) => { onHandleChangeFavor(e)} , onMove: (e) => { onHandleMoveFromFavor(e)}))
                         ],
                       ),
                     ),

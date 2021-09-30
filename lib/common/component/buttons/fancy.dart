@@ -4,13 +4,15 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:gmc_erp/public/constant/color.dart';
 
 class FancyFab extends StatefulWidget {
-
-  final void Function()  onScan;
+  final void Function() onScan;
+  final void Function() onScanCreat;
 
   const FancyFab({
     Key key,
-     this.onScan,
+    this.onScan,
+    this.onScanCreat,
   }) : super(key: key);
+
   @override
   _FancyFabState createState() => _FancyFabState();
 }
@@ -18,20 +20,20 @@ class FancyFab extends StatefulWidget {
 class _FancyFabState extends State<FancyFab>
     with SingleTickerProviderStateMixin {
   bool isOpened = false;
-   AnimationController _animationController;
-   Animation<Color> _buttonColor;
-    Animation<double> _animateIcon;
-   Animation<double> _translateButton;
+  AnimationController _animationController;
+  Animation<Color> _buttonColor;
+  Animation<double> _animateIcon;
+  Animation<double> _translateButton;
   Curve _curve = Curves.easeOut;
   double _fabHeight = 56.0;
 
   @override
   initState() {
     _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-      ..addListener(() {
-        setState(() {});
-      });
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+          ..addListener(() {
+            setState(() {});
+          });
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _buttonColor = ColorTween(
@@ -78,8 +80,8 @@ class _FancyFabState extends State<FancyFab>
   Widget scan() {
     return Container(
       child: FloatingActionButton(
-        backgroundColor:  HexColor(kOrange600),
-        onPressed: () => {this.widget.onScan()},
+        backgroundColor: HexColor(kOrange600),
+        onPressed: () => this.widget.onScan(),
         tooltip: 'Add',
         child: SvgPicture.asset(
           "assets/images/Scan.svg",
@@ -92,8 +94,8 @@ class _FancyFabState extends State<FancyFab>
   Widget add() {
     return Container(
       child: FloatingActionButton(
-        backgroundColor:  HexColor(kOrange600),
-        onPressed: null,
+        backgroundColor: HexColor(kOrange600),
+        onPressed: () => this.widget.onScanCreat(),
         tooltip: 'Inbox',
         child: Icon(Icons.add),
       ),
@@ -105,15 +107,17 @@ class _FancyFabState extends State<FancyFab>
       child: FloatingActionButton(
         backgroundColor: _buttonColor.value,
         onPressed: animate,
-        child:isOpened ? AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
-          progress: _animateIcon,
-        ) :  SvgPicture.asset(
-          "assets/images/Paper.svg",
-          width: 30,
-          height: 30,
-          color: Colors.white,
-        ),
+        child: isOpened
+            ? AnimatedIcon(
+                icon: AnimatedIcons.menu_close,
+                progress: _animateIcon,
+              )
+            : SvgPicture.asset(
+                "assets/images/Paper.svg",
+                width: 30,
+                height: 30,
+                color: Colors.white,
+              ),
       ),
     );
   }

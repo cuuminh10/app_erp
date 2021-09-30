@@ -168,6 +168,32 @@ class ProductOrderRepsitory {
     }
   }
 
+  Future<List<ProductOrderOpen>> getListPoOrderV2(RequestProductDTO requestProductDTO, String screenCode) async {
+    final url = "${Constants.apiBaseURL}/productOrder/search/v2/${screenCode}";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await httpClient.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${prefs.getString('token')}'
+      },
+        body: jsonEncode(requestProductDTO.toJson()));
+
+    if (response.statusCode == 200) {
+      // return ProductOrderOpen.fromJsonMap(json.decode(response.body));
+      final respondData = json.decode(response.body) as List;
+      final List<ProductOrderOpen> listResult = respondData.map((comment) {
+        return ProductOrderOpen.fromJsonMap(comment);
+      }).toList();
+
+      return listResult;
+    } else {
+      // If that call was not successful, throw an error.
+      var msg = json.decode(response.body);
+      throw Exception(msg["message"]);
+    }
+  }
+
   Future<List<ResponseProduct_1_DTO>> getProductGroup(RequestProductDTO requestProductDTO, String screenCode) async {
     final url = "${Constants.apiBaseURL}/productOrder/groups/v2/${screenCode}";;
     SharedPreferences prefs = await SharedPreferences.getInstance();

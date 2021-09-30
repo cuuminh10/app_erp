@@ -99,6 +99,16 @@ class ProductOrderBloc extends Bloc<ProductOrderEvent, ProductOrderState> {
         yield getProductGroupSuccess(list: result);
         return;
       }
+
+      if (event is getListPoOrderV2) {
+        RequestProductDTO requestProductDTO = event.requestProductDTO;
+        String screenCode = event.screenCode;
+
+        final result = await _productOrderService.getListPoOrderV2(requestProductDTO, screenCode);
+        // Write value
+        yield ProductOrderSuccess(productOrderOpen: result);
+        return;
+      }
     } catch (error) {
       yield ProductOrderFailer(error: error, date: new DateTime.now().toString());
       return;

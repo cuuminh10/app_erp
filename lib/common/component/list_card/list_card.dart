@@ -8,13 +8,22 @@ class ListCard extends StatelessWidget {
   final String tittle;
   final List<Favor> list;
   final List<Favor> listEnable;
-  final  Set<void> Function(dynamic)   onTap;
+  final Set<void> Function(dynamic) onTap;
+  final Set<void> Function(dynamic) onMove;
+
   const ListCard(
-      {Key key,  String this.tittle,  List<Favor> this.list,  List<Favor> this.listEnable,   Set<void> Function(dynamic)   this.onTap})
+      {Key key,
+      String this.tittle,
+      List<Favor> this.list,
+      List<Favor> this.listEnable,
+      Set<void> Function(dynamic) this.onTap,
+      Set<void> Function(dynamic) this.onMove})
       : super(key: key);
 
-  List<Favor>  checkContains (String moduleName) {
-    List<Favor>  contain = listEnable.where((element) => element.moduleName == moduleName).toList();
+  List<Favor> checkContains(String moduleName) {
+    List<Favor> contain = listEnable
+        .where((element) => element.moduleName == moduleName)
+        .toList();
 
     return contain;
   }
@@ -48,25 +57,30 @@ class ListCard extends StatelessWidget {
                   shrinkWrap: true,
                   padding: EdgeInsets.only(top: 0),
                   children: List.generate(list.length, (index) {
-                    return InkWell(
-                      onTap: () => {
-                          this.onTap(list[index].moduleName)
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14.0),
-                        ),
-                        color: HexColor(kNormalBackground),
-                        child: Center(
-                          child: Row(
-                            children: [
-                              new Expanded(
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14.0),
+                      ),
+                      color: HexColor(kNormalBackground),
+                      child: Center(
+                        child: Row(
+                          children: [
+                            new Expanded(
+                              child: GestureDetector(
+                                onTap: () => {
+                                  this.onMove(list[index].moduleName)
+                                },
                                 child: SvgPicture.asset(
                                   "assets/images/${list[index].image}",
                                 ),
                               ),
-                              new Expanded(
-                                flex: 3,
+                            ),
+                            new Expanded(
+                              flex: 3,
+                              child: GestureDetector(
+                                onTap: () => {
+                                  this.onMove(list[index].moduleName)
+                                },
                                 child: Text(
                                   '${list[index].name}',
                                   style: TextStyle(
@@ -75,13 +89,22 @@ class ListCard extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              new Expanded(
+                            ),
+                            new Expanded(
+                              child: GestureDetector(
+                                onTap: () => {
+                                  this.onTap(list[index].moduleName)
+                                 },
                                 child: SvgPicture.asset(
-                                  checkContains(list[index].moduleName).length == 0 ? "assets/images/add-disable.svg" : "assets/images/add-enable.svg" ,
-                                )  ,
+                                  checkContains(list[index].moduleName)
+                                              .length ==
+                                          0
+                                      ? "assets/images/add-disable.svg"
+                                      : "assets/images/add-enable.svg",
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -93,4 +116,3 @@ class ListCard extends StatelessWidget {
     );
   }
 }
-

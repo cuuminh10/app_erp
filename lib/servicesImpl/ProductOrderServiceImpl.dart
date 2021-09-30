@@ -48,4 +48,9 @@ class ProductOrderServiceImpl extends BaseServiceImpl<ProductOrderServiceImpl, i
   Future<List<ResponseProduct_1_DTO>> getProductGroup(RequestProductDTO requestProductDTO, String screenCode) {
     return repository.getProductGroup(requestProductDTO, screenCode);
   }
+
+  @override
+  Future<List<ProductOrderOpen>> getListPoOrderV2(RequestProductDTO requestProductDTO, String screenCode) {
+    return repository.getListPoOrderV2(requestProductDTO, screenCode);
+  }
 }
